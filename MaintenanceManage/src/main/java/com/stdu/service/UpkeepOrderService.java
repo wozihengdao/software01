@@ -1,58 +1,55 @@
 package com.stdu.service;
 
-import com.stdu.mapper.EquipmentMapper;
-import com.stdu.pojo.Equipment;
+import com.stdu.mapper.UpkeepOrderMapper;
+import com.stdu.pojo.UpkeepOrder;
 import com.stdu.util.SqlSessionFactoryUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-
 import java.util.List;
 
-public class EquipmentService {
-
+public class UpkeepOrderService {
     private final SqlSessionFactory factory = SqlSessionFactoryUtils.getSqlSessionFactory();
 
-    // 添加设备
-    public void addEquipment(Equipment equipment) {
+    // 添加保养单
+    public void addUpkeepOrder(UpkeepOrder order) {
         try (SqlSession session = factory.openSession()) {
-            EquipmentMapper mapper = session.getMapper(EquipmentMapper.class);
-            mapper.insert(equipment);
+            UpkeepOrderMapper mapper = session.getMapper(UpkeepOrderMapper.class);
+            mapper.insert(order);
             session.commit();
         }
     }
 
-    // 删除设备
+    // 删除保养单
     public void deleteById(Long id) {
         try (SqlSession session = factory.openSession()) {
-            EquipmentMapper mapper = session.getMapper(EquipmentMapper.class);
+            UpkeepOrderMapper mapper = session.getMapper(UpkeepOrderMapper.class);
             mapper.deleteById(id);
             session.commit();
         }
     }
 
-    // 更新设备信息
-    public void updateEquipment(Equipment equipment) {
+    // 更新保养单
+    public void updateUpkeepOrder(UpkeepOrder order) {
         try (SqlSession session = factory.openSession()) {
-            EquipmentMapper mapper = session.getMapper(EquipmentMapper.class);
-            mapper.update(equipment);
+            UpkeepOrderMapper mapper = session.getMapper(UpkeepOrderMapper.class);
+            mapper.update(order);
             session.commit();
         }
     }
 
-    // 查询所有设备
-    public List<Equipment> selectAll() {
+    // 查询所有保养单
+    public List<UpkeepOrder> selectAll() {
         try (SqlSession session = factory.openSession()) {
-            EquipmentMapper mapper = session.getMapper(EquipmentMapper.class);
+            UpkeepOrderMapper mapper = session.getMapper(UpkeepOrderMapper.class);
             return mapper.selectAll();
         }
     }
 
-    // 根据ID查询设备
-    public Equipment selectById(Long id) {
+    // 根据ID查询
+    public UpkeepOrder selectById(Long id) {
         try (SqlSession session = factory.openSession()) {
-            EquipmentMapper mapper = session.getMapper(EquipmentMapper.class);
+            UpkeepOrderMapper mapper = session.getMapper(UpkeepOrderMapper.class);
             return mapper.selectById(id);
         }
     }
-
 }
