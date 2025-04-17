@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+
+
+<div id="app">
+
+    <el-container>
+        <el-header><el-menu
+                :default-active="activeIndex2"
+                class="el-menu-demo"
+                mode="horizontal"
+                @select="handleSelect"
+                background-color="#545c64"
+                text-color="#fff"
+                active-text-color="#ffd04b"
+
+        >
+            <el-menu-item index="1">首页</el-menu-item>
+            <el-menu-item index="2">报修</el-menu-item>
+            <el-menu-item index="3">维修</el-menu-item>
+            <el-menu-item index="4">保养</el-menu-item>
+            <el-menu-item index="5">巡检</el-menu-item>
+            <el-menu-item index="6">检测</el-menu-item>
+            <el-menu-item index="7">备件</el-menu-item>
+        </el-menu>
+        </el-header>
+        <el-main>
+
+
+            <div v-if="activeIndex2==1">首页 </div>
+            <div v-if="activeIndex2==2">
+
+
+
+
+                <!--表格-->
+                <template>
+                    <el-table
+                            :data="tableData"
+                            style="width: 100%"
+                            :row-class-name="tableRowClassName"
+                            @selection-change="handleSelectionChange"
+                    >
+                        <el-table-column
+                                type="selection"
+                                width="55">
+                        </el-table-column>
+                        <el-table-column
+                                type="index"
+                                width="50">
+                        </el-table-column>
+
+                        <el-table-column
+                                prop="brandName"
+                                label="报修单号"
+                                align="center"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                prop="companyName"
+                                label="企业名称"
+                                align="center"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                prop="ordered"
+                                align="center"
+                                label="排序">
+                        </el-table-column>
+
+                        <el-table-column
+                                prop="status"
+                                align="center"
+                                label="当前状态">
+                        </el-table-column>
+
+
+                        <el-table-column
+                                fixed="right"
+                                label="操作"
+                                width="120">
+
+                            <template slot-scope="scope">
+                                <el-button
+                                        @click.native.prevent="deleteBrand(scope.$index, tableData)"
+                                        type="text"
+                                        size="small">
+                                    移除
+                                </el-button>
+
+                                <el-button
+
+                                        type="text"
+                                        size="small"
+                                        @click="initBrand(scope.$index)">
+                                    修改
+                                </el-button>
+
+
+                            </template>
+
+                        </el-table-column>
+
+                    </el-table>
+                </template>
+
+
+            </div>
+            <div v-if="activeIndex2==3">维修 </div>
+            <div v-if="activeIndex2==4">保养 </div>
+            <div v-if="activeIndex2==5">巡检 </div>
+            <div v-if="activeIndex2==6">检测 </div>
+            <div v-if="activeIndex2==7">备件 </div>
+        </el-main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </el-container>
+
+            {{activeIndex2}}
+<!--        <el-submenu index="2">-->
+<!--            <template slot="title">我的工作台</template>-->
+<!--            <el-menu-item index="2-1">选项1</el-menu-item>-->
+<!--            <el-menu-item index="2-2">选项2</el-menu-item>-->
+<!--            <el-menu-item index="2-3">选项3</el-menu-item>-->
+<!--            <el-submenu index="2-4">-->
+<!--                <template slot="title">选项4</template>-->
+<!--                <el-menu-item index="2-4-1">选项1</el-menu-item>-->
+<!--                <el-menu-item index="2-4-2">选项2</el-menu-item>-->
+<!--                <el-menu-item index="2-4-3">选项3</el-menu-item>-->
+<!--            </el-submenu>-->
+<!--        </el-submenu>-->
+<!--        <el-menu-item index="3" disabled>消息中心</el-menu-item>-->
+<!--        <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>-->
+
+
+
+
+
+
+</div>
+
+
+</body>
+<script>
+    new Vue({
+        el:"#app",
+        data() {
+            return {
+                activeIndex: '1',
+                activeIndex2: '1'
+            };
+        },
+        methods: {
+            handleSelect(key, keyPath) {
+               this.activeIndex2 = key;
+                console.log(key, keyPath);
+            }
+        }
+    })
+</script>
+</html>
