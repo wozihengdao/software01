@@ -7,6 +7,7 @@
     <script src="js/vue.js"></script>
     <script src="element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+    <script src="js/storage.js"></script>
 </head>
 <body>
 
@@ -57,19 +58,10 @@
                         <el-menu-item index="5">巡检</el-menu-item>
                         <el-menu-item index="6">检测</el-menu-item>
                         <el-menu-item index="7">备件</el-menu-item>
-                    </el-meu>
-                    n
+                    </el-menu>
+
                 </el-header>
                 <el-main>
-
-
-
-
-
-
-
-
-
 
 
                         <!--按钮-->
@@ -100,7 +92,7 @@
                                                 v-for="station in stationList"
                                                 :key="station.id"
                                                 :label="station.name"
-                                                :value="station.id">
+                                                :value="station.name">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
@@ -243,7 +235,7 @@
         </el-container>
     </el-container>
 
-
+</div>
 </body>
 
 <script>

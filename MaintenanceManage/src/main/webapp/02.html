@@ -7,6 +7,7 @@
     <script src="js/vue.js"></script>
     <script src="element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+    <script src="js/storage.js"></script>
 </head>
 <body>
 
@@ -35,7 +36,7 @@
             </el-menu>
         </el-aside>
 
-        {{activeIndex2}}
+
         <el-container>
             <div v-if="activeIndex1==2" style="width:1500px">
                 <el-header>
@@ -220,7 +221,7 @@
                                 style="width: 100%"
                                 :row-class-name="tableRowClassName">
                             <el-table-column prop="id" label="维修单号" align="center"></el-table-column>
-                            <el-table-column label工程师ID" align="center">
+                            <el-table-column label="工程师ID" align="center">
                             <template slot-scope="scope">
                                 {{ scope.row.engineerId || '系统分配' }}
                             </template>
@@ -229,7 +230,13 @@
                             <el-table-column prop="data" label="接单时间" align="center"></el-table-column>
                             <el-table-column fixed="right" label="操作" width="120">
                                 <template>
-                                    <el-tag type="success" effect="dark">已接取</el-tag>
+                                    <el-button
+                                            type="primary"
+                                            size="small"
+                                            @click="">
+                                        处理
+                                    </el-button>
+
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -245,7 +252,7 @@
         </el-container>
     </el-container>
 
-    {{activeIndex1}}
+
 
 
 
@@ -296,15 +303,22 @@
             ,
             methods: {
                 handleAccept(order) {
+
                     this.$confirm('确认要接受该维修单吗？', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
                         // 调用API更新工程师ID
+
+                        alert(order.id);
+
+
                         this.$set(order, 'engineerId', '当前工程师ID')
                         this.$message.success('接单成功');
                     })
+
+
                 },
                 // 拒绝工单
                 handleReject(order) {

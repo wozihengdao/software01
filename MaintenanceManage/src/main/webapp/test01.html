@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LocalStorage Demo</title>
+    <script src="./js/vue.js"></script>
+    <!-- 如果使用ElementUI需要正确路径 -->
+    <script src="./element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="./element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+    <button @click="saveData">保存数据</button>
+    <button @click="loadData">读取数据</button>
+    <button @click="clearData">清空数据</button>
+    <input v-model="userData" />
+</div>
+
+<script type="module">
+    import storage from './js/storage.js';
+
+    // 注册ElementUI
+
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                userData: ''  // 初始化数据类型保持字符串
+            };
+        },
+        methods: {
+            saveData() {
+                // 存储字符串数据
+                storage.set('user', this.userData);
+
+                // 存储带过期的对象数据
+                storage.setExpire('tempData', {
+                    token: 'abc123',
+                    inputData: this.userData
+                }, 24*60); // 30分钟过期
+            },
+            loadData() {
+                // 读取字符串数据
+                this.userData = storage.get('user') || '';
+
+                // 读取临时数据
+                const tempData = storage.getExpire('tempData');
+                console.log('临时数据:', tempData);
+            },
+            clearData() {
+                storage.remove('user');
+                storage.remove('tempData');
+            }
+        },
+        mounted() {
+            this.loadData();
+        }
+    });
+</script>
+</body>
+</html>
