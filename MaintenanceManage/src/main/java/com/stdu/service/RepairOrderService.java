@@ -52,4 +52,14 @@ public class RepairOrderService {
             return mapper.findById(id);
         }
     }
+
+    public RepairOrder selectLast() {
+
+        try (SqlSession session = factory.openSession()) {
+            RepairOrderMapper mapper = session.getMapper(RepairOrderMapper.class);
+            return mapper.selectLast();
+        }
+
+    }
+
 }

@@ -6,6 +6,7 @@ import com.stdu.util.SqlSessionFactoryUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import javax.servlet.annotation.WebServlet;
 import java.util.List;
 
 public class StopService {

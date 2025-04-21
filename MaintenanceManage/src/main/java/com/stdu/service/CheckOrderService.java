@@ -55,13 +55,5 @@ public class CheckOrderService {
     }
 
     // 可选：带条件的分页查询（根据需求扩展）
-    /*
-    public List<CheckOrder> getCheckOrdersByCondition(String engineerId, int page, int size) {
-        try (SqlSession session = factory.openSession()) {
-            CheckOrderMapper mapper = session.getMapper(CheckOrderMapper.class);
-            RowBounds rowBounds = new RowBounds((page-1)*size, size);
-            return mapper.selectByEngineer(engineerId, rowBounds);
-        }
-    }
-    */
+
 }

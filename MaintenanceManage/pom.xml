@@ -78,5 +78,18 @@
   </dependencies>
   <build>
     <finalName>MaintenanceManage</finalName>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.2</version>
+        <configuration>
+          <port>7469</port>
+          <!--          <path>/web_demo_3/HelloWeb.html</path>-->
+          <!--                 web_demo_3/HelloWeb.html-->
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>

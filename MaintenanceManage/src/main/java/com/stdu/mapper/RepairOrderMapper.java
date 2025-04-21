@@ -46,4 +46,8 @@ public interface RepairOrderMapper {
     // 删除报修单 [18,19](@ref)
     @Delete("DELETE FROM tb_repair_order WHERE id = #{id}")
     int deleteById(@Param("id") Long id);
+
+    @Select("select * from tb_repair_order order by id desc limit 1")
+    RepairOrder selectLast();
+
 }

@@ -14,240 +14,236 @@
 <div id="app">
 
     <el-container>
-        <el-header>
-
+        <el-aside width="200px" style="background-color: rgb(238, 241, 246)" style="height:  1000px">
             <el-menu
-                :default-active="activeIndex2"
-                class="el-menu-demo"
-                mode="horizontal"
-                @select="handleSelect"
-                background-color="#545c64"
-                text-color="#fff"
-                active-text-color="#ffd04b"
-
-        >
-            <el-menu-item index="1">首页</el-menu-item>
-            <el-menu-item index="2">报修</el-menu-item>
-            <el-menu-item index="3">维修</el-menu-item>
-            <el-menu-item index="4">保养</el-menu-item>
-            <el-menu-item index="5">巡检</el-menu-item>
-            <el-menu-item index="6">检测</el-menu-item>
-            <el-menu-item index="7">备件</el-menu-item>
-        </el-menu>
-        </el-header>
+                    @select="handleMenuItemClick" background-color="#545c64"
+                    text-color="#fff"
+                    active-text-color="#ffd04b" >
+                    <template slot="title"><i class="el-icon-message"></i>导航一</template>
+                    <el-menu-item-group>
+<!--                        <template slot="title"></template>-->
+                        <el-menu-item index="1">个人信息</el-menu-item>
+                        <el-menu-item index="2">功能栏</el-menu-item>
+                        <el-menu-item index="3">联系我们</el-menu-item>
+                        <el-menu-item index="4">退出登录</el-menu-item>
+                    </el-menu-item-group>
 
 
-        <el-main>
 
 
-            <div v-if="activeIndex2==1">首页 </div>
-            <div v-if="activeIndex2==2">
+
+            </el-menu>
+        </el-aside>
+
+        {{activeIndex2}}
+        <el-container>
+            <div v-if="activeIndex1==2" style="width:1500px">
+            <el-header>
+
+                <el-menu
+                        :default-active="activeIndex2"
+                        class="el-menu-demo"
+                        mode="horizontal"
+                        @select="handleSelect"
+                        background-color="#545c64"
+                        text-color="#fff"
+                        active-text-color="#ffd04b"
+
+                >
+
+                    <el-menu-item index="1">首页</el-menu-item>
+                    <el-menu-item index="2">报修</el-menu-item>
+                    <el-menu-item index="3">维修</el-menu-item>
+                    <el-menu-item index="4">保养</el-menu-item>
+                    <el-menu-item index="5">巡检</el-menu-item>
+                    <el-menu-item index="6">检测</el-menu-item>
+                    <el-menu-item index="7">备件</el-menu-item>
+                </el-menu>
+
+            </el-header>
+            <el-main>
 
 
-                <!--按钮-->
-
-                <el-row>
-
-<!--                    <el-button type="danger" @click="multiDelete()" plain>批量删除</el-button>-->
-                    <el-button type="primary" plain @click="dialogVisible = true">报修</el-button>
-
-                </el-row>
 
 
-                <!--添加数据对话框表单-->
-                <el-dialog
-                        title="报修工单"
-                        :visible.sync="dialogVisible"
-                        width="40%">
-                    <el-form ref="form" :model="repairOrder" label-width="120px">
-                        <!-- 隐藏ID字段 -->
-                        <el-input type="hidden" v-model="repairOrder.id"></el-input>
 
-                        <el-form-item label="所属车站" prop="stop" required>
-                            <el-select
-                                    v-model="repairOrder.stop"
-                                    placeholder="请选择车站"
-                                    filterable>
-                                <el-option
-                                        v-for="station in stationList"
-                                        :key="station.id"
-                                        :label="station.name"
-                                        :value="station.code">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
 
-                        <el-form-item label="设备编号" prop="faultyEquipmentId" required>
-                            <el-input
-                                    v-model="repairOrder.faultyEquipmentId"
-                                    placeholder="请输入设备编号或扫码">
-                                <el-button slot="append" icon="el-icon-camera"></el-button>
-                            </el-input>
-                        </el-form-item>
 
-                        <el-form-item label="故障类别" prop="faultyType">
-                            <el-select v-model="repairOrder.faultyType" placeholder="请选择类型">
-                                <el-option label="机械故障" value="mechanical"></el-option>
-                                <el-option label="电气故障" value="electrical"></el-option>
-                                <el-option label="软件故障" value="software"></el-option>
-                            </el-select>
-                        </el-form-item>
 
-                        <el-form-item label="故障等级" prop="faultyGrade">
-                            <el-radio-group v-model="repairOrder.faultyGrade">
-                                <el-radio label="urgent">紧急</el-radio>
-                                <el-radio label="high">高</el-radio>
-                                <el-radio label="medium">中</el-radio>
-                                <el-radio label="low">低</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
 
-                        <el-form-item label="故障描述" prop="faultyDescription">
-                            <el-input
-                                    type="textarea"
-                                    :rows="3"
-                                    v-model="repairOrder.faultyDescription"
-                                    placeholder="请详细描述故障现象">
-                            </el-input>
-                        </el-form-item>
 
-                        <el-form-item label="现场图片" prop="picture">
+                    <!--按钮-->
+
+                    <el-row>
+
+                        <!--         <el-button type="danger" @click="multiDelete()" plain>批量删除</el-button>-->
+                        <el-button type="primary" plain @click="dialogVisible = true">报修</el-button>
+
+                    </el-row>
+
+
+                    <!--添加数据对话框表单-->
+                    <el-dialog
+                            title="报修工单"
+                            :visible.sync="dialogVisible"
+                            width="40%">
+                        <el-form ref="form" :model="repairOrder" label-width="120px">
+                            <!-- 隐藏ID字段 -->
+                            <el-input type="hidden" v-model="repairOrder.id"></el-input>
+
+                            <el-form-item label="所属车站" prop="stop" required>
+                                <el-select
+                                        v-model="repairOrder.stop"
+                                        placeholder="请选择车站"
+                                        filterable>
+                                    <el-option
+                                            v-for="station in stationList"
+                                            :key="station.id"
+                                            :label="station.name"
+                                            :value="station.id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+
+                            <el-form-item label="设备编号" prop="faultyEquipmentId" required>
+                                <el-input
+                                        v-model="repairOrder.faultyEquipmentId"
+                                        placeholder="请输入设备编号或扫码">
+
+                                </el-input>
+                            </el-form-item>
+
+                            <el-form-item label="故障类别" prop="faultyType">
+                                <el-select v-model="repairOrder.faultyType" placeholder="请选择类型">
+                                    <el-option label="机械故障" value="mechanical"></el-option>
+                                    <el-option label="电气故障" value="electrical"></el-option>
+                                    <el-option label="软件故障" value="software"></el-option>
+                                </el-select>
+                            </el-form-item>
+
+                            <el-form-item label="故障等级" prop="faultyGrade">
+                                <el-radio-group v-model="repairOrder.faultyGrade">
+                                    <el-radio label="urgent">紧急</el-radio>
+                                    <el-radio label="high">高</el-radio>
+                                    <el-radio label="medium">中</el-radio>
+                                    <el-radio label="low">低</el-radio>
+                                </el-radio-group>
+                            </el-form-item>
+
+                            <el-form-item label="故障描述" prop="faultyDescription">
+                                <el-input
+                                        type="textarea"
+                                        :rows="3"
+                                        v-model="repairOrder.faultyDescription"
+                                        placeholder="请详细描述故障现象">
+                                </el-input>
+                            </el-form-item>
+                           <span>上传图片</span>
                             <el-upload
-                                    action="/api/upload"
-                                    :on-success="handleUploadSuccess"
-                                    :before-upload="beforeUpload"
-                                    list-type="picture-card">
-                                <i class="el-icon-plus"></i>
-                                <div slot="tip" class="el-upload__tip">
-                                    需包含时间水印（建议实时拍摄）
-                                </div>
-                            </el-upload>
-                        </el-form-item>
 
-                        <el-form-item label="工单状态" prop="type">
-                            <el-select v-model="repairOrder.type">
-                                <el-option label="待处理" value="pending"></el-option>
-                                <el-option label="处理中" value="processing"></el-option>
-                                <el-option label="已完成" value="completed"></el-option>
-                            </el-select>
-                        </el-form-item>
-
-                        <el-form-item label="上报时间">
-                            <el-date-picker
-                                    v-model="repairOrder.data"
-                                    type="datetime"
-                                    value-format="yyyy-MM-dd HH:mm:ss"
-                                    readonly>
-                            </el-date-picker>
-                        </el-form-item>
-
-                        <el-form-item>
-                            <el-button type="primary" @click="submitRepairOrder">提交工单</el-button>
-                            <el-button @click="dialogVisible = false">取消</el-button>
-                        </el-form-item>
-                    </el-form>
-                </el-dialog>
-
-
-
-
-
-
-
-
-
-
-
-                <!--表格-->
-                <template>
-                    <el-table
-                            :data="tableData"
-                            style="width: 100%"
-                            :row-class-name="tableRowClassName"
-                            @selection-change="handleSelectionChange"
+                                    ref="upload"
+                                    action="#"
+                                    file-list="fileList"
+                                    list-type="picture-card"
+                                    :auto-upload="false">
+                                <i slot="default" class="el-icon-plus"></i>
+                                            <div slot="file" slot-scope="{file}">
+                                                <img
+                                                        class="el-upload-list__item-thumbnail"
+                                                        :src="file.url" alt=""
+                                                >
+                                                <span class="el-upload-list__item-actions">
+                    <span
+                            class="el-upload-list__item-preview"
+                            @click="handlePictureCardPreview(file)"
                     >
-                        <el-table-column prop="id" label="报修单号" align="center"></el-table-column>
-                        <el-table-column prop="stop" label="所属车站" align="center"></el-table-column>
-                        <el-table-column prop="faultyEquipmentId" label="故障设备编号" align="center"></el-table-column>
-                        <el-table-column prop="faultyType" label="故障类别" align="center"></el-table-column>
-                        <el-table-column prop="type" label="状态" align="center"></el-table-column>
-                        <el-table-column prop="data" label="上报时间" align="center"></el-table-column>
-
-
-                        <el-table-column
-                                fixed="right"
-                                label="操作"
-                                width="120">
-
-                            <template slot-scope="scope">
-                                <el-button
-                                        @click.native.prevent="deleteBrand(scope.$index, tableData)"
-                                        type="text"
-                                        size="small">
-                                    撤回
-                                </el-button>
-
-                                <el-button
-
-                                        type="text"
-                                        size="small"
-                                        @click="initBrand(scope.$index)">
-                                    修改
-                                </el-button>
+                      <i class="el-icon-zoom-in"></i>
+                    </span>
+                    <span
+                            v-if="!disabled"
+                            class="el-upload-list__item-delete"
+                            @click="handleDownload(file)"
+                    >
+                      <i class="el-icon-download"></i>
+                    </span>
+                    <span
+                            v-if="!disabled"
+                            class="el-upload-list__item-delete"
+                            @click="handleRemove(file)"
+                    >
+                      <i class="el-icon-delete"></i>
+                    </span>
+                  </span>
+                                            </div>
+                            </el-upload>
 
 
 
+                            <el-form-item>
+                                <el-button type="primary" @click="submitRepairOrder">提交工单</el-button>
+                                <el-button @click="dialogVisible = false">取消</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-dialog>
 
-                            </template>
 
-                        </el-table-column>
+                    <!--表格-->
+                    <template>
+                        <el-table
+                                :data="tableData"
+                                style="width: 100%"
+                                :row-class-name="tableRowClassName"
+                                @selection-change="handleSelectionChange"
+                        >
+                            <el-table-column prop="id" label="报修单号" align="center"></el-table-column>
+                            <el-table-column prop="stop" label="所属车站" align="center"></el-table-column>
+                            <el-table-column prop="faultyEquipmentId" label="故障设备编号" align="center"></el-table-column>
+                            <el-table-column prop="faultyType" label="故障类别" align="center"></el-table-column>
+                            <el-table-column prop="type" label="状态" align="center"></el-table-column>
+                            <el-table-column prop="data" label="上报时间" align="center"></el-table-column>
 
-                    </el-table>
-                </template>
 
+                            <el-table-column
+                                    fixed="right"
+                                    label="操作"
+                                    width="120">
+
+                                <template slot-scope="scope">
+                                    <el-button
+                                            @click.native.prevent="deleteItem(scope.$index, tableData)"
+                                            type="text"
+                                            size="small">
+                                        撤回
+                                    </el-button>
+
+                                    <el-button
+
+                                            type="text"
+                                            size="small"
+                                            @click="initItem(scope.$index)">
+                                        修改
+                                    </el-button>
+
+
+                                </template>
+
+                            </el-table-column>
+
+                        </el-table>
+                    </template>
+
+
+
+
+
+
+            </el-main>
 
             </div>
-            <div v-if="activeIndex2==3">维修 </div>
-            <div v-if="activeIndex2==4">保养 </div>
-            <div v-if="activeIndex2==5">巡检 </div>
-            <div v-if="activeIndex2==6">检测 </div>
-            <div v-if="activeIndex2==7">备件 </div>
-        </el-main>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        </el-container>
     </el-container>
 
-            {{activeIndex2}}
-<!--        <el-submenu index="2">-->
-<!--            <template slot="title">我的工作台</template>-->
-<!--            <el-menu-item index="2-1">选项1</el-menu-item>-->
-<!--            <el-menu-item index="2-2">选项2</el-menu-item>-->
-<!--            <el-menu-item index="2-3">选项3</el-menu-item>-->
-<!--            <el-submenu index="2-4">-->
-<!--                <template slot="title">选项4</template>-->
-<!--                <el-menu-item index="2-4-1">选项1</el-menu-item>-->
-<!--                <el-menu-item index="2-4-2">选项2</el-menu-item>-->
-<!--                <el-menu-item index="2-4-3">选项3</el-menu-item>-->
-<!--            </el-submenu>-->
-<!--        </el-submenu>-->
-<!--        <el-menu-item index="3" disabled>消息中心</el-menu-item>-->
-<!--        <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>-->
-
-
-
+            {{activeIndex1}}
 
 
 
@@ -260,18 +256,68 @@
         el:"#app",
         data() {
             return {
-                activeIndex: '1',
+                repairOrderList:[],
+                activeIndex1: '2',
                 activeIndex2: '1',
                 dialogVisible:false,
                 repairOrder:{},
+                dialogImageUrl: '',
+                stationList:[],
+                disabled: false,
+                tableData:[]
             };
         },
+        mounted() {
+
+            axios.post("http://localhost:7469/MaintenanceManage/stop/selectAll",).then((res) => {
+
+                this.stationList = res.data;
+
+            })
+
+        axios.post("http://localhost:7469/MaintenanceManage/repairOrder/selectAll",).then((res) => {
+
+            this.tableData= res.data;
+
+        })
+    }
+        ,
         methods: {
             handleSelect(key, keyPath) {
-               this.activeIndex2 = key;
-                console.log(key, keyPath);
+
+                window.location.href = "http://localhost:7469/MaintenanceManage/0"+(key-1)+".html";
+
+            },
+            handleMenuItemClick(index) {
+                console.log('点击菜单:', index)
+               this.activeIndex1=index;
+                alert(activeIndex1);
+            },
+            fileList: [],
+            handleRemove(file) {
+                // 从上传文件列表中移除
+                const fileList = this.$refs.upload.uploadFiles;
+                this.$refs.upload.uploadFiles = fileList.filter(item => item.uid !== file.uid);
+            },
+            handlePictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            },
+            handleDownload(file) {
+                console.log(file);
+            },
+
+            submitRepairOrder(){
+
+                axios.post("http://localhost:7469/MaintenanceManage/repairOrder/insert",this.repairOrder).then((res) => {
+
+                            alert("hello");
+
+                })
+                this.dialogVisible=false;
             }
         }
-    })
+        }
+    )
 </script>
 </html>
