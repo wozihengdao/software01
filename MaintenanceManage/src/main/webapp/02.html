@@ -7,7 +7,7 @@
     <script src="js/vue.js"></script>
     <script src="element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
-    <script src="js/storage.js"></script>
+
 </head>
 <body>
 
@@ -76,10 +76,10 @@
                     </el-row>
 
 
-                    <!--添加数据对话框表单-->
+                    <!--处理数据对话框表单-->
                     <el-dialog
                             title="维修工单"
-                            :visible.sync="dialogVisible"
+                            :visible.sync="dialogVisible1"
                             width="40%">
                         <el-form ref="form" :model="repairOrder" label-width="120px">
                             <!-- 隐藏ID字段 -->
@@ -229,11 +229,11 @@
                             <el-table-column prop="type" label="状态" align="center"></el-table-column>
                             <el-table-column prop="data" label="接单时间" align="center"></el-table-column>
                             <el-table-column fixed="right" label="操作" width="120">
-                                <template>
+                                <template slot-scope="scope">
                                     <el-button
                                             type="primary"
                                             size="small"
-                                            @click="">
+                                            @click="dialog1Init(scope.row)">
                                         处理
                                     </el-button>
 
@@ -260,7 +260,10 @@
 
 
 </body>
-<script>
+<script type="module">
+
+    import storage from "./js/storage.js";
+
     new Vue({
             el:"#app",
         computed: {
@@ -275,10 +278,11 @@
         },
             data() {
                 return {
+                    dialog2Visible:false,
                     repairOrderList:[],
                     activeIndex1: '2',
                     activeIndex2: '3',
-                    dialogVisible:false,
+                    dialog1Visible:false,
                     repairOrder:{},
                     dialogImageUrl: '',
                     stationList:[],
@@ -302,6 +306,13 @@
             }
             ,
             methods: {
+
+                dialog1Init(row) {
+
+
+
+                },
+
                 handleAccept(order) {
 
                     this.$confirm('确认要接受该维修单吗？', '提示', {
@@ -315,7 +326,16 @@
 
 
                         this.$set(order, 'engineerId', '当前工程师ID')
+                        order.engineerId =storage.get('user').username;
+                        alert(order.id);
+                        axios.post("http://localhost:7469/MaintenanceManage/maintenanceOrder/update", order).then((res) => {
+
+
+                        })
                         this.$message.success('接单成功');
+
+
+
                     })
 
 

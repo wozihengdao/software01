@@ -29,6 +29,7 @@ com\stdu\servlet\RepairOrderServlet.class
 com\stdu\servlet\UserServlet.class
 com\stdu\service\CheckOrderService.class
 com\stdu\mapper\PatrolOrderMapper.class
+com\stdu\pojo\Maintenance.class
 com\stdu\util\DateUtil.class
 com\stdu\mapper\MaintenanceOrderMapper.class
 com\stdu\service\SpareService.class

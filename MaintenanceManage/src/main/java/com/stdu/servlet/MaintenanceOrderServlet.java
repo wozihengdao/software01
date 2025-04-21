@@ -1,6 +1,7 @@
 package com.stdu.servlet;
 
 import com.alibaba.fastjson.JSON;
+import com.stdu.pojo.Maintenance;
 import com.stdu.pojo.MaintenanceOrder;
 import com.stdu.pojo.RepairOrder;
 import com.stdu.service.MaintenanceOrderService;
@@ -34,5 +35,19 @@ public class MaintenanceOrderServlet extends BaseServlet {
         System.out.println("hahahahaha");
     }
 
+    public void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-}
+              resp.setContentType("text/html;charset=utf-8");
+              BufferedReader reader = req.getReader();
+              String json= reader.readLine();
+
+              MaintenanceOrderService service = new MaintenanceOrderService();
+              MaintenanceOrder maintenance= JSON.parseObject(json, MaintenanceOrder.class);
+        System.out.println(maintenance.getEngineerId());
+              service.updateOrder(maintenance);
+
+    }
+
+
+
+    }

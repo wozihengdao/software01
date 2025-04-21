@@ -10,7 +10,7 @@
     <script src="js/vue.js"></script>
     <script src="element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
-    <script src="js/storage.js"></script>
+
 </head>
 
 <body>
@@ -43,22 +43,23 @@
 
 </div>
 
-<script>
+<script type="module">
+    import storage from "./js/storage.js";
     new Vue({
         el: '#app',
         data() {
             return {
                 user: {
                     username: "",
-                    password: ""
+                    password: "",
+                    type:""
                 }
             };
         },
         mounted() {
-            const savedUsername = storage.get('username');
-            if (savedUsername) {
-                this.loginForm.username = savedUsername;
-            }
+           this.user.username = storage.get('user').username;
+
+
         },
         created() {},
         methods: {
@@ -72,18 +73,26 @@
                 } else {
                     //校验用户名和密码是否正确;
                     // this.$router.push({ path: "/personal" });
-                    axios.post("/user/login/", {
-                            name: this.user.username,
-                            password: this.user.password
+                    axios.post("http://localhost:7469/MaintenanceManage/user/logIn", {
+                            username: this.user.username,
+                            password: this.user.password,
+                            type:""
                         })
-                        .then(res => {
+                        .then((res) => {
                             // console.log("输出response.data.status", res.data.status);
-                            if (res.data.status === 200) {
-                                this.$router.push({ path: "/personal" });
+                            if (res.data=='success') {
+
+                               storage.set('user', this.user);
+                                window.location.href = "http://localhost:7469/MaintenanceManage/main.html";
+
                             } else {
                                 alert("您输入的用户名或密码错误！");
                             }
                         });
+
+
+
+
                 }
             }
 
@@ -95,12 +104,12 @@
     .login {
         width: 100%;
         height: 740px;
-        background: url("../assets/images/bg1.png") no-repeat;
+        /*background: url("../assets/images/bg1.png") no-repeat;*/
         background-size: cover;
         overflow: hidden;
     }
     .login-wrap {
-        background: url("../assets/images/login_bg.png") no-repeat;
+        /*background: url("../assets/images/login_bg.png") no-repeat;*/
         background-size: cover;
         width: 400px;
         height: 300px;
