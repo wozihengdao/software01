@@ -81,7 +81,6 @@
                         .then((res) => {
                             // console.log("输出response.data.status", res.data.status);
                             if (res.data=='success') {
-
                                storage.set('user', this.user);
                                 window.location.href = "http://localhost:7469/MaintenanceManage/main.html";
 
@@ -89,10 +88,6 @@
                                 alert("您输入的用户名或密码错误！");
                             }
                         });
-
-
-
-
                 }
             }
 

@@ -40,7 +40,6 @@ public class RepairOrderServlet extends BaseServlet {
                 null,repairOrder.getPicture(),"0",repairOrder.getData());
          MaintenanceOrderService maintenanceOrderService = new MaintenanceOrderService();
          maintenanceOrderService.addOrder(maintenanceOrder);
-        System.out.println("hahahahaha");
         resp.getWriter().write("success");
     }
 
