@@ -32,7 +32,8 @@ public interface EngineerMapper {
             @Result(property = "id", column = "id", id = true),
             @Result(property = "orderNum", column = "order_num"),
             @Result(property = "state", column = "state"),
-            @Result(property = "type", column = "type")
+            @Result(property = "type", column = "type"),
+            @Result(property = "name", column = "name")
     })
     Engineer selectById(Long id);
 

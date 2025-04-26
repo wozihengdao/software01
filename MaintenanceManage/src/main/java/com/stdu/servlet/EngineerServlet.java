@@ -27,10 +27,16 @@ public class EngineerServlet  extends BaseServlet {
     }
 
     public void selectById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        System.out.println("/selectById");
         resp.setContentType("text/html;charset=utf-8");
         BufferedReader reader=req.getReader();
         String line=reader.readLine();
+        if(line==null){
+
+            line="70000001";
+
+        }
+
          Long id=Long.valueOf(line);
         System.out.println(id);
         Engineer engineer=engineerService.selectById(id);

@@ -19,6 +19,38 @@
         transition: all 0.3s;
     }
 </style>
+
+<style>
+    .time {
+        font-size: 13px;
+        color: #999;
+    }
+
+    .bottom {
+        margin-top: 13px;
+        line-height: 12px;
+    }
+
+    .button {
+        padding: 0;
+        float: right;
+    }
+
+    .image {
+        width: 100%;
+        display: block;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both
+    }
+</style>
 <div id="app">
 
     <el-container>
@@ -52,17 +84,24 @@
 
 
 
-        
         <el-container>
-            <div v-if="activeIndex1==2" style="width:1500px">
 
-                <el-main>
+            <el-row style="width: 400px;height: 400px">
+                <el-col :span="8" style="width: 100%" >
+                    <el-card :body-style="{ padding: '0px',width: '120px', height: '120px' }">
+                        <img src="1.png" class="image">
+                        <div style="padding: 14px;">
+                            <span>{{engineer.Id}}</span>
+                            <div class="bottom clearfix">
+                                <time class="time">jjjjjj</time>
+                                <el-button type="text" class="button">操作按钮</el-button>
+                            </div>
+                        </div>
+                    </el-card>
+                </el-col>
+            </el-row>
 
 
-
-                </el-main>
-
-            </div>
         </el-container>
     </el-container>
 
@@ -73,7 +112,8 @@
 
 
 </body>
-<script>
+<script type="module">
+    import storage from "./js/storage.js";
     new Vue({
             el:"#app",
             data() {
@@ -81,16 +121,28 @@
                     repairOrderList:[],
                     activeIndex1: '1',
                     activeIndex2: '2',
+                    user:{},
                     dialogVisible:false,
+                    engineer:{
 
+
+                    },
                     dialogImageUrl: '',
 
                     disabled: false,
 
                 };
             },
-            mounted() {
+            mounted(){
 
+                 this.user=storage.get('user');
+
+
+                  axios.post('http://localhost:7469/MaintenanceManage/engineer/selectById',this.user.username).then( (response)=> {
+
+                                      this.engineer = response.data.engineer;
+
+                })
 
             }
             ,

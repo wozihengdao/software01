@@ -28,11 +28,7 @@
 
     <!--    axios-->
     <!-- https://mvnrepository.com/artifact/org.webjars.npm/axios -->
-    <dependency>
-      <groupId>org.webjars.npm</groupId>
-      <artifactId>axios</artifactId>
-      <version>1.6.8</version>
-    </dependency>
+
 
     <!--    Maven helper 插件-->
     <!-- https://mvnrepository.com/artifact/org.nuiton/maven-helper-plugin -->
@@ -46,6 +42,8 @@
       <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
+
+
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
