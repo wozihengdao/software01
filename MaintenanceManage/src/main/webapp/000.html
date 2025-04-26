@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+
+</head>
+<body>
+<style>
+    .type-buttons {
+        margin: 20px 0;
+    }
+
+    .order-card {
+        margin-top: 15px;
+        transition: all 0.3s;
+    }
+</style>
+
+<style scoped>
+    .info-item {
+        margin: 8px 28px;
+        line-height: 15px;
+    }
+
+    .info-label {
+        color: #909399;
+        margin-right: 10px;
+    }
+
+    .info-content {
+        color: #606266;
+    }
+
+    .image {
+        width: 100%;
+        height: 270px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .button {
+        width: 100%;
+        margin-top: 5px;
+    }
+</style>
+
+
+<div id="app">
+
+    <el-container>
+        <el-aside width="200px" style="background-color: #545c64; height: 100vh">
+            <el-menu
+                    :default-active="activeIndex1"
+                    @select="handleMenuItemClick"
+                    background-color="#545c64"
+                    text-color="#fff"
+                    active-text-color="#ffd04b">
+                <el-menu-item-group title="主菜单">
+                    <el-menu-item index="1">
+                        <i class="el-icon-user"></i>
+                        <span>个人信息</span>
+                    </el-menu-item>
+                    <el-menu-item index="2">
+                        <i class="el-icon-menu"></i>
+                        <span>功能面板</span>
+                    </el-menu-item>
+                    <el-menu-item index="3">
+                        <i class="el-icon-phone"></i>
+                        <span>联系我们</span>
+                    </el-menu-item>
+                    <el-menu-item index="4">
+                        <i class="el-icon-switch-button"></i>
+                        <span>退出登录</span>
+                    </el-menu-item>
+                </el-menu-item-group>
+            </el-menu>
+        </el-aside>
+
+
+        <el-container>
+
+            <el-card class="box-card" style="height: 499.5px;width:1163px ">
+
+                <div id="container01" style="height: 480px; width:1100px"></div>
+
+            </el-card>
+
+            <el-row style="width: 300px;height: 500px">
+                <el-col :span="8" style="width: 100%">
+                    <el-card :body-style="{ padding: '0px',width: '100%'}">
+                        <img src="1.png" class="image"  style="width: 50% ;height: 50%; padding: 30px 70px  ">
+                        <div style="padding: 14px;">
+                            <!-- 动态数据 -->
+                            <div class="info-item">
+                                <span class="info-label">姓名：</span>
+                                <span class="info-content">{{ engineer.name }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">工号：</span>
+                                <span class="info-content">{{ engineer.id }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">工种：</span>
+                                <span class="info-content">{{ engineer.type === '1' ? '维修工程师' : '其他' }}</span>
+                            </div>
+
+                            <!-- 静态数据 -->
+                            <div class="info-item">
+                                <span class="info-label">手机号:</span>
+                                <span class="info-content">138-1234-5678</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">工龄：</span>
+                                <span class="info-content">5年</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">性别：</span>
+                                <span class="info-content">男</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">邮箱：</span>
+                                <span class="info-content">123456789@qq.com</span>
+                            </div>
+                            <div class="bottom clearfix" style="margin-top: 58px;">
+                                <el-button type="primary" class="button">修改个人信息</el-button>
+                            </div>
+                        </div>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-container>
+
+
+
+
+        <el-card class="box-card" style="height: 327px;width:400px;position:absolute;left: 210px;top:520.5px">
+
+            <div id="container02" style="height: 320px;"></div>
+
+        </el-card>
+        <el-card class="box-card" style="height: 327px;width:400px;position:absolute;left: 620px;top:520.5px">
+
+            <div id="container03" style="height: 320px;"></div>
+
+        </el-card>
+        <el-card class="box-card" style="height: 327px;width:633px;position:absolute;left: 1040px;top:520.5px">
+
+            <div id="container03" style="height: 320px;"></div>
+
+        </el-card>
+    </el-container>
+
+
+</div>
+
+
+</body>
+<script type="module">
+    import storage from "./js/storage.js";
+    new Vue({
+            el:"#app",
+            data() {
+                return {
+                    repairOrderList:[],
+                    activeIndex1: '1',
+                    activeIndex2: '2',
+                    user:{},
+                    dialogVisible:false,
+                    engineer:{
+
+
+                    },
+                    dialogImageUrl: '',
+
+                    disabled: false,
+
+                };
+            },
+            mounted(){
+
+                 this.user=storage.get('user');
+
+
+                  axios.post('http://localhost:7469/MaintenanceManage/engineer/selectById',this.user.username).then( (response)=> {
+
+                                      this.engineer = response.data;
+
+                })
+                this.$nextTick(() => {
+                    this.initChart();
+                });
+
+            }
+            ,
+            methods: {
+                initChart() {
+                    const echarts = window.echarts;
+                    const dom = document.getElementById('container01');
+                    if (!dom) return;
+
+                    const myChart = echarts.init(dom, null, {
+                        renderer: 'canvas',
+                        useDirtyRect: false
+                    });
+
+                    const option = {
+                        title: { text: '上周接单信息' },
+                        tooltip: { trigger: 'axis' },
+                        legend: { data: [ '保养单', '备件单','巡检单', '检测单','维修单' ] },
+                        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+                        xAxis: { type: 'category', data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'] },
+                        yAxis: { type: 'value' },
+                        series: [     {
+                            name: '维修单',
+                            type: 'line',
+                            stack: 'Total',
+                            data: [5, 4, 2, 1, 3, 2, 3]
+                        },
+                            {
+                                name: '保养单',
+                                type: 'line',
+                                stack: 'Total',
+                                data: [1, 2, 6, 1, 0, 4, 2]
+                            },
+                            {
+                                name: '备件单',
+                                type: 'line',
+                               stack: 'Total',
+                                data: [4, 2, 3, 4, 3, 2, 4]
+                            },
+                            {
+                                name: '巡检单',
+                                type: 'line',
+                                stack: 'Total',
+                                data: [2, 0, 1, 3, 7, 3, 2]
+                            },
+                            {
+                                name: '检测单',
+                                type: 'line',
+                               stack: 'Total',
+                                data: [2, 2, 1, 4, 1, 0, 6]
+                            }
+                        ]
+                    };
+
+
+                    myChart.setOption(option);
+                    window.addEventListener('resize', myChart.resize);
+
+
+                    const echarts02 = window.echarts;
+                    const dom02 = document.getElementById('container02');  // 注意容器ID改为container02
+                    if (!dom02) return;
+
+                    const myChart02 = echarts02.init(dom02, null, {
+                        renderer: 'canvas',
+                        useDirtyRect: false
+                    });
+
+                    const option02 = {
+                        title: {
+                            text: '接单状况'
+                        },
+                        legend: {
+                            data: ['按时完成','超时完成'],
+                            left: '220px',
+                            top:'5px'
+
+                        },
+                        radar: {
+                            indicator: [
+                                { name: '维修单', max: 6500 },
+                                { name: '保养单', max: 16000 },
+                                { name: '检测单', max: 30000 },
+                                { name: '巡检单', max: 38000 },
+                                { name: '报修单', max: 52000 },
+                                { name: '备件单', max: 25000 }
+                            ]
+                        },
+                        series: [
+                            {
+                                name: 'Budget vs spending',
+                                type: 'radar',
+                                data: [
+                                    {
+                                        itemStyle:{
+                                            color:"#409EFF"
+                                        },
+                                        lineStyle:{
+                                            color:"#409EFF"
+
+                                        },
+                                        value: [6200, 13000, 25000, 35000, 50000, 18000],
+                                        name: '按时完成'
+                                    },
+                                    {
+                                        itemStyle:{
+                                            color:"#F56C6C"
+                                        },
+                                        lineStyle:{
+                                            color:"#F56C6C"
+
+                                        },
+                                        value: [450, 600, 300, 350, 5000, 8000],
+                                        name: '超时完成'
+                                    }
+                                ]
+                            }
+                        ]
+                    };
+
+                    if (option02 && typeof option02 === 'object') {
+                        myChart02.setOption(option02);
+                    }
+
+                    window.addEventListener('resize', myChart02.resize);
+
+
+                    // 玫瑰图初始化代码
+                    const echarts03 = window.echarts;
+                    const dom03 = document.getElementById('container03'); // 注意修改容器ID
+                    if (!dom03) return;
+
+                    const myChart03 = echarts03.init(dom03, null, {
+                        renderer: 'canvas',
+                        useDirtyRect: false
+                    });
+
+                    const option03 = {
+                        title: {
+                            text: '工单完成状况',
+                            subtext: '',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c} ({d}%)'
+                        },
+                        legend: {
+                            left: 'center',
+                            top: '265px',
+                            data: ['按时完成','超时完成','未完成','待完成']
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+
+                                dataView: { show: true, readOnly: false },
+                                restore: { show: true },
+                                saveAsImage: { show: true }
+                            }
+                        },
+                        series: [
+                            {
+                                name: '详细信息',
+                                type: 'pie',
+                                radius: [20, 100],
+                                center: ['50%', '45%'],
+                                roseType: 'area',
+                                itemStyle: { borderRadius: 5 },
+                                data: [
+                                    { value: 30, name: '按时完成' },
+                                    { value: 28, name: '超时完成' },
+                                    { value: 26, name: '未完成' },
+                                    { value: 24, name: '待完成' }
+
+                                ]
+                            }
+                        ]
+                    };
+
+                    if (option03 && typeof option03 === 'object') {
+                        myChart03.setOption(option03);
+                    }
+
+                    window.addEventListener('resize', myChart03.resize);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    }
+
+
+                ,
+                handleSelect(key, keyPath) {
+
+                    window.location.href = "http://localhost:7469/MaintenanceManage/0"+(key-1)+".html";
+
+                },
+                handleMenuItemClick(index) {
+                    console.log('点击菜单:', index)
+                    this.activeIndex1=index;
+                    if(index==1){
+                        window.location.href = "http://localhost:7469/MaintenanceManage/000.html";
+                    }
+                    else if(index==2){
+
+                        window.location.href = "http://localhost:7469/MaintenanceManage/01.html";
+                    }
+                    else if(index==3){
+
+                        window.location.href = "http://localhost:7469/MaintenanceManage/002.html";
+                    }
+                    else if(index==4){
+                        window.location.href = "http://localhost:7469/MaintenanceManage/003.html";
+
+
+                    }},
+                fileList: [],
+                handlePictureCardPreview(file) {
+                    this.dialogImageUrl = file.url;
+                    this.dialogVisible = true;
+                },
+                handleDownload(file) {
+                    console.log(file);
+                }
+
+
+            }
+        }
+    )
+</script>
+
+
+
+
+</html>
