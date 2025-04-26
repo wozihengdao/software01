@@ -1,8 +1,11 @@
 package com.stdu.servlet;
 
 import com.alibaba.fastjson.JSON;
+import com.stdu.pojo.Equipment;
 import com.stdu.pojo.MaintenanceOrder;
 import com.stdu.pojo.RepairOrder;
+import com.stdu.service.EngineerService;
+import com.stdu.service.EquipmentService;
 import com.stdu.service.MaintenanceOrderService;
 import com.stdu.service.RepairOrderService;
 import com.stdu.util.DateUtil;
@@ -66,22 +69,19 @@ public class RepairOrderServlet extends BaseServlet {
         resp.setContentType("application/json;charset=utf-8");
 
         try {
-            // 从路径参数获取ID
-            String pathInfo = req.getPathInfo(); // 示例路径: /selectById/123
-            String[] splits = pathInfo.split("/");
-            if(splits.length < 3) {
-                resp.sendError(400, "参数错误");
-                return;
-            }
-
-            Long id = Long.parseLong(splits[2]);
+            String idParam = req.getParameter("id");
+            Long id = Long.parseLong(idParam);
             RepairOrder order = repairOrderService.selectById(id);
+            System.out.println(order);
+            EquipmentService equipmentService = new EquipmentService();
+
+            Equipment equipment = equipmentService.selectById(Long.parseLong(order.getFaultyEquipmentId())); // 需要实现EquipmentService
+            String deviceName = (equipment != null) ? equipment.getName() : "未知设备";
 
             if(order == null) {
                 resp.sendError(404, "工单不存在");
                 return;
             }
-
             // 转换日期格式 (如果前端需要)
             Map<String,Object> result = new HashMap<>();
             result.put("id", order.getId());
@@ -92,7 +92,7 @@ public class RepairOrderServlet extends BaseServlet {
             result.put("faultyGrade", order.getFaultyGrade());
             result.put("picture", order.getPicture());
             result.put("data", order.getData());  // 使用格式化后的字符串
-
+            result.put("equipmentName", deviceName); // 添加设备名称字段
             resp.getWriter().write(JSON.toJSONString(result));
 
         } catch (NumberFormatException e) {

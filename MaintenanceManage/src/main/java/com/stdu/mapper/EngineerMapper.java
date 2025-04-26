@@ -9,7 +9,7 @@ public interface EngineerMapper {
 
     // 插入（自动回填生成的主键）
     @Insert("INSERT INTO tb_engineer (order_num, state, type) " +
-            "VALUES (#{orderNum}, #{state}, #{type})")
+            "VALUES (#{orderNum}, #{state}, #{type},#{name})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insert(Engineer engineer);
 
@@ -21,6 +21,7 @@ public interface EngineerMapper {
     @Update("UPDATE tb_engineer SET " +
             "order_num = #{orderNum}, " +
             "state = #{state}, " +
+            "name = #{name}, " +
             "type = #{type} " +
             "WHERE id = #{id}")
     int update(Engineer engineer);
@@ -31,7 +32,8 @@ public interface EngineerMapper {
             @Result(property = "id", column = "id", id = true),
             @Result(property = "orderNum", column = "order_num"),
             @Result(property = "state", column = "state"),
-            @Result(property = "type", column = "type")
+            @Result(property = "type", column = "type"),
+            @Result(property = "name", column = "name")
     })
     Engineer selectById(Long id);
 

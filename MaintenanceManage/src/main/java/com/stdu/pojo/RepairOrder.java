@@ -95,4 +95,19 @@ public class RepairOrder {
     public void setData(String data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "RepairOrder{" +
+                "id=" + id +
+                ", stop='" + stop + '\'' +
+                ", faultyEquipmentId='" + faultyEquipmentId + '\'' +
+                ", faultyType='" + faultyType + '\'' +
+                ", faultyDescription='" + faultyDescription + '\'' +
+                ", faultyGrade='" + faultyGrade + '\'' +
+                ", picture='" + picture + '\'' +
+                ", type='" + type + '\'' +
+                ", data='" + data + '\'' +
+                '}';
+    }
 }

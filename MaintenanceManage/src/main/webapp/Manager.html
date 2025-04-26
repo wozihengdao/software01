@@ -563,8 +563,9 @@
                         service: 'upkeepOrder/selectById'
                     }
                     const res = await axios.get(
-                        `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}/${order.id}`
-                    )
+                        `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}/selectById`,
+                        { params: { id: order.id } }
+                    );
 
                     // 统一数据结构
                     const detailData = res.data.data || res.data;
