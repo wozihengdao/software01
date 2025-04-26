@@ -28,7 +28,7 @@ public class MaintenanceOrderServlet extends BaseServlet {
 
         String json= reader.readLine();
 
-       MaintenanceOrderService service = new MaintenanceOrderService();
+        MaintenanceOrderService service = new MaintenanceOrderService();
         List<MaintenanceOrder> list= service.selectAll();
         String str= JSON.toJSONString(list);
         resp.getWriter().write(str);
@@ -37,17 +37,41 @@ public class MaintenanceOrderServlet extends BaseServlet {
 
     public void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-              resp.setContentType("text/html;charset=utf-8");
-              BufferedReader reader = req.getReader();
-              String json= reader.readLine();
+        resp.setContentType("text/html;charset=utf-8");
+        BufferedReader reader = req.getReader();
+        String json= reader.readLine();
 
-              MaintenanceOrderService service = new MaintenanceOrderService();
-              MaintenanceOrder maintenance= JSON.parseObject(json, MaintenanceOrder.class);
+        MaintenanceOrderService service = new MaintenanceOrderService();
+        MaintenanceOrder maintenance= JSON.parseObject(json, MaintenanceOrder.class);
         System.out.println(maintenance.getEngineerId());
-              service.updateOrder(maintenance);
+        service.updateOrder(maintenance);
+
+    }
+
+    public void selectById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        System.out.println("/maintenanceOrder/selectById");
+        BufferedReader reader = req.getReader();
+        String json= reader.readLine();
+        if(json==null)json="20000000";
+//
+        MaintenanceOrderService service = new MaintenanceOrderService();
+
+        Maintenance maintenance=service.selectAllMaintenanceById(json);
+        System.out.println(maintenance);
+        resp.getWriter().write(JSON.toJSONString(maintenance));
+
+    }
+
+    public void assign(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        BufferedReader reader = req.getReader();
+        String json= reader.readLine();
+
 
     }
 
 
-
-    }
+}

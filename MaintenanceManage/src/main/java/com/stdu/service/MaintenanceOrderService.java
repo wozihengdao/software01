@@ -1,6 +1,7 @@
 package com.stdu.service;
 
 import com.stdu.mapper.MaintenanceOrderMapper;
+import com.stdu.pojo.Maintenance;
 import com.stdu.pojo.MaintenanceOrder;
 import com.stdu.util.SqlSessionFactoryUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -53,4 +54,14 @@ public class MaintenanceOrderService {
             return mapper.selectById(id);
         }
     }
+
+    public Maintenance selectAllMaintenanceById(String Id){
+
+        try (SqlSession session = factory.openSession()) {
+            MaintenanceOrderMapper mapper = session.getMapper(MaintenanceOrderMapper.class);
+            return mapper.selectAllMaintenanceById(Id);
+        }
+
+    }
+
 }

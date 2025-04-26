@@ -16,7 +16,7 @@ public class UserServlet extends BaseServlet{
 
     public void logIn(HttpServletRequest req, HttpServletResponse resp) throws ServletException,IOException {
         System.out.println("????");
-                UserService userService=new UserService();
+        UserService userService=new UserService();
         System.out.println("??????");
         resp.setContentType("text/html;charset=utf-8");
 
@@ -26,18 +26,17 @@ public class UserServlet extends BaseServlet{
         System.out.println(json);
         User user= JSON.parseObject(json,User.class);
         System.out.println(user);
-       User user1=userService.selectUserByUsername(user.getUsername());
+        User user1=userService.selectUserByUsername(user.getUsername());
+        if(user1!=null&&user1.getPassword().equals(user.getPassword())){
 
-       if(user1!=null&&user1.getPassword().equals(user.getPassword())){
+            resp.getWriter().write("success");
+            return;
+        }
+        else {
 
-           resp.getWriter().write("success");
-           return;
-       }
-       else {
+            resp.getWriter().write("fail");
 
-           resp.getWriter().write("fail");
-
-       }
+        }
 
 
 

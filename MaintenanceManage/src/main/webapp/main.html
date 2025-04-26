@@ -10,24 +10,44 @@
 </head>
 <body>
 
+<style>
+    .type-buttons {
+        margin: 20px 0;
+    }
 
+    .order-card {
+        margin-top: 15px;
+        transition: all 0.3s;
+    }
+</style>
 <div id="app">
 
     <el-container>
-        <el-aside width="200px" style="background-color: rgb(238, 241, 246)" style="height:  1000px">
+        <el-aside width="200px" style="background-color: #545c64; height: 100vh">
             <el-menu
-                    @select="handleMenuItemClick" background-color="#545c64"
+                    :default-active="activeIndex1"
+                    @select="handleMenuItemClick"
+                    background-color="#545c64"
                     text-color="#fff"
-                    active-text-color="#ffd04b" >
-                    <template slot="title"><i class="el-icon-message"></i>导航一</template>
-                    <el-menu-item-group>
-<!--                        <template slot="title"></template>-->
-                        <el-menu-item index="1">个人信息</el-menu-item>
-                        <el-menu-item index="2">功能栏</el-menu-item>
-                        <el-menu-item index="3">联系我们</el-menu-item>
-                        <el-menu-item index="4">退出登录</el-menu-item>
-                    </el-menu-item-group>
-
+                    active-text-color="#ffd04b">
+                <el-menu-item-group title="主菜单">
+                    <el-menu-item index="1">
+                        <i class="el-icon-user"></i>
+                        <span>个人信息</span>
+                    </el-menu-item>
+                    <el-menu-item index="2">
+                        <i class="el-icon-menu"></i>
+                        <span>功能面板</span>
+                    </el-menu-item>
+                    <el-menu-item index="3">
+                        <i class="el-icon-phone"></i>
+                        <span>联系我们</span>
+                    </el-menu-item>
+                    <el-menu-item index="4">
+                        <i class="el-icon-switch-button"></i>
+                        <span>退出登录</span>
+                    </el-menu-item>
+                </el-menu-item-group>
             </el-menu>
         </el-aside>
 
@@ -276,9 +296,9 @@
 
             },
             handleMenuItemClick(index) {
-                console.log('点击菜单:', index)
-               this.activeIndex1=index;
-                alert(activeIndex1);
+                     // alert(index);
+                if(index ==1)
+                window.location.href = "http://localhost:7469/MaintenanceManage/00"+".html";
             },
             fileList: [],
             handleRemove(file) {

@@ -54,5 +54,4 @@ public class EquipmentService {
             return mapper.selectById(id);
         }
     }
-
 }

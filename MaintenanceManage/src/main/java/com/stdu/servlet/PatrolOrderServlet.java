@@ -21,6 +21,7 @@ public class PatrolOrderServlet extends BaseServlet {
         List<PatrolOrder> list=patrolOrderService.selectAll();
 
         String json= JSON.toJSONString(list);
+        System.out.println(json);
         resp.getWriter().write(json);
     }
 
