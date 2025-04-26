@@ -1354,3 +1354,14 @@
 0:0:0:0:0:0:0:1 - - [21/Apr/2025:19:52:44 +0800] "GET /MaintenanceManage/02.html HTTP/1.1" 304 - http-bio-7469-exec-7 2
 0:0:0:0:0:0:0:1 - - [21/Apr/2025:19:52:44 +0800] "POST /MaintenanceManage/stop/selectAll HTTP/1.1" 200 106 http-bio-7469-exec-7 3
 0:0:0:0:0:0:0:1 - - [21/Apr/2025:19:52:44 +0800] "POST /MaintenanceManage/maintenanceOrder/selectAll HTTP/1.1" 200 389 http-bio-7469-exec-9 2
+0:0:0:0:0:0:0:1 - - [21/Apr/2025:23:20:24 +0800] "GET /MaintenanceManage HTTP/1.1" 302 - http-bio-7469-exec-1 0
+0:0:0:0:0:0:0:1 - - [21/Apr/2025:23:20:24 +0800] "GET /MaintenanceManage/ HTTP/1.1" 304 - http-bio-7469-exec-2 7
+0:0:0:0:0:0:0:1 - - [21/Apr/2025:23:20:25 +0800] "GET /MaintenanceManage/js/storage.js HTTP/1.1" 304 - http-bio-7469-exec-3 4
+0:0:0:0:0:0:0:1 - - [21/Apr/2025:23:20:25 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-7469-exec-4 0
+0:0:0:0:0:0:0:1 - - [21/Apr/2025:23:22:13 +0800] "POST /MaintenanceManage/user/logIn HTTP/1.1" 200 7 http-bio-7469-exec-6 484
+0:0:0:0:0:0:0:1 - - [21/Apr/2025:23:22:13 +0800] "GET /MaintenanceManage/main.html HTTP/1.1" 304 - http-bio-7469-exec-7 4
+0:0:0:0:0:0:0:1 - - [21/Apr/2025:23:22:14 +0800] "POST /MaintenanceManage/stop/selectAll HTTP/1.1" 200 106 http-bio-7469-exec-8 31
+0:0:0:0:0:0:0:1 - - [21/Apr/2025:23:22:14 +0800] "POST /MaintenanceManage/repairOrder/selectAll HTTP/1.1" 200 1654 http-bio-7469-exec-9 29
+0:0:0:0:0:0:0:1 - - [21/Apr/2025:23:23:39 +0800] "GET /MaintenanceManage/02.html HTTP/1.1" 304 - http-bio-7469-exec-2 2
+0:0:0:0:0:0:0:1 - - [21/Apr/2025:23:23:39 +0800] "POST /MaintenanceManage/stop/selectAll HTTP/1.1" 200 106 http-bio-7469-exec-2 2
+0:0:0:0:0:0:0:1 - - [21/Apr/2025:23:23:39 +0800] "POST /MaintenanceManage/maintenanceOrder/selectAll HTTP/1.1" 200 389 http-bio-7469-exec-4 7

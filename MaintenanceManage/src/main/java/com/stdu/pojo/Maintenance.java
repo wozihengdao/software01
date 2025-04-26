@@ -2,6 +2,23 @@ package com.stdu.pojo;
 
 public class Maintenance {
 
+    @Override
+    public String toString() {
+        return "Maintenance{" +
+                "id=" + id +
+                ", stop='" + stop + '\'' +
+                ", faultyEquipmentId='" + faultyEquipmentId + '\'' +
+                ", faultyType='" + faultyType + '\'' +
+                ", faultyDescription='" + faultyDescription + '\'' +
+                ", faultyGrade='" + faultyGrade + '\'' +
+                ", olderPicture='" + olderPicture + '\'' +
+                ", newPicture='" + newPicture + '\'' +
+                ", type='" + type + '\'' +
+                ", data='" + data + '\'' +
+                ", engineerId='" + engineerId + '\'' +
+                '}';
+    }
+
     private Long id;
     private String stop;
     private String faultyEquipmentId;

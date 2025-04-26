@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,6 +24,20 @@ public class EngineerServlet  extends BaseServlet {
 
         String json= JSON.toJSONString(list);
         resp.getWriter().write(json);
+    }
+
+    public void selectById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        BufferedReader reader=req.getReader();
+        String line=reader.readLine();
+         Long id=Long.valueOf(line);
+        System.out.println(id);
+        Engineer engineer=engineerService.selectById(id);
+        String json= JSON.toJSONString(engineer);
+        System.out.printf(json);
+        resp.getWriter().write(json);
+
     }
 
 }

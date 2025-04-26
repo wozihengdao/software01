@@ -27,7 +27,6 @@ public class UserServlet extends BaseServlet{
         User user= JSON.parseObject(json,User.class);
         System.out.println(user);
        User user1=userService.selectUserByUsername(user.getUsername());
-
        if(user1!=null&&user1.getPassword().equals(user.getPassword())){
 
            resp.getWriter().write("success");

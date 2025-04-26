@@ -45,6 +45,18 @@ public class MaintenanceOrder {
         return type;
     }
 
+    @Override
+    public String toString() {
+        return "MaintenanceOrder{" +
+                "id=" + id +
+                ", repairId='" + repairId + '\'' +
+                ", engineerId='" + engineerId + '\'' +
+                ", picture='" + picture + '\'' +
+                ", type='" + type + '\'' +
+                ", data='" + data + '\'' +
+                '}';
+    }
+
     public void setType(String type) {
         this.type = type;
     }

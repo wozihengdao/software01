@@ -48,6 +48,30 @@ public class MaintenanceOrderServlet extends BaseServlet {
 
     }
 
+    public void selectById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        System.out.println("/maintenanceOrder/selectById");
+        BufferedReader reader = req.getReader();
+        String json= reader.readLine();
+        if(json==null)json="20000000";
+//
+        MaintenanceOrderService service = new MaintenanceOrderService();
+
+         Maintenance maintenance=service.selectAllMaintenanceById(json);
+        System.out.println(maintenance);
+        resp.getWriter().write(JSON.toJSONString(maintenance));
+
+    }
+
+    public void assign(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+                resp.setContentType("text/html;charset=utf-8");
+                BufferedReader reader = req.getReader();
+                String json= reader.readLine();
+
+
+    }
 
 
     }

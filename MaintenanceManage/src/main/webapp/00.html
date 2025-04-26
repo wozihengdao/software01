@@ -3,11 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
 </head>
 <body>
+<style>
+    .type-buttons {
+        margin: 20px 0;
+    }
+
+    .order-card {
+        margin-top: 15px;
+        transition: all 0.3s;
+    }
+</style>
+<div id="app">
+
+    <el-container>
+        <el-aside width="200px" style="background-color: #545c64; height: 100vh">
+            <el-menu
+                    :default-active="activeIndex1"
+                    @select="handleMenuItemClick"
+                    background-color="#545c64"
+                    text-color="#fff"
+                    active-text-color="#ffd04b">
+                <el-menu-item-group title="主菜单">
+                    <el-menu-item index="1">
+                        <i class="el-icon-user"></i>
+                        <span>个人信息</span>
+                    </el-menu-item>
+                    <el-menu-item index="2">
+                        <i class="el-icon-menu"></i>
+                        <span>功能面板</span>
+                    </el-menu-item>
+                    <el-menu-item index="3">
+                        <i class="el-icon-phone"></i>
+                        <span>联系我们</span>
+                    </el-menu-item>
+                    <el-menu-item index="4">
+                        <i class="el-icon-switch-button"></i>
+                        <span>退出登录</span>
+                    </el-menu-item>
+                </el-menu-item-group>
+            </el-menu>
+        </el-aside>
+
+        <el-container>
+            <div v-if="activeIndex1==2" style="width:1500px">
+
+                <el-main>
 
 
+
+                </el-main>
+
+            </div>
+        </el-container>
+    </el-container>
+
+
+
+
+</div>
 
 
 </body>
+<script>
+    new Vue({
+            el:"#app",
+            data() {
+                return {
+                    repairOrderList:[],
+                    activeIndex1: '2',
+                    activeIndex2: '2',
+                    dialogVisible:false,
+
+                    dialogImageUrl: '',
+
+                    disabled: false,
+
+                };
+            },
+            mounted() {
+
+
+            }
+            ,
+            methods: {
+                handleSelect(key, keyPath) {
+
+                    window.location.href = "http://localhost:7469/MaintenanceManage/0"+(key-1)+".html";
+
+                },
+                handleMenuItemClick(index) {
+                    // alert(index);
+                    if(index ==1)
+                        window.location.href = "http://localhost:7469/MaintenanceManage/00"+".html";
+                },
+                fileList: [],
+                handlePictureCardPreview(file) {
+                    this.dialogImageUrl = file.url;
+                    this.dialogVisible = true;
+                },
+                handleDownload(file) {
+                    console.log(file);
+                }
+
+
+            }
+        }
+    )
+</script>
 </html>
