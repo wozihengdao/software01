@@ -54,8 +54,8 @@ public class RepairOrderServlet extends BaseServlet {
         RepairOrderService service = new RepairOrderService();
         List<RepairOrder> list= service.selectAll();
         String str=JSON.toJSONString(list);
+        System.out.println(str);
         resp.getWriter().write(str);
-        System.out.println("hahahahaha");
     }
 
     public RepairOrder selectLast(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -63,6 +63,9 @@ public class RepairOrderServlet extends BaseServlet {
 
        return null;
     }
+
+
+
 
 
 }

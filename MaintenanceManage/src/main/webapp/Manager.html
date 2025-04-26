@@ -18,6 +18,23 @@
         transition: all 0.3s;
     }
 
+    .el-table__body {
+        table-layout: fixed;
+    }
+
+    .detail-dialog {
+        margin: -20px;
+    }
+
+    .detail-dialog .el-descriptions {
+        margin: 20px;
+    }
+
+    .detail-dialog .el-descriptions-item__label {
+        width: 100px;
+        background: #f5f7fa;
+    }
+
 </style>
 <body>
 
@@ -61,94 +78,188 @@
             </div>
 
             <div v-show="activeIndex === '2'" style="width:100%">
-                <!-- 头部导航 -->
                 <el-header style="border-bottom: 1px solid #e6e6e6">
                     <div class="type-buttons">
-                        <el-radio-group v-model="activeType" size="medium">
+                        <el-radio-group v-model="activeType" size="medium" @change="handleTypeChange">
                             <el-radio-button
                                     v-for="type in orderTypes"
                                     :key="type.value"
-                                    :label="type.value"
-                                    border>
+                                    :label="type.value">
                                 {{ type.label }}
                             </el-radio-button>
                         </el-radio-group>
                     </div>
                 </el-header>
 
-                <!-- 主要内容 -->
                 <el-main>
-                    <!-- 工单展示区 -->
-                    <el-card class="order-card" shadow="hover">
+                    <el-card class="order-card">
                         <el-table
                                 :data="filteredOrders"
                                 stripe
                                 style="width: 100%"
-                                highlight-current-row>
+                                v-loading="loading">
 
-                            <el-table-column label="工单编号" prop="orderNo" width="180"></el-table-column>
-                            <el-table-column label="设备名称" prop="deviceName"></el-table-column>
-                            <el-table-column label="工单状态">
-                                <template slot-scope="scope">
-                                    <el-tag :type="statusStyle[scope.row.status]">
+                            <!-- 固定列 -->
+                            <el-table-column
+                                    label="工单编号"
+                                    prop="orderNo"
+                                    width="180"
+                                    fixed></el-table-column>
+
+                            <!-- 动态列 -->
+                            <template v-for="(col, index) in dynamicColumns">
+                                <el-table-column
+                                        :key="index"
+                                        :label="col.label"
+                                        :prop="col.prop"
+                                        :width="col.width">
+                                    <template v-if="col.slot" v-slot="scope">
+                                        <slot :name="col.slot" :row="scope.row"></slot>
+                                    </template>
+                                </el-table-column>
+                            </template>
+
+                            <!-- 状态列 -->
+                            <el-table-column label="状态" width="120">
+                                <template v-slot="scope">
+                                    <el-tag
+                                            :type="statusStyle[scope.row.status]"
+                                            size="medium">
                                         {{ statusText[scope.row.status] }}
                                     </el-tag>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="提交时间" prop="createTime" width="180"></el-table-column>
-                            <el-table-column label="操作" width="180">
-                                <template slot-scope="scope">
-                                    <el-button
-                                            type="text"
-                                            @click="handleDetail(scope.row)">
-                                        详情
-                                    </el-button>
-                                    <el-button
-                                            v-if="scope.row.status === 1"
-                                            type="text"
-                                            style="color: #67C23A"
-                                            @click="showAssignDialog(scope.row)">
-                                        派单
-                                    </el-button>
+
+                            <!-- 操作列 -->
+                            <el-table-column label="操作" width="180" fixed="right">
+                                <template v-slot="scope">
+                                    <div style="display: flex; gap: 8px">
+                                        <template v-for="(action, index) in getOrderActions(scope.row)">
+                                            <el-button
+                                                    :key="index"
+                                                    type="text"
+                                                    :style="action.style"
+                                                    @click="action.handler(scope.row)">
+                                                {{ action.label }}
+                                            </el-button>
+                                        </template>
+                                    </div>
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <el-dialog
-                                title="选择工程师"
-                                :visible.sync="assignDialogVisible"
-                                width="30%">
-                            <el-select
-                                    v-model="selectedEngineer"
-                                    placeholder="请选择工程师"
-                                    filterable
-                                    style="width: 100%">
-                                <el-option
-                                        v-for="engineer in engineers"
-                                        :key="engineer.id"
-                                        :label="engineer.name"
-                                        :value="engineer.id">
-                                    <span style="float: left">{{ engineer.name }}</span>
-                                    <span style="float: right; color: #8492a6; font-size: 13px">
-                {{ engineer.department }}
-            </span>
-                                </el-option>
-                            </el-select>
-                            <span slot="footer" class="dialog-footer">
-        <el-button @click="assignDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="assignOrder">确 定</el-button>
-    </span>
-                        </el-dialog>
+
                         <!-- 分页 -->
                         <el-pagination
                                 background
-                                layout="prev, pager, next"
-                                :total="total"
+                                layout="total, prev, pager, next"
+                                :total="totalFiltered"
                                 :page-size="pageSize"
+                                :current-page="currentPage"
                                 @current-change="handlePageChange"
                                 style="margin-top: 20px">
                         </el-pagination>
                     </el-card>
                 </el-main>
+
+                <!-- 派单对话框 -->
+                <el-dialog
+                        title="选择工程师"
+                        :visible.sync="assignDialogVisible"
+                        width="30%">
+                    <el-select
+                            v-model="selectedEngineer"
+                            placeholder="请选择工程师"
+                            filterable
+                            style="width: 100%">
+                        <el-option
+                                v-for="engineer in engineers"
+                                :key="engineer.id"
+                                :label="engineer.name"
+                                :value="engineer.id">
+                            <span style="float: left">{{ engineer.name }}</span>
+                            <span style="float: right; color: #8492a6; font-size: 13px">
+                                {{ engineer.department }}
+                            </span>
+                        </el-option>
+                    </el-select>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="assignDialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="assignOrder">确 定</el-button>
+                    </span>
+                </el-dialog>
+
+                <!-- 详情对话框 -->
+                <el-dialog
+                        :title="currentDetail ? currentDetail.orderNo : '工单详情'"
+                        :visible.sync="detailDialogVisible"
+                        width="60%"
+                        class="detail-dialog">
+                    <el-descriptions
+                            :column="2"
+                            border
+                            v-if="currentDetail">
+
+                        <el-descriptions-item label="设备名称">
+                            {{ currentDetail.deviceName }}
+                        </el-descriptions-item>
+                        <el-descriptions-item label="创建时间">
+                            {{ currentDetail.createTime }}
+                        </el-descriptions-item>
+
+                        <!-- 报修工单 -->
+                        <template v-if="activeType === 'repair'">
+                            <el-descriptions-item label="故障描述">
+                                {{ currentDetail.faultDesc }}
+                            </el-descriptions-item>
+                            <el-descriptions-item label="紧急程度">
+                                <el-tag :type="urgencyStyle[currentDetail.urgency]">
+                                    {{ currentDetail.urgencyLevel }}
+                                </el-tag>
+                            </el-descriptions-item>
+                            <el-descriptions-item label="故障等级">
+                                <el-tag :type="urgencyStyle[currentDetail.faultyGrade]">
+                                    {{ ['一般','紧急','特急'][currentDetail.faultyGrade] }}
+                                </el-tag>
+                            </el-descriptions-item>
+                            <el-descriptions-item label="现场照片" v-if="currentDetail.faultImages?.length">
+                                <div style="display: flex; gap: 10px">
+                                    <el-image
+                                            v-for="(img,idx) in currentDetail.faultImages"
+                                            :key="idx"
+                                            :src="'http://your-domain.com/' + img"
+                                            :preview-src-list="currentDetail.faultImages.map(i => 'http://your-domain.com/'+i)"
+                                            style="width: 100px; height: 80px">
+                                    </el-image>
+                                </div>
+                            </el-descriptions-item>
+                        </template>
+
+                        <!-- 维修工单 -->
+                        <template v-if="activeType === 'maintain'">
+                            <el-descriptions-item label="维护类型">
+                                {{ currentDetail.maintainType }}
+                            </el-descriptions-item>
+                            <el-descriptions-item label="维护周期">
+                                {{ currentDetail.cycle }}
+                            </el-descriptions-item>
+                        </template>
+
+                        <!-- 保养工单 -->
+                        <template v-if="activeType === 'service'">
+                            <el-descriptions-item label="保养项目">
+                                {{ currentDetail.project }}
+                            </el-descriptions-item>
+                            <el-descriptions-item label="上次保养">
+                                {{ currentDetail.lastDate }}
+                            </el-descriptions-item>
+                        </template>
+
+                        <!-- 公共字段 -->
+                        <el-descriptions-item label="备注信息">
+                            {{ currentDetail.remark || '无' }}
+                        </el-descriptions-item>
+                    </el-descriptions>
+                </el-dialog>
             </div>
             <div v-show="activeIndex === '3'" class="content-area">
                 <el-card shadow="never">
@@ -173,44 +284,19 @@
                     {value: 'monitor', label: '监测工单'},
                     {value: 'spare', label: '备件工单'}
                 ],
-                allOrders: [
-                    // // 示例数据
-                    // {
-                    //     orderNo: 'GD-202308001',
-                    //     type: 'repair',
-                    //     deviceName: '自动扶梯',
-                    //     status: 1,
-                    //     createTime: '2023-08-01 09:30',
-                    //     content: '扶梯异响问题报修'
-                    // },
-                    // {
-                    //     orderNo: 'GD-202308002',
-                    //     type: 'maintain',
-                    //     deviceName: '空调机组',
-                    //     status: 2,
-                    //     createTime: '2023-08-02 14:20',
-                    //     content: '定期维护保养'
-                    // }
-                ],
+                allOrders: [],
                 engineers: [],
-                statusText: {
-                    1: '待处理',
-                    2: '进行中',
-                    3: '已完成',
-                    4: '已关闭'
-                },
-                statusStyle: {
-                    1: 'warning',
-                    2: 'primary',
-                    3: 'success',
-                    4: 'info'
-                },
+                statusText: {1:'待处理',2:'进行中',3:'已完成',4:'已关闭'},
+                statusStyle: {1:'warning',2:'primary',3:'success',4:'info'},
+                urgencyStyle: ['','warning','danger'],
                 pageSize: 10,
-                total: 50,
+                loading: false,
                 assignDialogVisible: false,
                 selectedEngineer: null,
                 currentOrder: null,
                 currentPage: 1,
+                currentDetail: null,      // 当前查看的工单详情
+                detailDialogVisible: false, // 控制详情对话框显示
             }
         },
         watch: {
@@ -220,17 +306,87 @@
                 this.loadOrders()
             }
         },
-        created() {
-            this.loadOrders()
-        },
         computed: {
+            dynamicColumns() {
+                const base = [
+                ]
+                switch(this.activeType) {
+                    case 'repair':
+                        return [
+                            { label: '所属车站', prop: 'stop', width: 120 },
+                            { label: '设备编号', prop: 'faultyEquipmentId', width: 180 },
+                            { label: '故障类型', prop: 'faultCategory', width: 120 },
+                            { label: '上报时间', prop: 'reportTime', width: 180 }
+                        ]
+                    case 'maintain':
+                        return [
+                            ...base,
+                            { label: '维护类型', prop: 'maintainType', width: 120 },
+                            { label: '负责人', prop: 'engineerName', width: 120 },
+                            { label: '计划时间', prop: 'planTime', width: 200 }
+                        ]
+                    case 'service':
+                        return [
+                            ...base,
+                        ]
+                    case 'inspect':
+                        return [
+                            ...base,
+                        ]
+                    default:
+                        return base
+                }
+            },
             filteredOrders() {
-                return this.allOrders.filter(
-                    order => order.type === this.activeType
+                return this.allOrders.slice(
+                    (this.currentPage - 1) * this.pageSize,
+                    this.currentPage * this.pageSize
                 )
+            },
+            totalFiltered() {
+                return this.allOrders.length
             }
         },
         methods: {
+            // 新增操作配置映射
+            getOrderActions(order) {
+                const baseActions = [
+                    {
+                        label: '详情',
+                        type: 'text',
+                        handler: this.handleDetail
+                    }
+                ]
+
+                const status = order.status
+                const typeActions = {
+                    repair: [
+                    ],
+                    maintain: [
+                        {
+                            show: status === 1,
+                            label: '派单',
+                            type: 'text',
+                            style: {color: '#67C23A'},
+                            handler: this.showAssignDialog
+                        }
+                    ],
+                    service: [
+                        {
+                            show: status === 1,
+                            label: '派单',
+                            type: 'text',
+                            style: {color: '#67C23A'},
+                            handler: this.showAssignDialog
+                        }
+                    ]
+                }
+
+                return [
+                    ...baseActions,
+                    ...(typeActions[this.activeType] || [])
+                ].filter(action => action.show !== false)
+            },
             // 加载工单数据方法
             async loadOrders() {
                 try {
@@ -243,25 +399,151 @@
                         monitor: 'http://localhost:7469/MaintenanceManage/patrolOrder/selectAll',
                         spare: 'http://localhost:7469/MaintenanceManage/checkOrder/selectAll'
                     }
-                    const res = await axios.get(apiMap[this.activeType], {
-                        params: {
-                            pageNum: this.currentPage,
-                            pageSize: this.pageSize
+                    const res = await axios.get(apiMap[this.activeType])
+                    // 根据实际数据结构调整
+                    const rawData = res.data.data || res.data // 不同后端可能返回不同结构
+
+                    this.allOrders = rawData.map(item => {
+                        const base = {
+                            id: item.id,
+                            orderNo: `GD-${item.id.toString().padStart(6, '0')}`,
+                            deviceName: item.equipmentName || '未知设备',
+                            status: parseInt(item.status) || 1,
+                            createTime: item.createTime || '无记录',
+                            remark: item.remark,
+                            // 公共字段
+                            stop: item.stop?.name || '未知车站',
+                            faultyEquipmentId: item.faultyEquipmentId?.code  || '无',
+                            reportTime: item.reportTime || item.createTime
+                        }
+
+                        switch(this.activeType) {
+                            case 'repair':
+                                return {
+                                    ...base,
+                                    orderNo: `BX${item.id.toString().padStart(6,'0')}`, // 更符合业务编号
+                                    stop: item.stop,        // 直接使用POJO字段
+                                    faultyEquipmentId: item.faultyEquipmentId,
+                                    faultCategory: item.faultyType,
+                                    reportTime: item.data, // 直接显示原始数据
+                                    // 状态需要转换
+                                    status: {
+                                        '0': 1, // 待处理
+                                        '1': 2, // 处理中
+                                        '2': 3  // 已完成
+                                    }[item.type] || 1
+                                }
+                            case 'maintain':
+                                return {
+                                    ...base,
+                                    maintainType: ['日常','季度','年度'][item.type] || '未知',
+                                }
+                            case 'service':
+                                return {
+                                    ...base,
+                                    project: item.projectName,
+                                    lastDate: item.lastMaintainDate
+                                }
+                            case 'inspect':
+                                return {
+                                    ...base,
+                                    inspectItem: item.inspectionItems,
+                                    inspector: item.inspectorName
+                                }
+                            default:
+                                return base
                         }
                     })
 
-                    this.allOrders = res.data.data.records
-                    this.total = res.data.data.total
                 } catch (error) {
-                    this.$message.error('获取工单失败')
+                    console.error('加载工单失败:', error)
+                    this.$message.error('数据加载失败')
+                } finally {
+                    this.loading = false
+                }
+            },
+            async handleDetail(order) {
+                try {
+                    // 根据工单类型调用不同详情接口
+                    const apiMap = {
+                        repair: 'http://localhost:7469/MaintenanceManage/repairOrder/selectById',
+                        maintain: 'http://localhost:7469/MaintenanceManage/maintenanceOrder/selectById',
+                        service: 'http://localhost:7469/MaintenanceManage/upkeep/selectById',
+                        inspect: 'http://localhost:7469/MaintenanceManage/patrol/selectById',
+                        monitor: 'http://localhost:7469/MaintenanceManage/patrolOrder/selectById',
+                        spare: 'http://localhost:7469/MaintenanceManage/checkOrder/selectById'
+                    };
+
+                    const res = await axios.get(`${apiMap[this.activeType]}/${order.id}`);
+                    const detailData = res.data.data || res.data
+
+                    this.currentDetail = {
+                        ...order,
+                        // 补充详细信息
+                        faultDesc: item.faultyDescription,
+                        urgencyLevel: ['一般','紧急','特急'][item.faultyGrade] || '未知',
+                        deviceModel: '需补充设备接口',
+                        faultImages: item.picture ? item.picture.split(',') : []
+                    }
+                    this.detailDialogVisible = true;
+                } catch (error) {
+                    this.$message.error('获取工单详情失败');
+                    console.error(error);
+                }
+            },
+            // 显示派单对话框时加载工程师列表
+            async showAssignDialog(order) {
+                try {
+                    const res = await axios.get('http://localhost:7469/MaintenanceManage/engineer/selectAll')
+                    this.engineers = res.data.data.map(e => ({
+                        id: e.id,
+                        name: e.engineerName,
+                        department: e.departmentName
+                    }))
+                    this.currentOrder = order
+                    this.assignDialogVisible = true
+                } catch (error) {
+                    this.$message.error('获取工程师列表失败')
+                    console.error(error)
+                }
+
+                this.currentOrder = order
+                this.selectedEngineer = null
+                this.assignDialogVisible = true
+            },
+            // 派单操作
+            async assignOrder() {
+                try {
+                    // 根据不同类型调用对应派单接口
+                    const apiMap = {
+                        repair: 'repairOrder/assign',
+                        maintain: 'maintenanceOrder/assign',
+                        service: 'upkeep/assign',
+                        inspect: 'api/inspect-orders',
+                        monitor: 'api/monitor-orders',
+                        spare: 'api/spare-orders'
+                    }[this.activeType]
+
+                    await axios.post(
+                        `http://localhost:7469/MaintenanceManage/${apiPath}/${this.currentOrder.id}`,
+                        { engineerId: this.selectedEngineer }
+                    )
+
+                    this.$message.success('派单成功')
+                    this.assignDialogVisible = false
+                    await this.loadOrders()
+                } catch (error) {
+                    this.$message.error('派单失败')
                     console.error(error)
                 }
             },
+            handleTypeChange() {
+                this.currentPage = 1
+                this.loadOrders()
+            },
 
-            // 分页改变处理
-            async handlePageChange(page) {
+            handlePageChange(page) {
                 this.currentPage = page
-                await this.loadOrders()
             },
             // 添加菜单处理方法
             handleMenuSelect(index) {
@@ -279,62 +561,10 @@
                 }).then(() => {
                     window.location.href = '/login.html'
                 })
-            },
-            handleDetail(order) {
-                this.$alert(`工单详情：${order.content}`, '工单信息', {
-                    confirmButtonText: '确定'
-                })
-            },
-            handlePageChange(page) {
-                this.currentPage = page
-                // 这里添加分页数据加载逻辑
-                console.log(`加载第 ${page} 页数据`)
-            },
-            showAssignDialog(order) {
-                this.currentOrder = order
-                this.selectedEngineer = null
-                this.assignDialogVisible = true
-            },
-            // 显示派单对话框时加载工程师列表
-            async showAssignDialog(order) {
-                try {
-                    const res = await axios.get('http://localhost:7469/MaintenanceManage/engineer/selectAll')
-                    this.engineers = res.data
-                } catch (error) {
-                    this.$message.error('获取工程师列表失败')
-                    console.error(error)
-                }
-
-                this.currentOrder = order
-                this.selectedEngineer = null
-                this.assignDialogVisible = true
-            },
-            // 派单操作
-            async assignOrder() {
-                try {
-                    // 根据不同类型调用对应派单接口
-                    const apiMap = {
-                        repair: 'http://localhost:7469/MaintenanceManage/repairOrder/assign',
-                        maintain: 'http://localhost:7469/MaintenanceManage/maintainOrder/assign',
-                        service: 'http://localhost:7469/MaintenanceManage/api/service-orders',
-                        inspect: 'http://localhost:7469/MaintenanceManage/api/inspect-orders',
-                        monitor: 'http://localhost:7469/MaintenanceManage/api/monitor-orders',
-                        spare: 'http://localhost:7469/MaintenanceManage/api/spare-orders'
-                    }
-
-                    await axios.post(
-                        `${apiMap[this.currentOrder.type]}/${this.currentOrder.id}/assign`,
-                        { engineerId: this.selectedEngineer }
-                    )
-
-                    await this.loadOrders()
-                    this.$message.success('派单成功')
-                    this.assignDialogVisible = false
-                } catch (error) {
-                    this.$message.error('派单失败')
-                    console.error(error)
-                }
             }
+        },
+        created() {
+            this.loadOrders()
         }
     })
 </script>
