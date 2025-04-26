@@ -29,7 +29,7 @@ public class UserServlet extends BaseServlet{
        User user1=userService.selectUserByUsername(user.getUsername());
        if(user1!=null&&user1.getPassword().equals(user.getPassword())){
 
-           resp.getWriter().write("success");
+           resp.getWriter().write(user1.getType());
            return;
        }
        else {
