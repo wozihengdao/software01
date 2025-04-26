@@ -6,6 +6,7 @@ com\stdu\servlet\PatrolOrderServlet.class
 com\stdu\mapper\UpkeepOrderMapper.class
 com\stdu\servlet\SpareServlet.class
 com\stdu\servlet\EngineerServlet.class
+com\stdu\pojo\TimeSel.class
 com\stdu\pojo\SpareOrder.class
 com\stdu\mapper\UserMapper.class
 com\stdu\service\RepairOrderService.class

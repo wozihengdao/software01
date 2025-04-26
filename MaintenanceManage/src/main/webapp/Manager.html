@@ -391,7 +391,7 @@
                 return function (level) {
                     return ['', 'warning', 'danger'][level] || ''
                 }
-            }
+            },
             // 分页数据
             filteredOrders() {
                 const start = (this.currentPage - 1) * this.pageSize
@@ -560,18 +560,29 @@
                     const apiMap = {
                         repair: 'repairOrder/selectById',
                         maintain: 'maintenanceOrder/selectById',
-                        service: 'upkeep/selectById'
+                        service: 'upkeepOrder/selectById'
                     }
                     const res = await axios.get(
                         `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}/${order.id}`
                     )
-                    this.currentDetail = res.data.data || res.data
+
+                    // 统一数据结构
+                    const detailData = res.data.data || res.data;
+                    this.currentDetail = {
+                        ...detailData,
+                        orderNo: this.generateOrderNo(detailData.id),
+                        deviceName: detailData.equipmentName || '未知设备',
+                        createTime: detailData.data,
+                        urgency: detailData.faultyGrade || 0,
+                        faultDesc: detailData.faultyDescription,
+                        picture: detailData.picture
+                    };
+
                     this.detailDialogVisible = true
                 } catch (error) {
                     this.$message.error('获取详情失败')
                 }
             },
-
             // 显示创建保养工单对话框
             showCreateDialog() {
                 this.createDialogVisible = true
@@ -660,7 +671,7 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        window.location.href = '/login.html'
+                        window.location.href = "http://localhost:7469/MaintenanceManage/logIn.html";
                     })
                     return
                 }

@@ -43,6 +43,7 @@ D:\software01\MaintenanceManage\src\main\java\com\stdu\service\RepairOrderServic
 D:\software01\MaintenanceManage\src\main\java\com\stdu\servlet\SpareServlet.java
 D:\software01\MaintenanceManage\src\main\java\com\stdu\pojo\UpkeepOrder.java
 D:\software01\MaintenanceManage\src\main\java\com\stdu\mapper\StopMapper.java
+D:\software01\MaintenanceManage\src\main\java\com\stdu\pojo\TimeSel.java
 D:\software01\MaintenanceManage\src\main\java\com\stdu\service\EngineerService.java
 D:\software01\MaintenanceManage\src\main\java\com\stdu\servlet\RepairOrderServlet.java
 D:\software01\MaintenanceManage\src\main\java\com\stdu\servlet\BaseServlet.java
