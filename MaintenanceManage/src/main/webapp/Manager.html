@@ -236,12 +236,28 @@
 
                         <!-- 维修工单 -->
                         <template v-if="activeType === 'maintain'">
-                            <el-descriptions-item label="维护类型">
-                                {{ currentDetail.maintainType }}
-                            </el-descriptions-item>
-                            <el-descriptions-item label="维护周期">
-                                {{ currentDetail.cycle }}
-                            </el-descriptions-item>
+                            <!-- 在维修工单模板区块添加 -->
+                            <template v-if="activeType === 'maintain'">
+                                <el-descriptions-item label="关联报修单">
+                                    {{ currentDetail.repairOrderNo || '无' }}
+                                </el-descriptions-item>
+
+                                <el-descriptions-item label="维护图片" v-if="currentDetail.maintainImages?.length">
+                                    <div style="display: flex; gap: 10px">
+                                        <el-image
+                                                v-for="(img,idx) in currentDetail.maintainImages"
+                                                :key="idx"
+                                                :src="'http://your-domain.com/' + img"
+                                                :preview-src-list="currentDetail.maintainImages.map(i => 'http://your-domain.com/'+i)"
+                                                style="width: 100px; height: 80px">
+                                        </el-image>
+                                    </div>
+                                </el-descriptions-item>
+
+                                <el-descriptions-item label="维护记录">
+                                    {{ currentDetail.maintainRecord || '暂无记录' }}
+                                </el-descriptions-item>
+                            </template>
                         </template>
 
                         <!-- 保养工单 -->
@@ -321,7 +337,6 @@
                     case 'maintain':
                         return [
                             ...base,
-                            { label: '维护类型', prop: 'maintainType', width: 120 },
                             { label: '负责人', prop: 'engineerName', width: 120 },
                             { label: '计划时间', prop: 'planTime', width: 200 }
                         ]
@@ -348,6 +363,20 @@
             }
         },
         methods: {
+            // 获取工程师名称
+            getEngineerName(id) {
+                const engineer = this.engineers.find(e => e.id === id)
+                return engineer ? engineer.name : '未分配'
+            },
+
+            // 状态映射
+            mapMaintainStatus(status) {
+                return {
+                    '0': 1, // 待处理
+                    '1': 2, // 进行中
+                    '2': 3  // 已完成
+                }[status] || 1
+            },
             // 新增操作配置映射
             getOrderActions(order) {
                 const baseActions = [
@@ -436,7 +465,10 @@
                             case 'maintain':
                                 return {
                                     ...base,
-                                    maintainType: ['日常','季度','年度'][item.type] || '未知',
+                                    orderNo: `WX${item.id.toString().padStart(6,'0')}`,
+                                    planTime: item.data,
+                                    engineerName: this.getEngineerName(item.engineerId),
+                                    status: this.mapMaintainStatus(item.status)
                                 }
                             case 'service':
                                 return {
@@ -483,7 +515,11 @@
                         faultDesc: item.faultyDescription,
                         urgencyLevel: ['一般','紧急','特急'][item.faultyGrade] || '未知',
                         deviceModel: '需补充设备接口',
-                        faultImages: item.picture ? item.picture.split(',') : []
+                        faultImages: item.picture ? item.picture.split(',') : [],
+                        repairOrderNo: `BX${detailData.repairId.toString().padStart(6,'0')}`,
+                        maintainImages: detailData.picture ? detailData.picture.split(',') : [],
+                        maintainRecord: detailData.remark,
+                        actualFinishTime: detailData.finishTime || '未完成'
                     }
                     this.detailDialogVisible = true;
                 } catch (error) {
