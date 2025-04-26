@@ -608,6 +608,49 @@
         }
     )
 </script>
+
+<script>
+    (function() {
+        var container = document.getElementById('calendar');
+        var days = ['周一','周二','周三','周四','周五','周六','周日'];
+        var html = '<table><thead><tr>';
+        days.forEach(function(day) {
+            html += '<th>' + day + '</th>';
+        });
+        html += '</tr></thead><tbody><tr>';
+
+        var year = 2025, month = 4; // JS 月份从 0 开始，4 表示 5 月
+        var firstDay = new Date(year, month, 1).getDay(); // 0=周日,1=周一...
+        var blankCount = (firstDay + 6) % 7;              // 转成周一为 0
+        // 首行空格
+        for (var i = 0; i < blankCount; i++) {
+            html += '<td></td>';
+        }
+
+        var monthLength = new Date(year, month + 1, 0).getDate();
+        for (var d = 1; d <= monthLength; d++) {
+            // 计算当前日期在周内的索引：0=周一 ... 6=周日
+            var idx = (blankCount + d - 1) % 7;
+            var isWeekend = (idx === 5 || idx === 6);
+            html += '<td' + (isWeekend ? ' class="holiday">' : '>') + d + '</td>';
+            // 换行
+            if ((blankCount + d) % 7 === 0 && d !== monthLength) {
+                html += '</tr><tr>';
+            }
+        }
+        // 补齐末行空格
+        var total = blankCount + monthLength;
+        if (total % 7 !== 0) {
+            for (var j = 0; j < (7 - total % 7); j++) {
+                html += '<td></td>';
+            }
+        }
+
+        html += '</tr></tbody></table>';
+        container.innerHTML = html;
+    })();
+</script>
+
 <style scoped>
     .readonly-item >>> .el-input__inner {
         background-color: #f5f7fa;
