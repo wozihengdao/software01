@@ -50,6 +50,9 @@
             </el-menu>
         </el-aside>
 
+
+
+        
         <el-container>
             <div v-if="activeIndex1==2" style="width:1500px">
 
@@ -76,7 +79,7 @@
             data() {
                 return {
                     repairOrderList:[],
-                    activeIndex1: '2',
+                    activeIndex1: '1',
                     activeIndex2: '2',
                     dialogVisible:false,
 
@@ -99,8 +102,9 @@
                 },
                 handleMenuItemClick(index) {
                     // alert(index);
-                    if(index ==1)
-                        window.location.href = "http://localhost:7469/MaintenanceManage/00"+".html";
+                    this.activeIndex1 = index;
+                    if(index ==1);
+                   //     window.location.href = "http://localhost:7469/MaintenanceManage/00"+".html";
                 },
                 fileList: [],
                 handlePictureCardPreview(file) {
