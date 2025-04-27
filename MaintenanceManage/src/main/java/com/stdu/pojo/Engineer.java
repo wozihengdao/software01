@@ -6,16 +6,10 @@ public class Engineer {
     private Integer orderNum;
     private String state;
     private String type;
+    private String name;
 
     public Long getId() {
         return id;
-    }
-
-    public Engineer(Long id, Integer orderNum, String state, String type) {
-        this.id = id;
-        this.orderNum = orderNum;
-        this.state = state;
-        this.type = type;
     }
 
     public void setId(Long id) {
@@ -44,5 +38,24 @@ public class Engineer {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Engineer{" +
+                "id=" + id +
+                ", orderNum=" + orderNum +
+                ", state='" + state + '\'' +
+                ", type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

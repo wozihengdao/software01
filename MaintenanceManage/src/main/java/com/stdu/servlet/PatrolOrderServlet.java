@@ -1,6 +1,7 @@
 package com.stdu.servlet;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.stdu.pojo.PatrolOrder;
 import com.stdu.service.PatrolOrderService;
 
@@ -9,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -24,5 +26,48 @@ public class PatrolOrderServlet extends BaseServlet {
         System.out.println(json);
         resp.getWriter().write(json);
     }
+    public void selectById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        resp.setContentType("text/html;charset=utf-8");
+        String idParam = req.getParameter("id");
+        Long id = Long.parseLong(idParam);
+
+        String json= JSON.toJSONString(patrolOrderService.selectById(id));
+
+        System.out.println(json);
+
+        resp.getWriter().write(json);
+    }
+
+    public void assign(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=utf-8");
+
+        BufferedReader reader = req.getReader();
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+        JSONObject json = JSON.parseObject(sb.toString());
+
+        String idParam = json.getString("orderId");
+        String engineerId = json.getString("engineerId");
+
+        try {
+            Long orderId = Long.parseLong(idParam);
+            PatrolOrder patrolOrder = patrolOrderService.selectById(orderId);
+            if (patrolOrder != null) {
+                patrolOrder.setEngineerId(engineerId);
+                patrolOrderService.updatePatrolOrder(patrolOrder);
+                resp.getWriter().write("派单成功");
+            } else {
+                resp.getWriter().write("工单不存在");
+            }
+        } catch (NumberFormatException e) {
+            resp.getWriter().write("工单 ID 格式错误");
+        } catch (Exception e) {
+            resp.getWriter().write("派单失败");
+            e.printStackTrace();
+        }
+    }
 }

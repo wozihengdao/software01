@@ -63,9 +63,7 @@ public class RepairOrderServlet extends BaseServlet {
         resp.getWriter().write(str);
     }
 
-    public void selectById(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-
+    public void selectById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json;charset=utf-8");
 
         try {
@@ -82,7 +80,7 @@ public class RepairOrderServlet extends BaseServlet {
                 resp.sendError(404, "工单不存在");
                 return;
             }
-            // 转换日期格式 (如果前端需要)
+            // 转换日期格式
             Map<String,Object> result = new HashMap<>();
             result.put("id", order.getId());
             result.put("stop", order.getStop());

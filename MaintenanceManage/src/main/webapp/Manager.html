@@ -3,13 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>设备维护管理系统</title>
+
+    <!-- 引入依赖 -->
     <script src="js/axios-0.18.0.js"></script>
     <script src="js/vue.js"></script>
     <script src="element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 </head>
 
 <style>
+    /* 新增样式 */
+    .auto-assign-dialog {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+        .el-dialog__header {
+            border-bottom: 1px solid #ebeef5;
+            padding: 15px 20px;
+        }
+
+        .el-dialog__body {
+            padding: 20px;
+        }
+    }
+
+    /* 按钮组布局优化 */
+    .create-button-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 15px 0;
+
+        .el-button {
+            flex-shrink: 0;
+        }
+    }
+    /********************** 通用样式 **********************/
     .type-buttons {
         margin: 20px 0;
     }
@@ -19,6 +49,7 @@
         transition: all 0.3s;
     }
 
+    /********************** 对话框增强样式 **********************/
     .detail-dialog {
         margin: -20px;
     }
@@ -27,29 +58,203 @@
         margin: 20px;
     }
 
-    .detail-dialog .el-descriptions-item__label {
-        width: 100px;
-        background: #f5f7fa;
+    /* 图片预览 */
+    .image-preview-wrapper {
+        margin-top: 10px;
+        border: 1px solid #e4e7ed;
+        border-radius: 4px;
+        padding: 8px;
+        background: #f8fafc;
     }
 
+    /* 紧急程度标签 */
+    .urgency-tag {
+        margin-left: 8px;
+        font-weight: 500;
+        padding: 4px 8px !important;
+    }
+
+    /* 故障描述预格式 */
+    .fault-description {
+        background: #f8f9fa;
+        padding: 12px;
+        border-radius: 4px;
+        border: 1px dashed #e4e7ed;
+        line-height: 1.6;
+        margin: 8px 0;
+    }
+
+    /********************** 创建按钮组 **********************/
     .create-button-group {
         margin: 15px 0;
     }
-    /* 添加图片预览样式 */
-    .el-image {
-        transition: all 0.3s;
-        border-radius: 4px;
+
+    .image-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.5);
+        color: white;
+        text-align: center;
+        padding: 2px 0;
+        font-size: 12px;
+        border-radius: 0 0 4px 4px;
+    }
+    /* 新增个人信息模块样式 */
+    .info-item {
+        margin: 8px 28px;
+        line-height: 15px;
+    }
+    .info-label {
+        color: #909399;
+        margin-right: 10px;
+    }
+    .info-content {
+        color: #606266;
+    }
+    .avatar-img {
+        width: 50%;
+        height: 50%;
+        padding: 30px 70px;
+    }
+    /* 确保图表容器可见 */
+    #mainChart,
+    #radarChart,
+    #roseChart,
+    #pieChart {
+        width: 100% !important;
+        height: 100% !important;
+    }
+    /* 新增样式 */
+    .personal-container {
+        display: flex;
+        padding: 20px;
+        gap: 20px;
+        height: calc(100vh - 60px);
+    }
+
+    .personal-card {
+        width: 320px;
+        flex-shrink: 0;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .avatar-container {
+        text-align: center;
+        padding: 20px 0;
+        border-bottom: 1px solid #ebeef5;
+    }
+
+    .avatar-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        border: 4px solid #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .basic-info {
+        margin-bottom: 15px;
+    }
+
+    .engineer-name {
+        margin: 0;
+        font-size: 24px;
+        color: #303133;
+    }
+
+    .position-tag {
+        margin-top: 8px;
+        font-size: 14px;
+        transform: scale(0.9);
+    }
+
+    .detail-info {
+        padding: 20px 0;
+    }
+
+    .detail-info .el-descriptions-item__label {
+        color: #909399;
+        width: 80px;
+    }
+
+    .detail-info .el-descriptions-item__content {
+        color: #606266;
+        font-weight: 500;
+    }
+
+    .edit-btn {
+        width: 100%;
+        margin-top: 15px;
+        border-radius: 6px;
+        padding: 12px 0;
+    }
+
+    .data-visualization {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .chart-card {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        height: 360px;
+    }
+
+    .chart-title {
+        margin: 0 0 15px 15px;
+        color: #303133;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .chart-group {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        height: 300px;
+    }
+
+    .sub-chart {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    /* 信息分组样式 */
+    .info-group {
+        margin: 15px 0;
+        padding: 15px;
+        background: #f8f9fc;
+        border-radius: 8px;
         border: 1px solid #ebeef5;
+        width: 100%;
     }
 
-    .el-image:hover {
-        transform: scale(1.05);
+    .group-title {
+        color: #303133;
+        font-size: 14px;
+        margin: -5px 0 10px -5px;
+        padding-left: 8px;
+        border-left: 4px solid #409EFF;
     }
 
-    /* 故障描述换行处理 */
-    .el-descriptions-item__content {
-        white-space: pre-wrap;
-        word-break: break-word;
+    .full-width {
+        grid-column: 1 / -1;
+    }
+
+    /* 调整描述项间距 */
+    .detail-info .el-descriptions-item {
+        padding: 8px 0;
+    }
+
+    /* 标签样式优化 */
+    .el-tag--info {
+        background-color: #f4f4f5;
+        border-color: #e9e9eb;
     }
 </style>
 
@@ -59,14 +264,14 @@
         <!-- 左侧导航菜单 -->
         <el-aside width="200px" style="background-color: #545c64; height: 100vh">
             <el-menu
-                    :default-active="activeIndex"
+                    default-active="2"
                     @select="handleMenuSelect"
                     background-color="#545c64"
                     text-color="#fff"
                     active-text-color="#ffd04b">
                 <el-menu-item-group title="主菜单">
                     <el-menu-item index="1"><i class="el-icon-user"></i>个人信息</el-menu-item>
-                    <el-menu-item index="2"><i class="el-icon-menu"></i>功能面板</el-menu-item>
+                    <el-menu-item index="2"><i class="el-icon-menu"></i>工单管理</el-menu-item>
                     <el-menu-item index="3"><i class="el-icon-phone"></i>联系我们</el-menu-item>
                     <el-menu-item index="4"><i class="el-icon-switch-button"></i>退出登录</el-menu-item>
                 </el-menu-item-group>
@@ -75,11 +280,85 @@
 
         <!-- 右侧主内容区 -->
         <el-container>
-            <!-- 个人信息模块 -->
-            <div v-show="activeIndex === '1'">
-                <el-card shadow="never">个人信息页面内容...</el-card>
-            </div>
+<!--            个人信息模块-->
+            <div v-show="activeIndex === '1'" class="personal-container">
+                <!-- 左侧个人信息卡片 -->
+                <el-card class="personal-card">
+                    <div class="avatar-container">
+                        <img src="1.png" class="avatar-img">
+                        <div class="basic-info">
+                            <h3 class="engineer-name">{{ engineer.name }}</h3>
+                            <el-tag type="warning" effect="dark" class="position-tag">
+                                {{ engineer.position }}
+                            </el-tag>
+                        </div>
+                    </div>
 
+                    <!-- 详细信息布局 -->
+                    <el-descriptions :column="2" class="detail-info">
+                        <!-- 基本信息列 -->
+                        <div class="info-group">
+                            <h4 class="group-title">基本信息</h4>
+                            <el-descriptions-item label="工号">{{ engineer.id }}</el-descriptions-item>
+                            <el-descriptions-item label="部门">{{ engineer.department }}</el-descriptions-item>
+                            <el-descriptions-item label="工种">{{ engineer.type === '1' ? '维修工程师' : '其他' }}</el-descriptions-item>
+                        </div>
+
+                        <!-- 联系信息列 -->
+                        <div class="info-group">
+                            <h4 class="group-title">联系信息</h4>
+                            <el-descriptions-item label="手机号">手机号：<br>138-1234-5678</el-descriptions-item><hr>
+                            <el-descriptions-item label="邮箱">邮箱:<br>123456789@qq.com</el-descriptions-item><hr>
+                            <el-descriptions-item label="工龄">工龄:<br>5年</el-descriptions-item>
+                        </div>
+
+                        <!-- 资格信息块 -->
+                        <div class="info-group full-width">
+                            <h4 class="group-title">资格证书</h4>
+                            <el-descriptions-item>
+                                <el-tag type="info" effect="plain" style="margin:2px">
+                                    {{ engineer.certificate }}
+                                </el-tag>
+                            </el-descriptions-item>
+                        </div>
+                    </el-descriptions>
+
+                    <el-button
+                            type="primary"
+                            icon="el-icon-edit"
+                            class="edit-btn"
+                            @click="showEditDialog">
+                        修改信息
+                    </el-button>
+                </el-card>
+
+                <!-- 右侧数据可视化区域 -->
+                <div class="data-visualization">
+                    <!-- 月度绩效趋势 -->
+                    <el-card class="chart-card">
+                        <h4 class="chart-title"></h4>
+                        <div id="mainChart" style="height: 280px"></div>
+                    </el-card>
+
+                    <!-- 技能评估雷达图 -->
+                    <el-card class="chart-card">
+                        <h4 class="chart-title"></h4>
+                        <div id="radarChart" style="height: 280px"></div>
+                    </el-card>
+
+                    <!-- 工单分布 -->
+                    <div class="chart-group">
+                        <el-card class="sub-chart">
+                            <h4 class="chart-title"></h4>
+                            <div id="roseChart" style="height: 240px"></div>
+                        </el-card>
+                        <el-card class="sub-chart">
+                            <h4 class="chart-title"></h4>
+                            <div id="pieChart" style="height: 240px"></div>
+                        </el-card>
+                    </div>
+                </div>
+            </div>
             <!-- 工单管理模块 -->
             <div v-show="activeIndex === '2'" style="width:100%">
                 <el-header style="border-bottom: 1px solid #e6e6e6">
@@ -92,7 +371,8 @@
                             {{ type.label }}
                         </el-radio-button>
                     </el-radio-group>
-                    <!--新建保养工单-->
+
+                    <!-- 新建保养工单按钮 -->
                     <div class="create-button-group">
                         <el-button
                                 v-if="activeType === 'service'"
@@ -100,72 +380,101 @@
                                 @click="showCreateDialog">
                             <i class="el-icon-plus"></i> 新建保养工单
                         </el-button>
+                        <!-- 新增自动派单按钮 -->
+                        <el-button
+                                v-if="activeType === 'service'"
+                                type="warning"
+                                @click="showAutoAssignConfig('service')"
+                                style="margin-left:10px">
+                            <i class="el-icon-alarm-clock"></i> 自动派单
+                        </el-button>
+
+
+                        <!-- 新增：巡检工单按钮 -->
+                        <el-button
+                                v-if="activeType === 'patrol'"
+                                type="primary"
+                                @click="showCreateDialog">
+                            <i class="el-icon-plus"></i> 新建巡检工单
+                        </el-button>
+                        <el-button
+                                v-if="activeType === 'patrol'"
+                                type="warning"
+                                @click="showAutoAssignConfig('patrol')"
+                                style="margin-left:10px">
+                            <i class="el-icon-alarm-clock"></i> 自动派单
+                        </el-button>
+                        <!-- 新增：监测工单按钮 -->
+                        <el-button
+                                v-if="activeType === 'monitor'"
+                                type="primary"
+                                @click="showCreateDialog">
+                            <i class="el-icon-plus"></i> 新建监测工单
+                        </el-button>
+                        <el-button
+                                v-if="activeType === 'monitor'"
+                                type="warning"
+                                @click="showAutoAssignConfig('monitor')"
+                                style="margin-left:10px">
+                            <i class="el-icon-alarm-clock"></i> 自动派单
+                        </el-button>
+                        <!-- 新增：备件工单按钮 -->
+                        <el-button
+                                v-if="activeType === 'spare'"
+                                type="primary"
+                                @click="showCreateDialog">
+                            <i class="el-icon-plus"></i> 新建备件工单
+                        </el-button>
+                        <el-button
+                                v-if="activeType === 'spare'"
+                                type="warning"
+                                @click="showAutoAssignConfig('spare')"
+                                style="margin-left:10px">
+                            <i class="el-icon-alarm-clock"></i> 自动派单
+                        </el-button>
                     </div>
                 </el-header>
-                <!-- 新建工单对话框 -->
-                <el-dialog title="新建保养工单" :visible.sync="createDialogVisible" width="600px">
-                    <el-form :model="newOrder" :rules="orderRules" ref="orderForm" label-width="100px">
-                        <el-form-item label="所属车站" prop="stop">
+                <!-- 添加周期设置对话框 -->
+                <el-dialog
+                        title="自动派单配置"
+                        :visible.sync="autoAssignVisible"
+                        width="400px"
+                        custom-class="auto-assign-dialog">
+                    <el-form>
+                        <el-form-item label="派单周期" label-width="80px">
                             <el-select
-                                    v-model="newOrder.stop"
-                                    filterable
-                                    placeholder="请选择车站"
-                                    style="width: 100%">
+                                    v-model="selectedCycle"
+                                    placeholder="请选择周期"
+                                    style="width:100%">
                                 <el-option
-                                        v-for="station in stationList"
-                                        :key="station.id"
-                                        :label="`${station.id} - ${station.name}`"
-                                        :value="station.id">
-                                    <span style="float: left">{{ station.id }}</span>
-                                    <span style="float: right; color: #8492a6; font-size: 13px">
-                                {{ station.name }}
-                                    </span>
+                                        v-for="item in cycleOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
                                 </el-option>
                             </el-select>
-                        </el-form-item>
-
-                        <el-form-item label="设备选择" prop="equipmentId">
-                            <el-select
-                                    v-model="selectedEquipment"
-                                    filterable
-                                    placeholder="请选择设备"
-                                    @change="handleEquipmentChange"
-                                    style="width: 100%"
-                            >
-                                <el-option
-                                        v-for="item in equipmentList"
-                                        :key="item.id"
-                                        :label="`${item.id} - ${item.name}`"
-                                        :value="item">
-                                    <span style="float: left">{{ item.id }}</span>
-                                    <span style="float: right; color: #8492a6; font-size: 13px">
-        {{ item.name }}（{{ item.type }}）
-      </span>
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-
-                        <el-form-item label="设备名称">
-                            <el-input v-model="equipmentInfo.name" disabled></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="设备类型">
-                            <el-input v-model="equipmentInfo.type" disabled></el-input>
                         </el-form-item>
                     </el-form>
-
-
-                    <span slot="footer" class="dialog-footer">
-                    <el-button @click="createDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="createOrder">确 定</el-button>
-                </span>
+                    <span slot="footer">
+        <el-button @click="autoAssignVisible = false">取消</el-button>
+        <el-button type="primary" @click="saveAutoConfig">保存配置</el-button>
+    </span>
                 </el-dialog>
                 <!-- 工单表格 -->
                 <el-main>
                     <el-card class="order-card">
-                        <el-table :data="filteredOrders" stripe style="width: 100%" v-loading="loading">
-                            <!-- 工单编号列 -->
-                            <el-table-column label="工单编号" prop="orderNo" width="180" fixed></el-table-column>
+                        <el-table
+                                :data="filteredOrders"
+                                stripe
+                                style="width: 100%"
+                                v-loading="loading">
+                            <!-- 固定列：工单编号 -->
+                            <el-table-column
+                                    label="工单编号"
+                                    prop="orderNo"
+                                    width="180"
+                                    fixed>
+                            </el-table-column>
 
                             <!-- 动态列 -->
                             <template v-for="(col, index) in dynamicColumns">
@@ -190,11 +499,17 @@
                             <el-table-column label="操作" width="180" fixed="right">
                                 <template v-slot="scope">
                                     <div style="display: flex; gap: 8px">
-                                        <el-button type="text" @click="handleDetail(scope.row)">详情</el-button>
-                                        <template
-                                                v-if="['maintain','service'].includes(activeType) && scope.row.status === 1">
-                                            <el-button type="text" style="color:#67C23A"
-                                                       @click="showAssignDialog(scope.row)">派单
+                                        <el-button
+                                                type="text"
+                                                @click="handleDetail(scope.row)">
+                                            详情
+                                        </el-button>
+                                        <template v-if="['maintain','service','patrol','monitor','spare'].includes(activeType) && scope.row.status === 1">
+                                            <el-button
+                                                    type="text"
+                                                    style="color:#67C23A"
+                                                    @click="showAssignDialog(scope.row)">
+                                                派单
                                             </el-button>
                                         </template>
                                     </div>
@@ -202,7 +517,7 @@
                             </el-table-column>
                         </el-table>
 
-                        <!-- 分页 -->
+                        <!-- 分页组件 -->
                         <el-pagination
                                 background
                                 layout="total, prev, pager, next"
@@ -215,16 +530,89 @@
                     </el-card>
                 </el-main>
 
+                <!-- 新建保养工单对话框 -->
+                <el-dialog
+                        title="新建保养工单"
+                        :visible.sync="createDialogVisible"
+                        width="600px">
+                    <el-form
+                            :model="newOrder"
+                            :rules="orderRules"
+                            ref="orderForm"
+                            label-width="100px">
+                        <el-form-item label="所属车站" prop="stop">
+                            <el-select
+                                    v-model="newOrder.stop"
+                                    filterable
+                                    placeholder="请选择车站"
+                                    style="width: 100%">
+                                <el-option
+                                        v-for="station in stationList"
+                                        :key="station.id"
+                                        :label="`${station.id} - ${station.name}`"
+                                        :value="station.id">
+                                    <span style="float: left">{{ station.id }}</span>
+                                    <span style="float: right; color: #8492a6; font-size: 13px">
+                                        {{ station.name }}
+                                    </span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+
+                        <el-form-item label="设备选择" prop="equipmentId">
+                            <el-select
+                                    v-model="selectedEquipment"
+                                    filterable
+                                    placeholder="请选择设备"
+                                    @change="handleEquipmentChange"
+                                    style="width: 100%">
+                                <el-option
+                                        v-for="item in equipmentList"
+                                        :key="item.id"
+                                        :label="`${item.id} - ${item.name}`"
+                                        :value="item">
+                                    <span style="float: left">{{ item.id }}</span>
+                                    <span style="float: right; color: #8492a6; font-size: 13px">
+                                        {{ item.name }}（{{ item.type }}）
+                                    </span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+
+                        <el-form-item label="设备名称">
+                            <el-input v-model="equipmentInfo.name" disabled></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="设备类型">
+                            <el-input v-model="equipmentInfo.type" disabled></el-input>
+                        </el-form-item>
+                    </el-form>
+
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="createDialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="createOrder">确 定</el-button>
+                    </span>
+                </el-dialog>
+
                 <!-- 派单对话框 -->
-                <el-dialog title="选择工程师" :visible.sync="assignDialogVisible" width="30%">
-                    <el-select v-model="selectedEngineer" placeholder="请选择工程师" filterable style="width: 100%">
+                <el-dialog
+                        title="选择工程师"
+                        :visible.sync="assignDialogVisible"
+                        width="30%">
+                    <el-select
+                            v-model="selectedEngineer"
+                            placeholder="请选择工程师"
+                            filterable
+                            style="width: 100%">
                         <el-option
                                 v-for="engineer in engineers"
                                 :key="engineer.id"
                                 :label="engineer.name"
                                 :value="engineer.id">
                             <span style="float: left">{{ engineer.name }}</span>
-                            <span style="float: right; color: #8492a6; font-size: 13px">{{ engineer.department }}</span>
+                            <span style="float: right; color: #8492a6; font-size: 13px">
+                                {{ engineer.id}}
+                            </span>
                         </el-option>
                     </el-select>
                     <span slot="footer" class="dialog-footer">
@@ -233,39 +621,119 @@
                     </span>
                 </el-dialog>
 
-                <!-- 工单详情 -->
-                <el-dialog :title="currentDetail ? currentDetail.orderNo : '工单详情'"
-                           :visible.sync="detailDialogVisible"
-                           width="60%"
-                           class="detail-dialog">
-                    <el-descriptions :column="2" border v-if="currentDetail">
-                        <!-- 公共字段 -->
-                        <el-descriptions-item label="设备名称">{{ currentDetail.deviceName }}</el-descriptions-item>
-                        <el-descriptions-item label="创建时间">{{ currentDetail.createTime }}</el-descriptions-item>
+                <!-- 工单详情对话框 -->
+                <el-dialog
+                        :title="`工单详情 - ${currentDetail?.orderNo}`"
+                        :visible.sync="detailDialogVisible"
+                        width="800px"
+                        class="detail-dialog">
+                    <el-descriptions
+                            :column="2"
+                            border
+                            v-if="currentDetail"
+                            style="margin: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06)">
 
-                        <!-- 报修工单特有字段 -->
+                        <!-- 通用字段 -->
+                        <el-descriptions-item label="工单类型" style="font-weight: 500; color: #303133;">
+                            {{ orderTypes.find(t => t.value === activeType)?.label }}
+                        </el-descriptions-item>
+                        <el-descriptions-item label="当前状态" style="font-weight: 500; color: #303133;">
+                            <el-tag
+                                    :type="statusStyle[currentDetail.status]"
+                                    size="small"
+                                    style="font-size: 14px; vertical-align: middle;">
+                                {{ statusText[currentDetail.status] }}
+                            </el-tag>
+                        </el-descriptions-item>
+                        <el-descriptions-item label="所属车站" :span="2">
+                            <span style="font-size: 14px; color: #606266;">{{ currentDetail.stop || '未填写' }}</span>
+                        </el-descriptions-item>
+                        <el-descriptions-item label="创建时间" :span="2">
+                            <span style="font-size: 14px; color: #606266;">{{ formatTime(currentDetail.createTime) }}</span>
+                        </el-descriptions-item>
+
+                        <!-- 动态字段 -->
                         <template v-if="activeType === 'repair'">
-                            <el-descriptions-item label="故障设备ID">{{ currentDetail.faultyEquipmentId }}
+                            <el-descriptions-item label="故障设备ID" :span="2">
+                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.faultyEquipmentId || '未填写' }}</span>
                             </el-descriptions-item>
-                            <el-descriptions-item label="故障类型">{{ currentDetail.faultyType }}</el-descriptions-item>
-                            <el-descriptions-item label="紧急程度">
-                                <el-tag :type="getUrgencyStyle(currentDetail.urgency)">
-                                    {{ getUrgencyText(currentDetail.urgency) }}
+                            <el-descriptions-item label="故障类型" :span="2">
+                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.faultyType || '未填写' }}</span>
+                            </el-descriptions-item>
+                            <el-descriptions-item label="紧急程度" :span="2">
+                                <el-tag
+                                        :type="getUrgencyStyle(currentDetail.faultyGrade)"
+                                        size="small"
+                                        class="urgency-tag"
+                                        style="font-size: 14px; margin-left: 0;">
+                                    {{ getUrgencyText(currentDetail.faultyGrade) || '未填写' }}
                                 </el-tag>
                             </el-descriptions-item>
                             <el-descriptions-item label="故障描述" :span="2">
-                                <div style="white-space: pre-wrap;">{{ currentDetail.faultDesc }}</div>
-                            </el-descriptions-item>
-
-                            <!-- 图片展示 -->
-                            <el-descriptions-item label="故障图片" :span="2" v-if="currentDetail.picture">
-                                <el-image
-                                        style="width: 200px; margin-right: 10px;"
-                                        :src="'http://localhost:7469/' + currentDetail.picture"
-                                        :preview-src-list="['http://localhost:7469/' + currentDetail.picture]">
-                                </el-image>
+                                <div class="fault-description" style="margin: 12px 0; padding: 16px; border-radius: 8px;">
+                    <span style="font-size: 14px; color: #606266; line-height: 1.8;">
+                        {{ currentDetail.faultyDescription || '无故障描述' }}
+                    </span>
+                                </div>
                             </el-descriptions-item>
                         </template>
+
+                        <template v-if="['maintain', 'service', 'patrol'].includes(activeType)">
+                            <el-descriptions-item label="负责工程师" :span="2">
+                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.engineerName || '未分配' }}</span>
+                            </el-descriptions-item>
+                            <el-descriptions-item label="计划时间" :span="2">
+                                <span style="font-size: 14px; color: #606266;">{{ formatTime(currentDetail.planTime) }}</span>
+                            </el-descriptions-item>
+                        </template>
+
+                        <template v-if="['check', 'spare', 'service'].includes(activeType)">
+                            <el-descriptions-item label="设备类型" :span="2">
+                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.EquipmentType || '未知类型' }}</span>
+                            </el-descriptions-item>
+                            <el-descriptions-item label="设备ID" :span="2">
+                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.EquipmentId || '未填写' }}</span>
+                            </el-descriptions-item>
+                        </template>
+
+                        <!-- 图片展示 -->
+                        <el-descriptions-item label="相关图片" :span="2" style="padding-top: 20px;">
+                            <div class="image-preview-wrapper" style="display: flex; gap: 12px; padding: 16px; border-radius: 8px;">
+                                <template v-if="activeType === 'repair'">
+                                    <el-image
+                                            v-if="currentDetail.picture"
+                                            :src="currentDetail.picture"
+                                            :preview-src-list="[currentDetail.picture]"
+                                            style="width: 160px; height: 120px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1)">
+                                        <div slot="tip" class="image-label" style="border-radius: 0 0 6px 6px;">故障图片</div>
+                                    </el-image>
+                                </template>
+
+                                <template v-if="['check', 'spare', 'service'].includes(activeType)">
+                                    <el-image
+                                            v-if="currentDetail.oldPicture"
+                                            :src="currentDetail.oldPicture"
+                                            :preview-src-list="[currentDetail.oldPicture, currentDetail.newPicture]"
+                                            style="width: 160px; height: 120px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1)">
+                                        <div slot="tip" class="image-label" style="border-radius: 0 0 6px 6px;">维修前</div>
+                                    </el-image>
+                                    <el-image
+                                            v-if="currentDetail.newPicture"
+                                            :src="currentDetail.newPicture"
+                                            :preview-src-list="[currentDetail.oldPicture, currentDetail.newPicture]"
+                                            style="width: 160px; height: 120px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0.1)">
+                                        <div slot="tip" class="image-label" style="border-radius: 0 0 6px 6px;">维修后</div>
+                                    </el-image>
+                                </template>
+                            </div>
+                        </el-descriptions-item>
+
+                        <!-- 附加数据 -->
+                        <el-descriptions-item label="补充信息" :span="2" style="padding-top: 20px;">
+                            <div style="font-size: 14px; color: #606266; line-height: 1.8;">
+                                {{ currentDetail.data || '无附加信息' }}
+                            </div>
+                        </el-descriptions-item>
                     </el-descriptions>
                 </el-dialog>
             </div>
@@ -287,7 +755,7 @@
                 activeIndex: '2',
                 activeType: 'repair',
 
-                // 工单配置
+                // 工单类型配置
                 orderTypes: [
                     {value: 'repair', label: '报修工单'},
                     {value: 'maintain', label: '维修工单'},
@@ -298,9 +766,9 @@
                 ],
 
                 // 数据存储
-                allOrders: [],
-                engineers: [],
-                currentDetail: null,
+                allOrders: [],      // 全部工单数据
+                engineers: [],      // 工程师列表
+                currentDetail: null,// 当前查看的工单详情
 
                 // 分页配置
                 pageSize: 10,
@@ -310,39 +778,79 @@
                 loading: false,
                 assignDialogVisible: false,
                 detailDialogVisible: false,
+                createDialogVisible: false,
 
                 // 临时数据
                 selectedEngineer: null,
                 currentOrder: null,
 
-                // 样式配置
-                urgencyStyle: ['', 'warning', 'danger'],
-                //保养工单额外需求数据项
-                createDialogVisible: false,
-                equipmentLoading: false,
+                engineerMap: {}, // 新增工程师ID-姓名映射
+                // 完善工程师个人信息
+                engineer: {
+                    name: '王大力',
+                    id: 'E2023001',
+                    type: '1', // 1表示维修工程师
+                    phone: '138-1234-5678',
+                    workYears: 5,
+                    email: 'wangdali@railway.com',
+                    skills: ['设备维修', '机械调试', '电气控制', '故障诊断'],
+                    performance: 4.8,
+                    department: '设备维护一部',
+                    position: '高级维修工程师',
+                    certificate: '特种设备作业证-XJ12345'
+                }, // 完善图表数据
+                chartData: {
+                    // 月度绩效趋势
+                    line: [4.2, 4.5, 4.7, 4.6, 4.8, 4.9, 4.7],
+
+                    // 技能雷达图数据（维修技能/故障诊断/设备保养/响应速度/客户评价）
+                    radar: [92, 88, 85, 90, 93],
+
+                    // 工单类型玫瑰图
+                    rose: [
+                        { value: 28, name: '维修工单' },
+                        { value: 35, name: '保养工单' },
+                        { value: 40, name: '巡检工单' },
+                        { value: 15, name: '监测工单' }
+                    ],
+
+                    // 工单状态饼图
+                    pie: [
+                        { value: 18, name: '待处理' },
+                        { value: 32, name: '进行中' },
+                        { value: 50, name: '已完成' }
+                    ]
+                },
+                // 保养工单相关数据
+                stationList: [],         // 车站列表
                 equipmentList: [],       // 设备列表
                 selectedEquipment: null, // 当前选中设备
-                stationList: [], // 车站列表
-                equipmentInfo: {         // 展示的设备信息
+                equipmentInfo: {         // 设备展示信息
                     name: '',
                     type: ''
                 },
-                newOrder: {
+                newOrder: {              // 新工单表单数据
                     stop: '',
                     equipmentId: '',
                 },
-                orderRules: {
-                    stop: [
-                        {required: true, message: '请选择车站', trigger: 'change'}
-                    ],
-                    equipmentId: [
-                        {required: true, message: '请选择设备', trigger: 'change'}
-                    ]
-                }
+                orderRules: {            // 表单验证规则
+                    stop: [{ required: true, message: '请选择车站', trigger: 'change' }],
+                    equipmentId: [{ required: true, message: '请选择设备', trigger: 'change' }]
+                },
+                autoAssignVisible: false,
+                currentAssignType: '',
+                selectedCycle: null,
+                cycleOptions: [
+                    { value: 7, label: '每周自动派单' },
+                    { value: 14, label: '每两周自动派单' },
+                    { value: 30, label: '每月自动派单' },
+                    { value: 60, label: '每季度自动派单' }
+                ],
+                autoConfigs: {}
             }
         },
         computed: {
-            // 动态列配置
+            /** 动态列配置 */
             dynamicColumns() {
                 const config = {
                     repair: [
@@ -357,149 +865,282 @@
                     ],
                     service: [
                         {label: '设备类型', prop: 'EquipmentType', width: 120},
-                        {label: '保养时间', prop: 'planTime', width: 200}
+                        {label: '保养时间', prop: 'planTime', width: 200},
+                        {label: '负责人', prop: 'engineerName', width: 120},
+
                     ],
                     patrol: [
                         {label: '所属车站', prop: 'stop', width: 120},
                         {label: '设备编号', prop: 'EquipmentId', width: 180},
                         {label: '设备类型', prop: 'EquipmentType', width: 180},
-                        {label: '上报时间', prop: 'planTime', width: 180}
+                        {label: '上报时间', prop: 'planTime', width: 180},
+                        {label: '负责人', prop: 'engineerName', width: 120},
+
                     ],
-                    monitor: [
+                    monitor:[
                         {label: '所属车站', prop: 'stop', width: 120},
                         {label: '设备编号', prop: 'EquipmentId', width: 180},
                         {label: '设备类型', prop: 'EquipmentType', width: 180},
-                        {label: '上报时间', prop: 'planTime', width: 180}
+                        {label: '上报时间', prop: 'planTime', width: 180},
+                        {label: '负责人', prop: 'engineerName', width: 120},
+
                     ],
-                    spare: [
+                    spare:[
                         {label: '所属车站', prop: 'stop', width: 120},
                         {label: '设备编号', prop: 'EquipmentId', width: 180},
                         {label: '设备类型', prop: 'EquipmentType', width: 180},
-                        {label: '上报时间', prop: 'planTime', width: 180}
+                        {label: '上报时间', prop: 'planTime', width: 180},
+                        {label: '负责人', prop: 'engineerName', width: 120},
+
                     ]
                 }
                 return config[this.activeType] || []
             },
-            // 紧急程度文本映射
-            getUrgencyText() {
-                return function (level) {
-                    return ['一般', '紧急', '特急'][level] || '未知'
-                }
-            },
-            // 紧急程度样式映射
-            getUrgencyStyle() {
-                return function (level) {
-                    return ['', 'warning', 'danger'][level] || ''
-                }
-            },
-            // 分页数据
+
+            /** 分页数据 */
             filteredOrders() {
                 const start = (this.currentPage - 1) * this.pageSize
                 return this.allOrders.slice(start, start + this.pageSize)
             },
 
-            // 分页总数
+            /** 分页总数 */
             totalFiltered() {
                 return this.allOrders.length
             },
 
-            // 状态显示配置
+            /** 状态显示配置 */
             statusText() {
                 return {1: '待处理', 2: '进行中', 3: '已完成', 4: '已关闭'}
             },
             statusStyle() {
                 return {1: 'warning', 2: 'primary', 3: 'success', 4: 'info'}
+            },
+
+            /** 紧急程度文本映射 */
+            getUrgencyText() {
+                return level => ['一般', '紧急', '特急'][level] || '未知'
+            },
+
+            /** 紧急程度样式映射 */
+            getUrgencyStyle() {
+                return level => ['', 'warning', 'danger'][level] || ''
             }
         },
         watch: {
+            /** 工单类型变化监听 */
             activeType() {
                 this.currentPage = 1
                 this.loadOrders()
             }
         },
         methods: {
-            // 加载工单数据
+            // 新增方法：加载工程师个人信息
+            async loadEngineerData() {
+                try {
+                    // 模拟接口调用
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                    this.$nextTick(() => {
+                        this.initCharts();
+                    });
+                } catch (error) {
+                    console.error('加载工程师信息失败:', error);
+                }
+            },
+
+            // 新增方法：初始化图表
+            initCharts() {
+                // 需要先初始化每个图表实例
+                const lineChart = echarts.init(document.getElementById('mainChart'));
+                const radarChart = echarts.init(document.getElementById('radarChart'));
+                const roseChart = echarts.init(document.getElementById('roseChart'));
+                const pieChart = echarts.init(document.getElementById('pieChart'));
+
+                // 折线图配置
+                lineChart.setOption({
+                    title: { text: '月度绩效趋势', left: 'center' },
+                    xAxis: {
+                        type: 'category',
+                        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月']
+                    },
+                    yAxis: { max: 5 },
+                    series: [{
+                        data: this.chartData.line,
+                        type: 'line',
+                        smooth: true,
+                        areaStyle: {},
+                        itemStyle: { color: '#409EFF' }
+                    }]
+                });
+
+                // 雷达图配置
+                radarChart.setOption({
+                    title: { text: '技能评估', left: 'center' },
+                    radar: {
+                        indicator: [
+                            { name: '维修技能', max: 100 },
+                            { name: '故障诊断', max: 100 },
+                            { name: '设备保养', max: 100 },
+                            { name: '响应速度', max: 100 },
+                            { name: '客户评价', max: 100 }
+                        ]
+                    },
+                    series: [{
+                        type: 'radar',
+                        data: [{
+                            value: this.chartData.radar,
+                            areaStyle: { color: 'rgba(64, 158, 255, 0.6)' }
+                        }]
+                    }]
+                });
+
+                // 玫瑰图配置
+                roseChart.setOption({
+                    title: { text: '工单类型分布', left: 'center' },
+                    series: [{
+                        type: 'pie',
+                        radius: [20, 120],
+                        roseType: 'area',
+                        data: this.chartData.rose,
+                        itemStyle: {
+                            borderRadius: 8,
+                            color: function(params) {
+                                const colors = ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C'];
+                                return colors[params.dataIndex % colors.length];
+                            }
+                        }
+                    }]
+                });
+
+                // 饼图配置
+                pieChart.setOption({
+                    title: { text: '工单状态分布', left: 'center' },
+                    series: [{
+                        type: 'pie',
+                        radius: '65%',
+                        data: this.chartData.pie,
+                        label: { formatter: '{b}: {d}%' },
+                        color: ['#E6A23C', '#409EFF', '#67C23A']
+                    }]
+                });
+            },
+            //工程师列表加载方法
+            async loadEngineers() {
+                try {
+                    const res = await axios.get('http://localhost:7469/MaintenanceManage/engineer/selectAll');
+                    this.engineers = res.data.map(e => ({
+                        id: e.id,
+                        name: e.engineerName || e.name,
+                    }));
+
+                    // 构建映射表
+                    this.engineerMap = this.engineers.reduce((map, engineer) => {
+                        map[engineer.id] = engineer.name;
+                        return map;
+                    }, {});
+
+                } catch (error) {
+                    this.$message.error('工程师列表加载失败');
+                }
+            },
+            // 添加时间格式化方法
+            formatTime(timestamp) {
+                if (!timestamp) return '无时间信息';
+                try {
+                    const date = new Date(timestamp);
+                    return `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')}
+              ${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`;
+                } catch (e) {
+                    return '时间格式错误';
+                }
+            },
+
+            /** 初始化加载工单数据 */
             async loadOrders() {
                 try {
                     this.loading = true
                     const apiMap = {
-                        repair: 'http://localhost:7469/MaintenanceManage/repairOrder/selectAll',
-                        maintain: 'http://localhost:7469/MaintenanceManage/maintenanceOrder/selectAll',
-                        service: 'http://localhost:7469/MaintenanceManage/upkeepOrder/selectAll',
-                        patrol: 'http://localhost:7469/MaintenanceManage/patrolOrder/selectAll',
-                        monitor: 'http://localhost:7469/MaintenanceManage/checkOrder/selectAll',
-                        spare: 'http://localhost:7469/MaintenanceManage/spareOrder/selectAll',
+                        repair: 'repairOrder/selectAll',
+                        maintain: 'maintenanceOrder/selectAll',
+                        service: 'upkeepOrder/selectAll',
+                        patrol: 'patrolOrder/selectAll',
+                        monitor: 'checkOrder/selectAll',
+                        spare: 'spareOrder/selectAll'
                     }
-
-                    const res = await axios.get(apiMap[this.activeType])
-                    const rawData = res.data.data || res.data
-
-                    this.allOrders = rawData.map(item => {
-                        const base = {
-                            id: item.id,
-                            orderNo: this.generateOrderNo(item.id),
-                            deviceName: item.equipmentName || '未知设备',
-                            status: parseInt(item.status) || 1,
-                            createTime: item.data || '无记录时间',
-                            stop: item.stop?.name || item.stop || '未知车站',
-                            EquipmentType: item.equipmentType || '无',
-                            EquipmentId: item.equipmentId || '无',
-                        }
-
-                        switch (this.activeType) {
-                            case 'repair':
-                                return {
-                                    ...base,
-                                    faultyEquipmentId: item.faultyEquipmentId || '无',
-                                    EquipmentId: item.equipmentId || '无',
-                                    faultyEquipmentType: item.faultyType || '无',
-                                    reportTime: item.data || '',
-                                    faultDesc: item.faultyDescription,
-                                    urgency: item.urgency || 0,
-                                }
-                            case 'maintain':
-                                return {
-                                    ...base,
-                                    engineerName: this.getEngineerName(item.engineerId),
-                                    planTime: item.data
-                                }
-                            case 'service':
-                                return {
-                                    ...base,
-                                    planTime: item.data,
-                                    engineerName: this.getEngineerName(item.engineerId)
-                                }
-                            case 'patrol':
-                                return {
-                                    ...base,
-                                    engineerName: this.getEngineerName(item.engineerId),
-                                    planTime: item.data,
-                                }
-                            case 'monitor':
-                                return {
-                                    ...base,
-                                    engineerName: this.getEngineerName(item.engineerId),
-                                    planTime: item.data,
-                                }
-                            case 'spare':
-                                return {
-                                    ...base,
-                                    engineerName: this.getEngineerName(item.engineerId),
-                                    planTime: item.data,
-                                }
-                            default:
-                                return base
-                        }
-                    })
+                    const res = await axios.get(
+                        `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}`
+                    )
+                    this.allOrders = (res.data.data || res.data).map(this.formatOrderData)
                 } catch (error) {
-                    console.error('加载失败:', error)
                     this.$message.error('数据加载失败')
+                    console.error('加载失败:', error)
                 } finally {
                     this.loading = false
                 }
             },
 
-            // 生成工单编号
+            /** 格式化工单数据 */
+             formatOrderData(item) {
+                const base = {
+                    id: item.id,
+                    orderNo: this.generateOrderNo(item.id),
+                    status: parseInt(item.status) || 1,
+                    // 修复时间字段映射
+                    createTime: item.createTime || new Date().getTime(),
+                    planTime: item.planTime || item.data,
+                    // 修复设备字段映射
+                    EquipmentType: item.equipmentType || item.EquipmentType || '未知类型',
+                    EquipmentId: item.equipmentId || item.EquipmentId || '未知ID',
+                    stop:item.stop||'空',
+                    engineerId: item.engineerId || null,
+                    engineerName: item.engineerId
+                        ? this.engineerMap[item.engineerId] || '未知工程师'
+                        : '待分配',
+                }
+
+                // 按类型扩展字段
+                switch (this.activeType) {
+                    case 'repair':
+                        return {
+                            ...base,
+                            faultyEquipmentId: item.faultyEquipmentId,
+                            faultyType: item.faultyType,
+                            reportTime: item.data,
+                            faultyDescription: item.faultyDescription,
+                            faultyGrade: item.faultyGrade,
+                            picture: item.picture,
+                            faultyEquipmentType:item.faultyType
+                        }
+                    case 'maintain':
+                        return {
+                            ...base,
+                            planTime: item.data
+                        }
+                    case 'service':
+                        return {
+                            ...base,
+                            planTime: item.data,
+                        }
+                    case 'patrol':
+                        return {
+                            ...base,
+                            planTime: item.data,
+                        }
+                    case 'monitor':
+                        return {
+                            ...base,
+                            planTime: item.data,
+                        }
+                    case 'spare':
+                        return {
+                            ...base,
+                            planTime: item.data,
+                        }
+
+                    default:
+                        return base
+                }
+            },
+            /** 生成工单编号 */
             generateOrderNo(id) {
                 const prefix = {
                     repair: 'BX',
@@ -511,21 +1152,65 @@
                 }[this.activeType]
                 return `${prefix}${id.toString().padStart(6, '0')}`
             },
+            /** 获取工程师姓名 */
+            async getEngineerName(id) {
+                if (!id) return '未分配';
 
-            // 获取工程师姓名
-            getEngineerName(id) {
-                const engineer = this.engineers.find(e => e.id === id)
-                return engineer?.name || '未分配'
+                try {
+                    // 1. 调用后端接口获取单个工程师数据
+                    const res = await axios.get(`http://localhost:7469/MaintenanceManage/engineer/selectById`,
+                        {
+                            params: { id: id }
+                        }
+                    );
+                    // 2. 直接返回姓名
+                    return res.data.name || '未知工程师';
+                } catch (error) {
+                    console.error('获取工程师姓名失败:', error);
+                    // 3. 处理404等错误状态
+                    if (error.response?.status === 404) {
+                        return '未知工程师';
+                    }
+                    return '获取姓名失败';
+                }
+            },
+            // 显示配置对话框
+            showAutoAssignConfig(type) {
+                this.currentAssignType = type
+                this.selectedCycle = this.autoConfigs[type] || null
+                this.autoAssignVisible = true
             },
 
-            // 显示派单对话框
+            // 保存配置
+            async saveAutoConfig() {
+                if (!this.selectedCycle) {
+                    this.$message.warning('请选择派单周期')
+                    return
+                }
+
+                try {
+                    // 调用保存接口
+                    await axios.post('/api/auto-assign', {
+                        type: this.currentAssignType,
+                        cycle: this.selectedCycle
+                    })
+
+                    // 更新本地配置
+                    this.$set(this.autoConfigs, this.currentAssignType, this.selectedCycle)
+                    this.autoAssignVisible = false
+                    this.$message.success('自动派单配置已保存')
+                } catch (error) {
+                    this.$message.error('配置保存失败: ' + error.message)
+                }
+            },
+
+            /** 显示派单对话框 */
             async showAssignDialog(order) {
                 try {
                     const res = await axios.get('http://localhost:7469/MaintenanceManage/engineer/selectAll')
-                    this.engineers = res.data.data.map(e => ({
+                    this.engineers = res.data.map(e => ({
                         id: e.id,
-                        name: e.engineerName,
-                        department: e.departmentName
+                        name: e.engineerName || e.name, // 兼容两种字段命名
                     }))
                     this.currentOrder = order
                     this.assignDialogVisible = true
@@ -534,75 +1219,73 @@
                 }
             },
 
-            // 执行派单操作
+            /** 执行派单操作 */
             async assignOrder() {
                 try {
                     const apiMap = {
-                        repair: 'repairOrder/assign',
                         maintain: 'maintenanceOrder/assign',
-                        service: 'upkeep/assign'
+                        service: 'upkeepOrder/assign',
+                        patrol: 'patrolOrder/assign',
+                        monitor: 'checkOrder/assign',
+                        spare: 'spareOrder/assign'
                     }
-                    await axios.post(
-                        `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}/${this.currentOrder.id}`,
-                        {engineerId: this.selectedEngineer}
+                    const response  = await axios.post(
+                        `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}`,
+                        {
+                            orderId: this.currentOrder.id, // 工单ID放请求体
+                            engineerId: this.selectedEngineer
+                        }
                     )
-                    this.$message.success('派单成功')
-                    this.assignDialogVisible = false
-                    await this.loadOrders()
+                    // 检查响应状态
+                    const result = response.data.trim();
+                    if (result === '派单成功') {
+                        this.$message.success(result);
+                        await this.loadEngineers(); // 刷新工程师数据
+                        await this.loadOrders(); // 确保等待加载完成
+                        this.assignDialogVisible = false;
+                        this.selectedEngineer = null; // 清空选择
+                    } else {
+                        this.$message.error(`派单失败: ${response.data}`)
+                    }
+
                 } catch (error) {
-                    this.$message.error('派单失败')
+                    // 显示更具体的错误信息
+                    const msg = error.response?.data || error.message
+                    this.$message.error(`请求错误: ${msg}`)
                 }
             },
 
-            // 查看工单详情
+            /** 查看工单详情 */
             async handleDetail(order) {
                 try {
                     const apiMap = {
                         repair: 'repairOrder/selectById',
                         maintain: 'maintenanceOrder/selectById',
-                        service: 'upkeepOrder/selectById'
+                        service: 'upkeepOrder/selectById',
+                        patrol: 'patrolOrder/selectById',
+                        monitor: 'checkOrder/selectById',
+                        spare: 'spareOrder/selectById'
+
                     }
                     const res = await axios.get(
-                        `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}/selectById`,
+                        `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}`,
                         { params: { id: order.id } }
-                    );
-
-                    // 统一数据结构
-                    const detailData = res.data.data || res.data;
-                    this.currentDetail = {
-                        ...detailData,
-                        orderNo: this.generateOrderNo(detailData.id),
-                        deviceName: detailData.equipmentName || '未知设备',
-                        createTime: detailData.data,
-                        urgency: detailData.faultyGrade || 0,
-                        faultDesc: detailData.faultyDescription,
-                        picture: detailData.picture
-                    };
-
+                    )
+                    this.currentDetail = this.formatOrderData(res.data)
                     this.detailDialogVisible = true
                 } catch (error) {
                     this.$message.error('获取详情失败')
                 }
             },
-            // 显示创建保养工单对话框
-            showCreateDialog() {
+
+            /** 显示创建对话框 */
+            async showCreateDialog() {
+                await Promise.all([this.loadStations(), this.loadEquipments()])
                 this.createDialogVisible = true
                 this.resetForm()
             },
 
-            // 重置保养表单
-            resetForm() {
-                this.newOrder = {
-                    stop: '',
-                    equipmentId: '',
-                    equipmentType: '',
-                    cycle: 0,
-                }
-                this.$nextTick(() => {
-                    if (this.$refs.orderForm) this.$refs.orderForm.clearValidate()
-                })
-            },
-            // 新增方法：加载车站列表
+            /** 加载车站列表 */
             async loadStations() {
                 try {
                     const res = await axios.get('http://localhost:7469/MaintenanceManage/stop/selectAll')
@@ -615,7 +1298,7 @@
                 }
             },
 
-            // 新增方法：加载设备列表
+            /** 加载设备列表 */
             async loadEquipments() {
                 try {
                     const res = await axios.get('http://localhost:7469/MaintenanceManage/equipment/selectAll')
@@ -629,42 +1312,31 @@
                 }
             },
 
-            // 新增方法：处理设备选择变化
+            /** 设备选择变化处理 */
             handleEquipmentChange(equipment) {
                 this.equipmentInfo = {
                     name: equipment.name,
                     type: equipment.type
                 }
                 this.newOrder.equipmentId = equipment.id
-                this.newOrder.equipmentType = equipment.type // 同步设备类型
             },
 
-            // 修改显示对话框方法
-            showCreateDialog() {
-                this.createDialogVisible = true
-                this.resetForm()
-                this.loadEquipments() // 打开对话框时加载设备列表
-                this.loadStations() // 同时加载车站列表
-            },
-
-            // 修改重置表单方法
+            /** 重置表单 */
             resetForm() {
                 this.selectedEquipment = null
-                this.equipmentInfo = {name: '', type: ''}
-                this.newOrder = {
-                    stop: '',
-                    equipmentId: '',
-                    cycle: 0,
-                }
+                this.equipmentInfo = { name: '', type: '' }
+                this.newOrder = { stop: '', equipmentId: '' }
                 this.$nextTick(() => {
                     if (this.$refs.orderForm) this.$refs.orderForm.clearValidate()
                 })
             },
-            // 分页变化处理
+
+            /** 分页变化处理 */
             handlePageChange(page) {
                 this.currentPage = page
             },
-            // 菜单选择处理
+
+            /** 菜单选择处理 */
             handleMenuSelect(index) {
                 if (index === '4') {
                     this.$confirm('确定退出系统吗？', '提示', {
@@ -672,15 +1344,17 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        window.location.href = "http://localhost:7469/MaintenanceManage/logIn.html";
+                        window.location.href = "http://localhost:7469/MaintenanceManage/logIn.html"
                     })
                     return
                 }
                 this.activeIndex = index
             }
         },
-        created() {
-            this.loadOrders()
+        async created() {
+            await this.loadEngineerData();
+            await this.loadEngineers();  // 先加载工程师
+            await this.loadOrders();
         }
     })
 </script>

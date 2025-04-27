@@ -23,6 +23,7 @@ public class EngineerServlet  extends BaseServlet {
         List<Engineer> list=engineerService.selectAll(); ;
 
         String json= JSON.toJSONString(list);
+        System.out.println(json);
         resp.getWriter().write(json);
     }
 
@@ -45,5 +46,8 @@ public class EngineerServlet  extends BaseServlet {
         resp.getWriter().write(json);
 
     }
+
+
+
 
 }

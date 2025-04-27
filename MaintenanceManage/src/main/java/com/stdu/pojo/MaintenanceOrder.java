@@ -65,4 +65,16 @@ public class MaintenanceOrder {
         this.type = type;
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "MaintenanceOrder{" +
+                "id=" + id +
+                ", repairId='" + repairId + '\'' +
+                ", engineerId='" + engineerId + '\'' +
+                ", picture='" + picture + '\'' +
+                ", type='" + type + '\'' +
+                ", data='" + data + '\'' +
+                '}';
+    }
 }
