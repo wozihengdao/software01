@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Element UI表格导出Excel</title>
+  <script src="js/vue.js"></script>
+  <script src="element-ui/lib/index.js"></script>
+  <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+  <!-- 新增依赖 -->
+  <script src="./js/xlsx.full.min.js"></script>
+  <script src="./js/FileSaver.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    button { margin: 5px; padding: 10px 15px; font-size: 14px; }
+  </style>
+</head>
+<body>
+<h1>前端数组导出 Excel 完整示例</h1>
+<p>点击下面按钮即可将示例数据导出为 Excel 文件：</p>
+<button id="export-array">导出二维数组 (.xlsx)</button>
+<button id="export-json">导出对象数组 (.xlsx)</button>
+
+<script>
+  // 示例数据：二维数组
+  const dataArray = [
+    ["序号", "姓名", "年龄", "城市"],
+    [1, "张三", 28, "北京"],
+    [2, "李四", 32, "上海"],
+    [3, "王五", 24, "广州"]
+  ];
+
+  // 示例数据：对象数组
+  const dataObjects = [
+    { 序号: 1, 姓名: "张三", 年龄: 28, 城市: "北京" },
+    { 序号: 2, 姓名: "李四", 年龄: 32, 城市: "上海" },
+    { 序号: 3, 姓名: "王五", 年龄: 24, 城市: "广州" }
+  ];
+
+  // 导出二维数组
+  document.getElementById('export-array').addEventListener('click', () => {
+    // 转换为 worksheet
+    const ws = XLSX.utils.aoa_to_sheet(dataArray);
+    // 创建工作簿并追加 sheet
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // 写出为二进制并下载
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'array_export.xlsx');
+  });
+
+  // 导出对象数组
+  document.getElementById('export-json').addEventListener('click', () => {
+    // 转换为 worksheet
+    const ws = XLSX.utils.json_to_sheet(dataObjects);
+    // 创建工作簿
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Users');
+    // 直接触发下载
+    XLSX.writeFile(wb, 'json_export.xlsx');
+  });
+</script>
+</body>
+</html>

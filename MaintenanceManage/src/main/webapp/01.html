@@ -227,7 +227,13 @@
                                 <el-table-column prop="stop" label="所属车站" align="center"></el-table-column>
                                 <el-table-column prop="faultyEquipmentId" label="故障设备编号" align="center"></el-table-column>
                                 <el-table-column prop="faultyType" label="故障类别" align="center"></el-table-column>
-                                <el-table-column prop="type" label="状态" align="center"></el-table-column>
+                                <el-table-column label="状态" align="center">
+                                    <template #default="scope">
+                                        <el-tag :type="statusStyle[scope.row.type]" size="medium">
+                                            {{ statusText[scope.row.type] }}
+                                        </el-tag>
+                                    </template>
+                                </el-table-column>
                                 <el-table-column prop="data" label="上报时间" align="center"></el-table-column>
 
 
@@ -237,12 +243,8 @@
                                         width="120">
 
                                     <template slot-scope="scope">
-                                        <el-button
-                                                @click.native.prevent="deleteItem(scope.$index, tableData)"
-                                                type="text"
-                                                size="small">
-                                            撤回
-                                        </el-button>
+
+                                        <template v-if="scope.row.type == 0">
 
                                         <el-button
 
@@ -251,7 +253,17 @@
                                                 @click="initItem(scope.$index)">
                                             修改
                                         </el-button>
+                                        </template>
+                                        <template v-if="scope.row.type != 0">
 
+                                            <el-button
+
+                                                    type="text"
+                                                    size="small"
+                                                    @click="initItem(scope.$index)">
+                                                详细
+                                            </el-button>
+                                        </template>
 
                                     </template>
 
@@ -277,6 +289,15 @@
 <script>
     new Vue({
             el:"#app",
+
+        computed: {
+            statusText() {
+                return { 0: '待处理', 1: '进行中', 2: '已完成', 3: '已关闭' };
+            },
+            statusStyle() {
+                return { 0: 'warning', 1: 'primary', 2: 'success', 3: 'info' };
+            }
+        },
             data() {
                 return {
                     repairOrderList:[],
@@ -306,7 +327,28 @@
             }
             ,
             methods: {
-                handleSelect(key, keyPath) {
+
+                deleteItem(order){
+
+                        this.$confirm('确认要接受该维修单吗？', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            // 调用API更新工程师ID
+
+                            axios.post("http://localhost:7469/MaintenanceManage/repairOrder/delete", order).then((res) => {
+
+                            })
+                            this.$message.success('撤回成功');
+                             window.location.reload();
+                        })
+                }
+
+
+                /** 状态显示配置 */
+   ,
+    handleSelect(key, keyPath) {
 
                     this.activeIndex2 = key;
                     window.location.href = "http://localhost:7469/MaintenanceManage/0"+(key-1)+".html";
@@ -353,6 +395,8 @@
 
                     })
                     this.dialogVisible=false;
+
+                   window.location.reload();
                 }
             }
         }

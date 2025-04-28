@@ -2,7 +2,7 @@ package com.stdu.pojo;
 
 public class Maintenance {
 
-    private Long id;
+    private Long  id;
     private String stop;
     private String faultyEquipmentId;
     private String faultyType;
@@ -13,6 +13,24 @@ public class Maintenance {
     private String type;
     private String data;
     private String engineerId;
+    @Override
+    public String toString() {
+        return "Maintenance{" +
+                "id=" + id +
+                ", stop='" + stop + '\'' +
+                ", faultyEquipmentId='" + faultyEquipmentId + '\'' +
+                ", faultyType='" + faultyType + '\'' +
+                ", faultyDescription='" + faultyDescription + '\'' +
+                ", faultyGrade='" + faultyGrade + '\'' +
+                ", olderPicture='" + olderPicture + '\'' +
+                ", newPicture='" + newPicture + '\'' +
+                ", type='" + type + '\'' +
+                ", data='" + data + '\'' +
+                ", engineerId='" + engineerId + '\'' +
+                '}';
+    }
+
+
 
     public Maintenance(Long id, String stop, String faultyEquipmentId, String faultyType, String faultyDescription, String faultyGrade, String olderPicture, String newPicture, String type, String data, String engineerId) {
         this.id = id;

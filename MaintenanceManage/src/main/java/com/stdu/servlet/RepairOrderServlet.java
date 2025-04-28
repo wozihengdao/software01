@@ -108,6 +108,22 @@ public class RepairOrderServlet extends BaseServlet {
     }
 
 
+    public void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+
+        BufferedReader reader = req.getReader();
+
+        String json= reader.readLine();
+        System.out.println("json"+json);
+        RepairOrder repairOrder = JSON.parseObject(json, RepairOrder.class);
+        System.out.println(repairOrder.getId());
+        repairOrderService.deleteById(repairOrder.getId());
+
+        resp.getWriter().write("success");
+
+    }
+
 
 
 
