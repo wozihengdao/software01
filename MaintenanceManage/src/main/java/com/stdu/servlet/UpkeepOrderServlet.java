@@ -75,4 +75,32 @@ public class UpkeepOrderServlet extends BaseServlet {
             e.printStackTrace();
         }
     }
+
+    public void accept(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        // 读取JSON请求体
+        BufferedReader reader = req.getReader();
+
+        String line=reader.readLine();
+
+        UpkeepOrder upkeepOrder = JSON.parseObject(line,UpkeepOrder.class);
+                    upkeepOrder.setType("1");
+        upkeepOrderService.updateUpkeepOrder(upkeepOrder);
+
+    }
+
+    public void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        // 读取JSON请求体
+        BufferedReader reader = req.getReader();
+
+        String line=reader.readLine();
+
+        UpkeepOrder upkeepOrder = JSON.parseObject(line,UpkeepOrder.class);
+        upkeepOrder.setType("2");
+        upkeepOrderService.updateUpkeepOrder(upkeepOrder);
+
+    }
 }

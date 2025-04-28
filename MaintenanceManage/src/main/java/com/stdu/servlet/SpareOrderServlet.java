@@ -3,6 +3,7 @@ package com.stdu.servlet;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.stdu.pojo.SpareOrder;
+import com.stdu.pojo.SpareOrder;
 import com.stdu.service.SpareOrderService;
 
 import javax.servlet.ServletException;
@@ -67,4 +68,34 @@ public class SpareOrderServlet extends BaseServlet{
             e.printStackTrace();
         }
     }
+
+    public void accept(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        // 读取JSON请求体
+        BufferedReader reader = req.getReader();
+
+        String line=reader.readLine();
+
+        SpareOrder spareOrder = JSON.parseObject(line,SpareOrder.class);
+        spareOrder.setType("1");
+        spareOrderService.updateSpareOrder(spareOrder);
+
+    }
+
+    public void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        // 读取JSON请求体
+        BufferedReader reader = req.getReader();
+
+        String line=reader.readLine();
+
+        SpareOrder spareOrder = JSON.parseObject(line,SpareOrder.class);
+        spareOrder.setType("2");
+        spareOrderService.updateSpareOrder(spareOrder);
+
+    }
+
+
 }

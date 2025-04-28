@@ -3,6 +3,7 @@ package com.stdu.servlet;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.stdu.pojo.PatrolOrder;
+import com.stdu.pojo.UpkeepOrder;
 import com.stdu.service.PatrolOrderService;
 
 import javax.servlet.ServletException;
@@ -70,4 +71,34 @@ public class PatrolOrderServlet extends BaseServlet {
             e.printStackTrace();
         }
     }
+
+    public void accept(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        // 读取JSON请求体
+        BufferedReader reader = req.getReader();
+
+        String line=reader.readLine();
+
+        PatrolOrder patrolOrder = JSON.parseObject(line,PatrolOrder.class);
+        patrolOrder.setType("1");
+        patrolOrderService.updatePatrolOrder(patrolOrder);
+
+    }
+
+    public void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        // 读取JSON请求体
+        BufferedReader reader = req.getReader();
+
+        String line=reader.readLine();
+
+        PatrolOrder patrolOrder = JSON.parseObject(line,PatrolOrder.class);
+        patrolOrder.setType("2");
+        patrolOrderService.updatePatrolOrder(patrolOrder);
+
+    }
+
+
 }

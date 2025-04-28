@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.stdu.pojo.CheckOrder;
 import com.stdu.pojo.Engineer;
+import com.stdu.pojo.CheckOrder;
 import com.stdu.service.CheckOrderService;
 import com.stdu.service.EngineerService;
 
@@ -71,4 +72,33 @@ public class CheckOrderServlet extends BaseServlet {
             e.printStackTrace();
         }
     }
+
+    public void accept(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        // 读取JSON请求体
+        BufferedReader reader = req.getReader();
+
+        String line=reader.readLine();
+
+        CheckOrder checkOrder = JSON.parseObject(line,CheckOrder.class);
+        checkOrder.setType("1");
+        checkOrderService.updateCheckOrder(checkOrder);
+
+    }
+
+    public void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        resp.setContentType("text/html;charset=utf-8");
+        // 读取JSON请求体
+        BufferedReader reader = req.getReader();
+
+        String line=reader.readLine();
+
+        CheckOrder checkOrder = JSON.parseObject(line,CheckOrder.class);
+        checkOrder.setType("2");
+        checkOrderService.updateCheckOrder(checkOrder);
+
+    }
+
 }

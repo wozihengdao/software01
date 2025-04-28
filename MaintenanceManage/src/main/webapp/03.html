@@ -87,8 +87,108 @@
         <el-container>
 
 
-            <div v-if="activeIndex1==2" style="width:1500px">
+
+
+            <el-dialog
+                    title="保养工单详情"
+                    :visible.sync="dialogVisible2"
+                    width="40%"
+                    @close="dialogVisible2 = false">
+                <el-form ref="viewForm" :model="Data" label-width="120px">
+                    <!-- 基础信息 -->
+
+                    <el-form-item label="工单ID">
+                        <el-input :value="Data.id" :readonly="true" class="readonly-item"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="创建日期">
+                        <el-input :value="Data.data"
+                                  :readonly="true"
+                                  placeholder="无日期信息"></el-input>
+                    </el-form-item>
+
+                    <!-- 设备信息 -->
+                    <el-form-item label="所属车站">
+                        <el-input :value="Data.stop"
+                                  :readonly="true"></el-input>
+                    </el-form-item>
+
+                    <!-- 故障信息 -->
+                    <el-form-item label="设备类型">
+                        <el-input :value="Data.equipmentType"
+                                  :readonly="true"></el-input>
+                    </el-form-item>
+                    <!-- 故障信息 -->
+                    <el-form-item label="设备号">
+                        <el-input :value="Data.equipmentId"
+                                  :readonly="true"></el-input>
+                    </el-form-item>
+
+
+                    <el-upload
+
+                            ref="upload"
+                            action="#"
+                            file-list="fileList"
+                            list-type="picture-card"
+                            :auto-upload="false">
+                        <i slot="default" class="el-icon-plus"></i>
+                        <div slot="file" slot-scope="{file}">
+                            <img
+                                    class="el-upload-list__item-thumbnail"
+                                    :src="file.url" alt=""
+                            >
+                            <span class="el-upload-list__item-actions">
+                    <span
+                            class="el-upload-list__item-preview"
+                            @click="handlePictureCardPreview(file)"
+                    >
+                      <i class="el-icon-zoom-in"></i>
+                    </span>
+                    <span
+                            v-if="!disabled"
+                            class="el-upload-list__item-delete"
+                            @click="handleDownload(file)"
+                    >
+                      <i class="el-icon-download"></i>
+                    </span>
+                    <span
+                            v-if="!disabled"
+                            class="el-upload-list__item-delete"
+                            @click="handleRemove(file)"
+                    >
+                      <i class="el-icon-delete"></i>
+                    </span>
+                  </span>
+                        </div>
+                    </el-upload>
+
+
+                    <div class="dialog-footer">
+                        <el-button @click="OrderSubmit">提交</el-button>
+                        <el-button @click="dialogVisible2 = false">关 闭</el-button>
+                    </div>
+
+                </el-form>
+            </el-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div v-if="activeIndex1==2" style="width:1500px">
                 <el-header>
+
+
 
                     <el-menu
                             :default-active="activeIndex2"
@@ -176,7 +276,7 @@
                         <!-- 已接取表格 -->
                         <h3>已接取</h3>
                         <el-table
-                                :data="tableData"
+                                :data="currentAcceptedOrders"
                                 @selection-change="handleAcceptedSelectionChange"
                                 style="width: 100%"
                                 :row-class-name="tableRowClassName">
@@ -271,7 +371,7 @@
             // 待接取订单（工程师ID为空）
             pendingOrders() {
                 return this.tableData .sort((a, b) => a.type.localeCompare(b.type))
-                    .filter(item => !item.engineerId);
+                    .filter(item => item.type=='0');
                 // 按字典序排序
             },
              acceptedOrders() {
@@ -299,10 +399,16 @@
                     disabled: false,
                     tableData:[],
                     Data:{
-                        data:"2025-04-21",engineerId:"70000001",
-                        faultyDescription:"无",faultyEquipmentId:"15454",
-                        faultyGrade:"urgent",faultyType:"mechanical",id:'20000000',
-                        newPicture:"无",olderPicture:"无",stop:"铁路站",type:"0"},
+                        data:"2025-04-21",
+                        engineerId:"70000001",
+                        equipmentId:"15454",
+                        equipmentType:"mechanical",
+                        id:'20000000',
+                        newPicture:"无",
+                        olderPicture:"无",
+                        stop:"铁路站",
+                        type:"0"
+                    },
 
                     IdRepairOrderList:[],
                     ERepairOrderList:[],
@@ -344,7 +450,7 @@
 
                         this.$set(order, 'engineerId', '当前工程师ID')
                         order.engineerId =storage.get('user').username;
-                        axios.post("http://localhost:7469/MaintenanceManage/maintenanceOrder/accept", order).then((res) => {
+                        axios.post("http://localhost:7469/MaintenanceManage/upkeepOrder/accept", order).then((res) => {
 
 
                         })
@@ -377,7 +483,7 @@
                                 const newOrder = {...order};
                                 newOrder.engineerId = storage.get('user').username;
                                 return axios.post(
-                                    "http://localhost:7469/MaintenanceManage/maintenanceOrder/accept",
+                                    "http://localhost:7469/MaintenanceManage/upkeepOrder/accept",
                                     newOrder
                                 );
                             });
@@ -406,30 +512,23 @@
                     //     return;
                     // }
 
-                    axios.post("http://localhost:7469/MaintenanceManage/maintenanceOrder/MselectAll",this.selectedOrders).then((res) => {
-                        this.orders = [];
-                        for(let i=0;i<res.data.length;i++){
 
-                            this.orders.push(res.data[i]);
-                        }
-                        this.orders = res.data;
+
+                        this.orders=this.selectedOrders;
 
                         // 定义导出字段顺序和列标题
                         const headerOrder = [
-                            'id', 'stop', 'faultyEquipmentId', 'faultyType',
-                            'faultyDescription', 'faultyGrade', 'olderPicture','newPicture', 'type', 'data','engineerId'
+                            'id', 'engineerId','stop', 'equipmentId', 'equipmentType',
+                            'oldPicture', 'type','data'
                         ];
 
                         // 可选：自定义列标题映射（字段名 -> 表头）
                         const headerNames = {
                             id: '工单号',
                             stop: '车站',
-                            faultyEquipmentId: '损坏设备号',
-                            faultyType: '损坏类型',
-                            faultyDescription: '损坏描述',
-                            faultyGrade: '损坏等级',
+                            equipmentId: '设备号',
+                            equipmentType: '设备类型',
                             olderPicture:'维修前图片',
-                            newPicture:'维修后图片',
                             engineerId:'工程师工号',
                             type: '状态',
                             data: '日期'
@@ -449,11 +548,20 @@
                         // 导出文件
                         const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
                         saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tableDataList.xlsx');
-                    })
+
 
 
 
                 },
+
+                dialog1Init(row) {
+
+                    this.Data=row;
+
+                    this.dialogVisible2=true;
+
+                },
+
                 handleSelect(key, keyPath) {
 
                     window.location.href = "http://localhost:7469/MaintenanceManage/0"+(key-1)+".html";
@@ -506,7 +614,24 @@
 
                     })
                     this.dialogVisible=false;
+                },
+
+                OrderSubmit(){
+
+                    axios.post("http://localhost:7469/MaintenanceManage/upkeepOrder/handle",this.Data).then((res) => {
+
+                        if(res.data=="success"){
+                            alert("处理完成");
+                        }
+                    })
+
+                    window.location.reload();
+
+
                 }
+
+
+
             }
         }
     )
