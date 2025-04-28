@@ -215,6 +215,90 @@
                         </el-dialog>
 
 
+
+                    <!--添加数据对话框表单-->
+                    <!-- 报修工单详情对话框 -->
+                    <el-dialog
+                            title="报修工单"
+                            :visible.sync="dialogVisible1"
+                            width="40%">
+                        <el-form
+                                :model="repairOrder"
+                                label-position="right"
+                                label-width="120px"
+                                style="padding: 0 20px">
+
+                            <!-- 第一行 -->
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="工单ID：">
+                                        <el-input v-model="repairOrder.id" readonly></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="停机情况：">
+                                        <el-input v-model="repairOrder.stop" readonly></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+
+                            <!-- 第二行 -->
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="设备编号：">
+                                        <el-input v-model="repairOrder.faultyEquipmentId" readonly></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="故障类型：">
+                                        <el-input v-model="repairOrder.faultyType" readonly></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+
+                            <!-- 第三行 -->
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="严重等级：">
+                                        <el-input v-model="repairOrder.faultyGrade" readonly></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="工单类型：">
+                                        <el-input v-model="repairOrder.type" readonly></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+
+                            <!-- 故障描述 -->
+                            <el-form-item label="故障描述：">
+                                <el-input
+                                        type="textarea"
+                                        :rows="3"
+                                        v-model="repairOrder.faultyDescription"
+                                        readonly>
+                                </el-input>
+                            </el-form-item>
+
+                            <!-- 现场图片 -->
+                            <el-form-item label="现场图片：">
+                                <img
+                                        v-if="repairOrder.picture"
+                                        :src="repairOrder.picture"
+                                        style="max-width: 100%; max-height: 200px"
+                                        alt="现场图片">
+                                <span v-else style="color: #999">暂无图片</span>
+                            </el-form-item>
+
+                            <!-- 补充数据 -->
+                            <el-form-item label="补充数据：">
+                                <pre style="background: #f5f7fa; padding: 10px">{{ repairOrder.data }}</pre>
+                            </el-form-item>
+                        </el-form>
+                    </el-dialog>
+
+
+
                         <!--表格-->
                     <el-table
                             :data="currentPageData"
@@ -244,28 +328,18 @@
 
                                     <template slot-scope="scope">
 
-                                        <template v-if="scope.row.type == 0">
 
-                                        <el-button
-
-                                                type="text"
-                                                size="small"
-                                                @click="initItem(scope.$index)">
-                                            修改
-                                        </el-button>
-                                        </template>
-                                        <template v-if="scope.row.type != 0">
 
                                             <el-button
 
-                                                    type="text"
+                                                    type="primary"
                                                     size="small"
                                                     @click="initItem(scope.$index)">
                                                 详细
                                             </el-button>
                                         </template>
 
-                                    </template>
+
 
                                 </el-table-column>
 
@@ -318,6 +392,7 @@
                     activeIndex1: '2',
                     activeIndex2: '2',
                     dialogVisible:false,
+                    dialogVisible1:false,
                     repairOrder:{},
                     dialogImageUrl: '',
                     stationList:[],
@@ -341,6 +416,13 @@
             }
             ,
             methods: {
+
+                initItem(order){
+
+                    this.repairOrder=order;
+
+                    this.dialogVisible1 = true;
+                },
                 handleCurrentChange(newPage) {
                     this.currentPage = newPage;
                 },

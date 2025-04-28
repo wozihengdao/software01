@@ -7,6 +7,7 @@
     <script src="js/vue.js"></script>
     <script src="element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
     <script src="js/storage.js"></script>
 </head>
 <body>
@@ -37,6 +38,60 @@
         width: 100%;
         margin-top: 5px;
     }
+     .dashboard-container {
+         /*background-color: rgba(0,0,0,0.1);*/
+         padding: 20px;
+         display: flex;
+         gap: 20px;
+     }
+
+    .stat-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        flex: 1;
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,0.2);
+        display: flex;
+        align-items: center;
+    }
+
+    .color-block {
+        width: 70px;
+        height: 70px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+    }
+
+    .stat-content {
+        flex: 1;
+    }
+
+    .stat-number {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .stat-title {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* 颜色定义 */
+    .blue { background-color: #409EFF; }
+    .green { background-color: #67C23A; }
+    .orange { background-color: #E6A23C; }
+    .yellow { background-color: #E6C23C; }
+
+    /* 图标颜色 */
+    .color-block i {
+        color: white;
+        font-size: 24px;
+    }
+
 </style>
 
 
@@ -67,12 +122,15 @@
                         <i class="el-icon-switch-button"></i>
                         <span>退出登录</span>
                     </el-menu-item>
+
                 </el-menu-item-group>
             </el-menu>
         </el-aside>
 
 
         <el-container>
+
+<!--            侧栏-->
             <div v-if="activeIndex1==2" style="width:1500px">
                 <el-header>
 
@@ -94,176 +152,92 @@
                         <el-menu-item index="5">巡检</el-menu-item>
                         <el-menu-item index="6">检测</el-menu-item>
                         <el-menu-item index="7">备件</el-menu-item>
+
+<!--                        抽屉-->
+<!--                      消息  -->
+                        <el-menu-item index="8" style="position: relative; left: 700px"><i class="el-icon-bell"> </i></el-menu-item>
+<!--                        AI-->
+                        <el-menu-item index="9" style="position: relative; left: 700px"><i class="el-icon-orange"> </i></el-menu-item>
                     </el-menu>
 
                 </el-header>
                 <el-main>
 
 
-                    <!--按钮-->
+                    </el-button>
 
-                    <el-row>
+                    <el-drawer
+                            title="消息"
+                            :visible.sync="drawer"
+                            :direction="direction"
+                            :before-close="handleClose">
 
-                        <!--         <el-button type="danger" @click="multiDelete()" plain>批量删除</el-button>-->
-                        <el-button type="primary" plain @click="dialogVisible = true">报修</el-button>
+                    </el-drawer>
+                    <el-drawer
+                            title="智慧巡养助手"
+                            :visible.sync="drawer01"
+                            :direction="direction01"
+                            :before-close="handleClose">
+                        <span>我来啦!</span>
+                    </el-drawer>
 
-                    </el-row>
+<!--          卡片-->
+                    <div class="dashboard-container">
+                        <!-- 用户访问量 -->
+                        <div class="stat-card">
+                            <div class="color-block blue">
+                                <i class="el-icon-user"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">12</div>
+                                <div class="stat-title">用户访问量</div>
+                            </div>
+                        </div>
 
+                        <!-- 系统消息 -->
+                        <div class="stat-card">
+                            <div class="color-block green">
+                                <i class="el-icon-message"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">18</div>
+                                <div class="stat-title">系统消息</div>
+                            </div>
+                        </div>
 
-                    <!--添加数据对话框表单-->
-                    <el-dialog
-                            title="报修工单"
-                            :visible.sync="dialogVisible"
-                            width="40%">
-                        <el-form ref="form" :model="repairOrder" label-width="120px">
-                            <!-- 隐藏ID字段 -->
-                            <el-input type="hidden" v-model="repairOrder.id"></el-input>
+                        <!-- 商品数量 -->
+                        <div class="stat-card">
+                            <div class="color-block orange">
+                                <i class="el-icon-document"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">153</div>
+                                <div class="stat-title">工单数量</div>
+                            </div>
+                        </div>
 
-                            <el-form-item label="所属车站" prop="stop" required>
-                                <el-select
-                                        v-model="repairOrder.stop"
-                                        placeholder="请选择车站"
-                                        filterable>
-                                    <el-option
-                                            v-for="station in stationList"
-                                            :key="station.id"
-                                            :label="station.name"
-                                            :value="station.name">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
+                        <!-- 今日订单 -->
+                        <div class="stat-card">
+                            <div class="color-block yellow">
+                                <i class="el-icon-monitor"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">23</div>
+                                <div class="stat-title">运行设备数量</div>
+                            </div>
+                        </div>
+                    </div>
+<!--          图表-->
 
-                            <el-form-item label="设备编号" prop="faultyEquipmentId" required>
-                                <el-input
-                                        v-model="repairOrder.faultyEquipmentId"
-                                        placeholder="请输入设备编号">
+                    <div class="stat-card" style="width: 1000px;position:relative;top:20px;left:15px">
+                <div id="container01" style="height: 500px;width:1000px"></div>
+                    </div>
+                     <br>
+                    <br>
 
-                                </el-input>
-                            </el-form-item>
-
-                            <el-form-item label="故障类别" prop="faultyType">
-                                <el-select v-model="repairOrder.faultyType" placeholder="请选择类型">
-                                    <el-option label="机械故障" value="mechanical"></el-option>
-                                    <el-option label="电气故障" value="electrical"></el-option>
-                                    <el-option label="软件故障" value="software"></el-option>
-                                </el-select>
-                            </el-form-item>
-
-                            <el-form-item label="故障等级" prop="faultyGrade">
-                                <el-radio-group v-model="repairOrder.faultyGrade">
-                                    <el-radio label="urgent">紧急</el-radio>
-                                    <el-radio label="high">高</el-radio>
-                                    <el-radio label="medium">中</el-radio>
-                                    <el-radio label="low">低</el-radio>
-                                </el-radio-group>
-                            </el-form-item>
-
-                            <el-form-item label="故障描述" prop="faultyDescription">
-                                <el-input
-                                        type="textarea"
-                                        :rows="3"
-                                        v-model="repairOrder.faultyDescription"
-                                        placeholder="请详细描述故障现象">
-                                </el-input>
-                            </el-form-item>
-                            <span>上传图片</span>
-                            <el-upload
-
-                                    ref="upload"
-                                    action="#"
-                                    file-list="fileList"
-                                    list-type="picture-card"
-                                    :auto-upload="false">
-                                <i slot="default" class="el-icon-plus"></i>
-                                <div slot="file" slot-scope="{file}">
-                                    <img
-                                            class="el-upload-list__item-thumbnail"
-                                            :src="file.url" alt=""
-                                    >
-                                    <span class="el-upload-list__item-actions">
-                    <span
-                            class="el-upload-list__item-preview"
-                            @click="handlePictureCardPreview(file)"
-                    >
-                      <i class="el-icon-zoom-in"></i>
-                    </span>
-                    <span
-                            v-if="!disabled"
-                            class="el-upload-list__item-delete"
-                            @click="handleDownload(file)"
-                    >
-                      <i class="el-icon-download"></i>
-                    </span>
-                    <span
-                            v-if="!disabled"
-                            class="el-upload-list__item-delete"
-                            @click="handleRemove(file)"
-                    >
-                      <i class="el-icon-delete"></i>
-                    </span>
-                  </span>
-                                </div>
-                            </el-upload>
-
-
-
-                            <el-form-item>
-                                <el-button type="primary" @click="submitRepairOrder">提交工单</el-button>
-                                <el-button @click="dialogVisible = false">取消</el-button>
-                            </el-form-item>
-                        </el-form>
-                    </el-dialog>
-
-
-                    <!--表格-->
-                    <template>
-                        <el-table
-                                :data="tableData"
-                                style="width: 100%"
-                                :row-class-name="tableRowClassName"
-                                @selection-change="handleSelectionChange"
-                        >
-                            <el-table-column prop="id" label="报修单号" align="center"></el-table-column>
-                            <el-table-column prop="stop" label="所属车站" align="center"></el-table-column>
-                            <el-table-column prop="faultyEquipmentId" label="故障设备编号" align="center"></el-table-column>
-                            <el-table-column prop="faultyType" label="故障类别" align="center"></el-table-column>
-                            <el-table-column prop="type" label="状态" align="center"></el-table-column>
-                            <el-table-column prop="data" label="上报时间" align="center"></el-table-column>
-
-
-                            <el-table-column
-                                    fixed="right"
-                                    label="操作"
-                                    width="120">
-
-                                <template slot-scope="scope">
-                                    <el-button
-                                            @click.native.prevent="deleteItem(scope.$index, tableData)"
-                                            type="text"
-                                            size="small">
-                                        撤回
-                                    </el-button>
-
-                                    <el-button
-
-                                            type="text"
-                                            size="small"
-                                            @click="initItem(scope.$index)">
-                                        修改
-                                    </el-button>
-
-
-                                </template>
-
-                            </el-table-column>
-
-                        </el-table>
-                    </template>
-
-
-
-
-
+                    <div class="stat-card" style="width: 290px;position:relative;top:-565.5px;left:1080px">
+                        <div id="container02" style="height: 500px;width:1000px"></div>
+                    </div>
 
                 </el-main>
 
@@ -279,6 +253,10 @@
             el:"#app",
             data() {
                 return {
+                    drawer: false,
+                    direction: 'rtl',
+                    drawer01: false,
+                    direction01: 'rtl',
                     repairOrderList:[],
                     activeIndex1: '2',
                     activeIndex2: '1',
@@ -291,6 +269,179 @@
                 };
             },
             mounted() {
+
+
+                    const echarts = window.echarts;
+                    const dom = document.getElementById('container01');
+                    if (!dom) return;
+
+                    const myChart = echarts.init(dom, null, {
+                        renderer: 'canvas',
+                        useDirtyRect: false
+                    });
+
+                    const option = {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross',
+                                label: {
+                                    backgroundColor: '#6a7985'
+                                }
+                            }
+                        },
+                        title: { text: '工单统计' },
+
+                        legend: { data: [ '保养单', '备件单','巡检单', '检测单','维修单' ] },
+                        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+                        xAxis: { type: 'category', data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'] ,boundaryGap: false},
+                        yAxis: { type: 'value' },
+                        series: [     {
+                            name: '维修单',
+                            type: 'line',
+                            stack: 'Total',
+
+                         //   smooth: true,
+                            areaStyle: {},
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            label: {
+                                show: true,
+                                position: 'top'
+                            },
+                            data: [10, 14, 12, 10, 7, 12, 13]
+                        },
+                            {
+                          //      smooth: true,
+                                name: '保养单',
+                                type: 'line',
+                                stack: 'Total',
+                                areaStyle: {},
+                                emphasis: {
+                                    focus: 'series'
+                                },
+                                label: {
+                                    show: true,
+                                    position: 'top'
+                                },
+                                data: [9, 12, 14, 16, 16, 14, 12]
+
+                            },
+                            {
+                          //      smooth: true,
+                                name: '备件单',
+                                type: 'line',
+                                stack: 'Total',
+                                areaStyle: {},
+                                label: {
+                                    show: true,
+                                    position: 'top'
+                                },
+                                emphasis: {
+                                    focus: 'series'
+                                },
+                                data: [12, 12, 13, 14, 18, 12, 9],
+                                data: [12, 12, 13, 14, 18, 12, 9]
+                            },
+                            {
+                            //    smooth: true,
+                                name: '巡检单',
+                                type: 'line',
+                                stack: 'Total',
+                                areaStyle: {},
+                                emphasis: {
+                                    focus: 'series'
+                                },
+                                label: {
+                                    show: true,
+                                    position: 'top'
+                                },
+                                data: [12, 17, 11, 13, 17, 13, 12]
+                            },
+                            {
+                            //    smooth: true,
+                                name: '检测单',
+                                type: 'line',
+                                stack: 'Total',
+                                areaStyle: {},
+                                emphasis: {
+                                    focus: 'series'
+                                },
+                                label: {
+                                    show: true,
+                                    position: 'top'
+                                },
+                                data: [12, 12,17, 14, 18, 20, 16]
+                            }
+                        ]
+                    };
+
+
+                    myChart.setOption(option);
+                    window.addEventListener('resize', myChart.resize);
+
+                const dom02 = document.getElementById('container02');
+                if (!dom02) return;
+
+                const myChart02 = echarts.init(dom02, null, {
+                    renderer: 'canvas',
+                    useDirtyRect: false
+                });
+
+                const option02 = {
+                    title: {
+                        text: '占比分析',
+                        subtext: '',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    legend: {
+                        top: '80%',
+                        left: 'center'
+                    },
+                    series: [
+                        {center: ['50%', '45%'],
+                            name: '详细信息',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            padAngle: 5,
+                            itemStyle: {
+                                borderRadius: 10
+                            },
+                            label: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 40,
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 30, name: '超时完成' },
+                                { value: 120, name: '按时完成' },
+                                { value: 50, name: '待完成' },
+                                { value: 30, name: '超时未完成' },
+
+                            ]
+                        }
+                    ]
+                };
+
+                if (option02 && typeof option02 === 'object') {
+                    myChart02.setOption(option02);
+                }
+
+                window.addEventListener('resize', myChart.resize);
 
                 axios.post("http://localhost:7469/MaintenanceManage/stop/selectAll",).then((res) => {
 
@@ -306,10 +457,22 @@
             }
             ,
             methods: {
+
+                handleClose(done) {
+                    this.$confirm('确认关闭？')
+                        .then(_ => {
+                            done();
+                        })
+                        .catch(_ => {});
+                }
+            ,
                 handleSelect(key, keyPath) {
 
                     this.activeIndex2 = key;
+                    if(key<=7)
                     window.location.href = "http://localhost:7469/MaintenanceManage/0"+(key-1)+".html";
+                    if(key==8)this.drawer=true;
+                    if(key==9)this.drawer01=true;
                     console.log(key, keyPath);
                 },
                 handleMenuItemClick(index) {

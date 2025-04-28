@@ -43,7 +43,9 @@
         object-fit: cover;
         display: block;
     }
-
+    .el-menu{
+        border-right: none !important;
+    }
     .button {
         width: 100%;
         margin-top: 5px;
@@ -78,12 +80,16 @@
                         <i class="el-icon-switch-button"></i>
                         <span>退出登录</span>
                     </el-menu-item>
+                    <el-menu-item index="5">
+                        <i class="el-icon-switch-button"></i>
+                        <span>退出登录</span>
+                    </el-menu-item>
                 </el-menu-item-group>
             </el-menu>
         </el-aside>
 
         <el-container>
-            <div v-if="activeIndex1==2" style="width:1500px">
+            <div v-if="activeIndex1==2" style="width:1500px;position:relative;">
                 <el-header>
 
                     <el-menu
