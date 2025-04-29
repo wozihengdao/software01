@@ -303,11 +303,7 @@
 
 <!--                        抽屉-->
 <!--                      消息  -->
-<<<<<<< HEAD
                         <el-menu-item index="8" style="position: relative; left: 700px"><i class="el-icon-message"></i></el-menu-item>
-=======
-                        <el-menu-item index="8" style="position: relative; left: 700px"><i class="el-icon-bell"> </i></el-menu-item>
->>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
 <!--                        AI-->
                         <el-menu-item index="9" style="position: relative; left: 700px"><i class="el-icon-orange"> </i></el-menu-item>
                     </el-menu>
@@ -321,7 +317,6 @@
                     <el-drawer
                             title="消息"
                             :visible.sync="drawer"
-<<<<<<< HEAD
                             direction="rtl"
                             size="30%"
                             :wrapper-closable="false"
@@ -395,20 +390,6 @@
                     </el-drawer>
 
 
-=======
-                            :direction="direction"
-                            :before-close="handleClose">
-
-                    </el-drawer>
-                    <el-drawer
-                            title="智慧巡养助手"
-                            :visible.sync="drawer01"
-                            :direction="direction01"
-                            :before-close="handleClose">
-                        <span>我来啦!</span>
-                    </el-drawer>
-
->>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
 <!--          卡片-->
                     <div class="dashboard-container">
                         <!-- 用户访问量 -->
@@ -432,7 +413,6 @@
                                 <div class="stat-title">系统消息</div>
                             </div>
                         </div>
-<<<<<<< HEAD
 
                         <!-- 商品数量 -->
                         <div class="stat-card">
@@ -463,39 +443,6 @@
                     </div>
                      <br>
                     <br>
-=======
-
-                        <!-- 商品数量 -->
-                        <div class="stat-card">
-                            <div class="color-block orange">
-                                <i class="el-icon-document"></i>
-                            </div>
-                            <div class="stat-content">
-                                <div class="stat-number">153</div>
-                                <div class="stat-title">工单数量</div>
-                            </div>
-                        </div>
-
-                        <!-- 今日订单 -->
-                        <div class="stat-card">
-                            <div class="color-block yellow">
-                                <i class="el-icon-monitor"></i>
-                            </div>
-                            <div class="stat-content">
-                                <div class="stat-number">23</div>
-                                <div class="stat-title">运行设备数量</div>
-                            </div>
-                        </div>
-                    </div>
-<!--          图表-->
-
-                    <div class="stat-card" style="width: 1000px;position:relative;top:20px;left:15px">
-                <div id="container01" style="height: 500px;width:1000px"></div>
-                    </div>
-                     <br>
-                    <br>
-
->>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
                     <div class="stat-card" style="width: 290px;position:relative;top:-565.5px;left:1080px">
                         <div id="container02" style="height: 500px;width:1000px"></div>
                     </div>
@@ -511,15 +458,12 @@
 </body>
 
 <script type="module">
-    import storage from "./js/storage.js";
+    import storage from "./storage.js";
     new Vue({
             el:"#app",
             data() {
                 return {
-<<<<<<< HEAD
                     List:[],
-=======
->>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
                     drawer: false,
                     direction: 'rtl',
                     drawer01: false,
@@ -538,7 +482,6 @@
             },
             mounted() {
 
-<<<<<<< HEAD
                 axios.post("http://localhost:7469/MaintenanceManage/repairOrder/allOrderToAI",storage.get('user').username).then((res)=>{
 
                     this.ans=res.data;
@@ -552,8 +495,6 @@
 
                 })
 
-=======
->>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
 
                     const echarts = window.echarts;
                     const dom = document.getElementById('container01');
@@ -626,11 +567,7 @@
                                     focus: 'series'
                                 },
                                 data: [12, 12, 13, 14, 18, 12, 9],
-<<<<<<< HEAD
 
-=======
-                                data: [12, 12, 13, 14, 18, 12, 9]
->>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
                             },
                             {
                             //    smooth: true,
@@ -745,7 +682,6 @@
             }
             ,
             methods: {
-<<<<<<< HEAD
                 initChat() {
                     this.$nextTick(() => {
                         this.setupChat();
@@ -869,8 +805,6 @@
                 formatId(id) {
                     return id.toString();
                 },
-=======
->>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
 
                 handleClose(done) {
                     this.$confirm('确认关闭？')
@@ -886,16 +820,12 @@
                     if(key<=7)
                     window.location.href = "http://localhost:7469/MaintenanceManage/0"+(key-1)+".html";
                     if(key==8)this.drawer=true;
-<<<<<<< HEAD
                     if(key==9){
 
 
                         this.drawer01=true;
 
                     }
-=======
-                    if(key==9)this.drawer01=true;
->>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
                     console.log(key, keyPath);
                 },
                 handleMenuItemClick(index) {
