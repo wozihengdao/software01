@@ -35,6 +35,7 @@ public class UpkeepOrderServlet extends BaseServlet {
         resp.getWriter().write(json);
     }
 
+
     public void selectById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         resp.setContentType("text/html;charset=utf-8");
@@ -79,6 +80,7 @@ public class UpkeepOrderServlet extends BaseServlet {
         }
     }
 
+<<<<<<< HEAD
     public void add(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         BufferedReader reader = req.getReader();
         StringBuilder sb = new StringBuilder();
@@ -171,6 +173,8 @@ public class UpkeepOrderServlet extends BaseServlet {
     }
 
 
+=======
+>>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
     public void accept(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         resp.setContentType("text/html;charset=utf-8");
@@ -180,7 +184,11 @@ public class UpkeepOrderServlet extends BaseServlet {
         String line=reader.readLine();
 
         UpkeepOrder upkeepOrder = JSON.parseObject(line,UpkeepOrder.class);
+<<<<<<< HEAD
         upkeepOrder.setType("1");
+=======
+                    upkeepOrder.setType("1");
+>>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
         upkeepOrderService.updateUpkeepOrder(upkeepOrder);
 
     }
@@ -198,5 +206,8 @@ public class UpkeepOrderServlet extends BaseServlet {
         upkeepOrderService.updateUpkeepOrder(upkeepOrder);
 
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
 }

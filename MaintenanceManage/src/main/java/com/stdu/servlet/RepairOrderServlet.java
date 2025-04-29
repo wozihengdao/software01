@@ -135,6 +135,7 @@ public class RepairOrderServlet extends BaseServlet {
 
     }
 
+<<<<<<< HEAD
     public void allOrder(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("/allOrder");
         resp.setContentType("text/html;charset=utf-8");
@@ -290,6 +291,8 @@ public class RepairOrderServlet extends BaseServlet {
 
 
     }
+=======
+>>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
 
 
 

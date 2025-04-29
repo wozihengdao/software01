@@ -3,9 +3,13 @@ package com.stdu.servlet;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.stdu.pojo.PatrolOrder;
+<<<<<<< HEAD
 import com.stdu.pojo.SpareOrder;
 import com.stdu.pojo.Stop;
 import com.stdu.pojo.TimeSel;
+=======
+import com.stdu.pojo.UpkeepOrder;
+>>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
 import com.stdu.service.PatrolOrderService;
 import com.stdu.service.StopService;
 import com.stdu.service.TimeSelService;
@@ -78,6 +82,7 @@ public class PatrolOrderServlet extends BaseServlet {
         }
     }
 
+<<<<<<< HEAD
     public void add(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         BufferedReader reader = req.getReader();
         StringBuilder sb = new StringBuilder();
@@ -169,6 +174,8 @@ public class PatrolOrderServlet extends BaseServlet {
     }
 
 
+=======
+>>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
     public void accept(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         resp.setContentType("text/html;charset=utf-8");
@@ -198,5 +205,8 @@ public class PatrolOrderServlet extends BaseServlet {
     }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 453dc911a51acfdef70cc13ca2ae187aec0d0705
 }
