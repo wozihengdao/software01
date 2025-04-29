@@ -75,5 +75,17 @@ public class PatrolOrder {
         this.data = data;
     }
 
-
+    @Override
+    public String toString() {
+        return "PatrolOrder{" +
+                "id=" + id +
+                ", stop='" + stop + '\'' +
+                ", equipmentId='" + equipmentId + '\'' +
+                ", equipmentType='" + equipmentType + '\'' +
+                ", engineerId='" + engineerId + '\'' +
+                ", picture='" + picture + '\'' +
+                ", type='" + type + '\'' +
+                ", data='" + data + '\'' +
+                '}';
+    }
 }

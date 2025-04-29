@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+</head>
+
+<body>
+<div id="app" >
+
+
+    <template>
+        <div class="login" >
+            <div class="login-wrap" >
+                <el-row type="flex" justify="center">
+                    <el-form ref="loginForm" :model="user" :rules="rules" status-icon label-width="80px">
+                        <h3>登录</h3>
+                        <hr>
+                        <el-form-item prop="username" label="用户名">
+                            <el-input v-model="user.username" placeholder="请输入用户名" prefix-icon></el-input>
+                        </el-form-item>
+                        <el-form-item id="password" prop="password" label="密码">
+                            <el-input v-model="user.password" show-password placeholder="请输入密码"></el-input>
+                        </el-form-item>
+                        <router-link to="/">找回密码</router-link>
+                        <router-link to="/register">注册账号</router-link>
+                        <el-form-item>
+                            <el-button type="primary" icon="el-icon-upload" @click="doLogin()">登 录</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-row>
+            </div>
+        </div>
+    </template>
+
+</div>
+
+<script type="module">
+    import storage from "./js/storage.js";
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                user: {
+                    username: "",
+                    password: "",
+                    type:""
+                }
+            };
+        },
+        mounted() {
+           this.user.username = storage.get('user').username;
+
+
+        },
+        created() {},
+        methods: {
+            doLogin() {
+                if (!this.user.username) {
+                    this.$message.error("请输入用户名！");
+                    return;
+                } else if (!this.user.password) {
+                    this.$message.error("请输入密码！");
+                    return;
+                } else {
+                    //校验用户名和密码是否正确;
+                    // this.$router.push({ path: "/personal" });
+                    axios.post("http://localhost:7469/MaintenanceManage/user/logIn", {
+                            username: this.user.username,
+                            password: this.user.password,
+                            type:""
+                        })
+                        .then((res) => {
+                            // console.log("输出response.data.status", res.data.status);
+                            if (res.data!="fail") {
+                               storage.set('user', this.user);
+                               if(res.data!='0')
+                                window.location.href = "http://localhost:7469/MaintenanceManage/01.html";
+                               else window.location.href = "http://localhost:7469/MaintenanceManage/Manager.html";
+                            } else {
+                                alert("您输入的用户名或密码错误！");
+                            }
+                        });
+                }
+            }
+
+        }
+    });
+</script>
+</body>
+<style scoped>
+    .login {
+        width: 100%;
+        height: 740px;
+        /*background: url("../assets/images/bg1.png") no-repeat;*/
+        background-size: cover;
+        overflow: hidden;
+    }
+    .login-wrap {
+        /*background: url("../assets/images/login_bg.png") no-repeat;*/
+        background-size: cover;
+        width: 400px;
+        height: 300px;
+        margin: 215px auto;
+        overflow: hidden;
+        padding-top: 10px;
+        line-height: 40px;
+    }
+    #password {
+        margin-bottom: 5px;
+    }
+    h3 {
+        color: #0babeab8;
+        font-size: 24px;
+    }
+    hr {
+        background-color: #444;
+        margin: 20px auto;
+    }
+    a {
+        text-decoration: none;
+        color: #aaa;
+        font-size: 15px;
+    }
+    a:hover {
+        color: coral;
+    }
+    .el-button {
+        width: 80%;
+        margin-left: -50px;
+    }
+</style>
+
+</html>

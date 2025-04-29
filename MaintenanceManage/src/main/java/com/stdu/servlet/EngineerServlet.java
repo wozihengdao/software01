@@ -23,12 +23,10 @@ public class EngineerServlet  extends BaseServlet {
         List<Engineer> list=engineerService.selectAll(); ;
 
         String json= JSON.toJSONString(list);
-        System.out.println(json);
         resp.getWriter().write(json);
     }
 
     public void selectById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("/selectById");
         resp.setContentType("text/html;charset=utf-8");
         BufferedReader reader=req.getReader();
         String line=reader.readLine();
@@ -39,10 +37,8 @@ public class EngineerServlet  extends BaseServlet {
         }
 
         Long id=Long.valueOf(line);
-        System.out.println(id);
         Engineer engineer=engineerService.selectById(id);
         String json= JSON.toJSONString(engineer);
-        System.out.printf(json);
         resp.getWriter().write(json);
 
     }

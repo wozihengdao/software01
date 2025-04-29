@@ -3,6 +3,7 @@ package com.stdu.mapper;
 import com.stdu.pojo.UpkeepOrder;
 import org.apache.ibatis.annotations.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface UpkeepOrderMapper {
@@ -12,6 +13,7 @@ public interface UpkeepOrderMapper {
             "VALUES (#{stop}, #{equipmentId}, #{equipmentType}, #{engineerId}, #{oldPicture}, #{newPicture}, #{type}, #{data})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insert(UpkeepOrder order);
+
 
     // 根据ID删除
     @Delete("DELETE FROM tb_upkeep_order WHERE id = #{id}")
@@ -49,4 +51,26 @@ public interface UpkeepOrderMapper {
     @Select("SELECT * FROM tb_upkeep_order WHERE id = #{id}")
     @ResultMap("upkeepOrderMap")
     UpkeepOrder selectById(Long id);
+
+    //获取最新
+    @Select("SELECT MAX(STR_TO_DATE(data, '%Y-%m-%d')) FROM tb_upkeep_order WHERE type = '0'")
+    LocalDate selectLastOrderDate();
+
+    @Select("SELECT * FROM tb_upkeep_order ORDER BY id DESC LIMIT 1")
+    @ResultMap("upkeepOrderMap")
+    UpkeepOrder selectLatestTemplate();
+
+
+
+    @Select("SELECT * FROM tb_upkeep_order WHERE id = #{id} AND type = '9'")
+    UpkeepOrder selectTemplateById(String templateId);
+
+    @Select("SELECT MAX(STR_TO_DATE(data, '%Y-%m-%d')) FROM tb_upkeep_order WHERE type != 9")
+    boolean getLastValidOrderDate();
+
+    @Insert("INSERT INTO tb_upkeep_order (stop, equipment_id, equipment_type, type, data) " +
+            "VALUES (#{stop}, #{equipmentId}, #{equipmentType}, #{type}, #{data})")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    int insert2(UpkeepOrder order);
+
 }

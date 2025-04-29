@@ -2,6 +2,7 @@ package com.stdu.mapper;
 
 
 import com.stdu.pojo.SpareOrder;
+import com.stdu.pojo.UpkeepOrder;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -50,4 +51,10 @@ public interface SpareOrderMapper {
     @Select("SELECT * FROM tb_spare_order WHERE id = #{id}")
     @ResultMap("spareOrderMap")
     SpareOrder selectById(Long id);
+
+    @Insert("INSERT INTO tb_spare_order (stop, equipment_id, equipment_type, type, data) " +
+            "VALUES (#{stop}, #{equipmentId}, #{equipmentType}, #{type}, #{data})")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    int insert2(SpareOrder order);
+
 }

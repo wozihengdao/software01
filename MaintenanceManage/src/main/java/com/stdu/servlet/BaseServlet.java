@@ -27,11 +27,7 @@ public class BaseServlet extends HttpServlet {
             Method method=cls.getMethod(name,HttpServletRequest.class,HttpServletResponse.class);
             method.invoke(this,req,resp);
 
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
 

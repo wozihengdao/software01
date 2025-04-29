@@ -1,6 +1,7 @@
 package com.stdu.mapper;
 
 import com.stdu.pojo.CheckOrder;
+import com.stdu.pojo.UpkeepOrder;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -51,4 +52,6 @@ public interface CheckOrderMapper {
     @Select("SELECT * FROM tb_check_order WHERE id = #{id}")
     @ResultMap("orderMap")
     CheckOrder selectById(Long id);
+
+
 }

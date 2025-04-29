@@ -115,4 +115,21 @@ public class Maintenance {
     public void setEngineerId(String engineerId) {
         this.engineerId = engineerId;
     }
+
+    @Override
+    public String toString() {
+        return "Maintenance{" +
+                "id=" + id +
+                ", stop='" + stop + '\'' +
+                ", faultyEquipmentId='" + faultyEquipmentId + '\'' +
+                ", faultyType='" + faultyType + '\'' +
+                ", faultyDescription='" + faultyDescription + '\'' +
+                ", faultyGrade='" + faultyGrade + '\'' +
+                ", olderPicture='" + olderPicture + '\'' +
+                ", newPicture='" + newPicture + '\'' +
+                ", type='" + type + '\'' +
+                ", data='" + data + '\'' +
+                ", engineerId='" + engineerId + '\'' +
+                '}';
+    }
 }

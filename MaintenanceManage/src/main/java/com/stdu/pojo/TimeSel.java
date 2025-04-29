@@ -1,10 +1,13 @@
 package com.stdu.pojo;
 
+import java.util.Date;
+
 public class TimeSel {
     int id;
     int day;
-    int orderType;
-
+    String orderType;
+    String templateOrderId;
+    private Date lastGenerateTime;
 
     public int getId() {
         return id;
@@ -22,12 +25,27 @@ public class TimeSel {
         this.day = day;
     }
 
-    public int getOrderType() {
+    public String getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(int orderType) {
+    public void setOrderType(String orderType) {
         this.orderType = orderType;
+    }
+
+    public String getTemplateOrderId() {
+        return templateOrderId;
+    }
+
+    public void setTemplateOrderId(String templateOrderId) {
+        this.templateOrderId = templateOrderId;
+    }
+    public Date getLastGenerateTime() {
+        return lastGenerateTime;
+    }
+
+    public void setLastGenerateTime(Date lastGenerateTime) {
+        this.lastGenerateTime = lastGenerateTime;
     }
 
     @Override
@@ -36,6 +54,8 @@ public class TimeSel {
                 "id=" + id +
                 ", day=" + day +
                 ", orderType=" + orderType +
+                ", templateOrderId='" + templateOrderId + '\'' +
+                ", lastGenerateTime=" + lastGenerateTime +
                 '}';
     }
 }

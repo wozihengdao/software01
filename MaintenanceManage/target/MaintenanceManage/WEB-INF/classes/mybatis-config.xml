@@ -12,10 +12,10 @@
         <environment id="development">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="drivre" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql:///db4?useSSL=false"/>
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql:///soft?useSSL=false"/>
                 <property name="username" value="root"/>
-                <property name="password" value="123456"/>
+                <property name="password" value="211314"/>
             </dataSource>
         </environment>
     </environments>

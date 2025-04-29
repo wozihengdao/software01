@@ -31,7 +31,6 @@ public class EquipmentServlet extends BaseServlet {
 
         try {
             Equipment equipment = equipmentService.selectById(Long.parseLong(req.getParameter("id")));
-            System.out.println("好好好"+JSON.toJSONString(equipment));
             if(equipment != null) {
                 resp.getWriter().write(JSON.toJSONString(equipment));
             } else {

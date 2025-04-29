@@ -7,6 +7,8 @@
     <script src="js/vue.js"></script>
     <script src="element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+    <script src="./js/xlsx.full.min.js"></script>
+    <script src="./js/FileSaver.min.js"></script>
 </head>
 <body>
 
@@ -83,8 +85,110 @@
 
 
         <el-container>
+
+
+
+
+            <el-dialog
+                    title="保养工单详情"
+                    :visible.sync="dialogVisible2"
+                    width="40%"
+                    @close="dialogVisible2 = false">
+                <el-form ref="viewForm" :model="Data" label-width="120px">
+                    <!-- 基础信息 -->
+
+                    <el-form-item label="工单ID">
+                        <el-input :value="Data.id" :readonly="true" class="readonly-item"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="创建日期">
+                        <el-input :value="Data.data"
+                                  :readonly="true"
+                                  placeholder="无日期信息"></el-input>
+                    </el-form-item>
+
+                    <!-- 设备信息 -->
+                    <el-form-item label="所属车站">
+                        <el-input :value="Data.stop"
+                                  :readonly="true"></el-input>
+                    </el-form-item>
+
+                    <!-- 故障信息 -->
+                    <el-form-item label="设备类型">
+                        <el-input :value="Data.equipmentType"
+                                  :readonly="true"></el-input>
+                    </el-form-item>
+                    <!-- 故障信息 -->
+                    <el-form-item label="设备号">
+                        <el-input :value="Data.equipmentId"
+                                  :readonly="true"></el-input>
+                    </el-form-item>
+
+
+                    <el-upload
+
+                            ref="upload"
+                            action="#"
+                            file-list="fileList"
+                            list-type="picture-card"
+                            :auto-upload="false">
+                        <i slot="default" class="el-icon-plus"></i>
+                        <div slot="file" slot-scope="{file}">
+                            <img
+                                    class="el-upload-list__item-thumbnail"
+                                    :src="file.url" alt=""
+                            >
+                            <span class="el-upload-list__item-actions">
+                    <span
+                            class="el-upload-list__item-preview"
+                            @click="handlePictureCardPreview(file)"
+                    >
+                      <i class="el-icon-zoom-in"></i>
+                    </span>
+                    <span
+                            v-if="!disabled"
+                            class="el-upload-list__item-delete"
+                            @click="handleDownload(file)"
+                    >
+                      <i class="el-icon-download"></i>
+                    </span>
+                    <span
+                            v-if="!disabled"
+                            class="el-upload-list__item-delete"
+                            @click="handleRemove(file)"
+                    >
+                      <i class="el-icon-delete"></i>
+                    </span>
+                  </span>
+                        </div>
+                    </el-upload>
+
+
+                    <div class="dialog-footer">
+                        <el-button @click="OrderSubmit">提交</el-button>
+                        <el-button @click="dialogVisible2 = false">关 闭</el-button>
+                    </div>
+
+                </el-form>
+            </el-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div v-if="activeIndex1==2" style="width:1500px">
                 <el-header>
+
+
 
                     <el-menu
                             :default-active="activeIndex2"
@@ -109,170 +213,120 @@
                 </el-header>
                 <el-main>
 
-
-
-                    <!--按钮-->
-
                     <el-row>
 
                         <!--         <el-button type="danger" @click="multiDelete()" plain>批量删除</el-button>-->
-                        <el-button type="primary" plain @click="dialogVisible = true">报修</el-button>
+                        <el-button type="primary" plain @click="mutliSelect">批量接受</el-button>
 
+                        <el-button type="success" plain @click="exportXSL">批量导出</el-button>
                     </el-row>
 
 
-                    <!--添加数据对话框表单-->
-                    <el-dialog
-                            title="报修工单"
-                            :visible.sync="dialogVisible"
-                            width="40%">
-                        <el-form ref="form" :model="repairOrder" label-width="120px">
-                            <!-- 隐藏ID字段 -->
-                            <el-input type="hidden" v-model="repairOrder.id"></el-input>
-
-                            <el-form-item label="所属车站" prop="stop" required>
-                                <el-select
-                                        v-model="repairOrder.stop"
-                                        placeholder="请选择车站"
-                                        filterable>
-                                    <el-option
-                                            v-for="station in stationList"
-                                            :key="station.id"
-                                            :label="station.name"
-                                            :value="station.id">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-
-                            <el-form-item label="设备编号" prop="faultyEquipmentId" required>
-                                <el-input
-                                        v-model="repairOrder.faultyEquipmentId"
-                                        placeholder="请输入设备编号或扫码">
-
-                                </el-input>
-                            </el-form-item>
-
-                            <el-form-item label="故障类别" prop="faultyType">
-                                <el-select v-model="repairOrder.faultyType" placeholder="请选择类型">
-                                    <el-option label="机械故障" value="mechanical"></el-option>
-                                    <el-option label="电气故障" value="electrical"></el-option>
-                                    <el-option label="软件故障" value="software"></el-option>
-                                </el-select>
-                            </el-form-item>
-
-                            <el-form-item label="故障等级" prop="faultyGrade">
-                                <el-radio-group v-model="repairOrder.faultyGrade">
-                                    <el-radio label="urgent">紧急</el-radio>
-                                    <el-radio label="high">高</el-radio>
-                                    <el-radio label="medium">中</el-radio>
-                                    <el-radio label="low">低</el-radio>
-                                </el-radio-group>
-                            </el-form-item>
-
-                            <el-form-item label="故障描述" prop="faultyDescription">
-                                <el-input
-                                        type="textarea"
-                                        :rows="3"
-                                        v-model="repairOrder.faultyDescription"
-                                        placeholder="请详细描述故障现象">
-                                </el-input>
-                            </el-form-item>
-                            <span>上传图片</span>
-                            <el-upload
-
-                                    ref="upload"
-                                    action="#"
-                                    file-list="fileList"
-                                    list-type="picture-card"
-                                    :auto-upload="false">
-                                <i slot="default" class="el-icon-plus"></i>
-                                <div slot="file" slot-scope="{file}">
-                                    <img
-                                            class="el-upload-list__item-thumbnail"
-                                            :src="file.url" alt=""
-                                    >
-                                    <span class="el-upload-list__item-actions">
-                    <span
-                            class="el-upload-list__item-preview"
-                            @click="handlePictureCardPreview(file)"
-                    >
-                      <i class="el-icon-zoom-in"></i>
-                    </span>
-                    <span
-                            v-if="!disabled"
-                            class="el-upload-list__item-delete"
-                            @click="handleDownload(file)"
-                    >
-                      <i class="el-icon-download"></i>
-                    </span>
-                    <span
-                            v-if="!disabled"
-                            class="el-upload-list__item-delete"
-                            @click="handleRemove(file)"
-                    >
-                      <i class="el-icon-delete"></i>
-                    </span>
-                  </span>
-                                </div>
-                            </el-upload>
 
 
-
-                            <el-form-item>
-                                <el-button type="primary" @click="submitRepairOrder">提交工单</el-button>
-                                <el-button @click="dialogVisible = false">取消</el-button>
-                            </el-form-item>
-                        </el-form>
-                    </el-dialog>
-
-
-                    <!--表格-->
                     <template>
+                        <!-- 待接取表格 -->
+                        <h3>待接取</h3>
                         <el-table
-                                :data="tableData"
-                                style="width: 100%"
-                                :row-class-name="tableRowClassName"
-                                @selection-change="handleSelectionChange"
-                        >
-                            <el-table-column prop="id" label="报修单号" align="center"></el-table-column>
-                            <el-table-column prop="stop" label="所属车站" align="center"></el-table-column>
-                            <el-table-column prop="faultyEquipmentId" label="故障设备编号" align="center"></el-table-column>
-                            <el-table-column prop="faultyType" label="故障类别" align="center"></el-table-column>
-                            <el-table-column prop="type" label="状态" align="center"></el-table-column>
-                            <el-table-column prop="data" label="上报时间" align="center"></el-table-column>
-
-
-                            <el-table-column
-                                    fixed="right"
-                                    label="操作"
-                                    width="120">
-
+                                :data="currentPendingOrders"
+                                @selection-change="handlePendingSelectionChange"
+                                style="width: 100%; margin-bottom: 20px"
+                                :row-class-name="tableRowClassName">
+                            <el-table-column type="selection" width="55"></el-table-column>
+                            <el-table-column prop="id" label="保养单号" align="center"></el-table-column>
+                            <el-table-column label="工程师ID" align="center">
                                 <template slot-scope="scope">
-                                    <el-button
-                                            @click.native.prevent="deleteItem(scope.$index, tableData)"
-                                            type="text"
-                                            size="small">
-                                        撤回
-                                    </el-button>
-
-                                    <el-button
-
-                                            type="text"
-                                            size="small"
-                                            @click="initItem(scope.$index)">
-                                        修改
-                                    </el-button>
+                                    {{ scope.row.engineerId || '未分配' }}
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="" label="状态" align="center">
 
 
+                                <template #default="scope">
+                                    <el-tag :type="statusStyle[scope.row.type]" size="medium">
+                                        {{ statusText[scope.row.type] }}
+                                    </el-tag>
                                 </template>
 
-                            </el-table-column>
 
+                            </el-table-column>
+                            <el-table-column prop="data" label="创建时间" align="center"></el-table-column>
+                            <el-table-column fixed="right" label="操作" width="150">
+                                <template slot-scope="scope">
+                                    <el-button
+                                            type="primary"
+                                            size="small"
+                                            @click="handleAccept(scope.row)">
+                                        接受
+                                    </el-button>
+
+                                </template>
+                            </el-table-column>
                         </el-table>
+
+                        <el-pagination
+                                background
+                                :page-size="pageSize1"
+                                :current-page="currentPage1"
+                                layout="prev, pager, next"
+                                :total="pendingOrders.length"
+                                @current-change="currentPage1 = $event">
+                        </el-pagination>
+
+                        <!-- 已接取表格 -->
+                        <h3>已接取</h3>
+                        <el-table
+                                :data="currentAcceptedOrders"
+                                @selection-change="handleAcceptedSelectionChange"
+                                style="width: 100%"
+                                :row-class-name="tableRowClassName">
+                            <el-table-column type="selection" width="55"></el-table-column>
+
+                            <el-table-column prop="id" label="保养单号" align="center"></el-table-column>
+                            <el-table-column label="工程师ID" align="center">
+                                <template slot-scope="scope">
+                                    {{ scope.row.engineerId || '系统分配' }}
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="type" label="状态" align="center">
+
+
+
+                                <template #default="scope">
+                                    <el-tag :type="statusStyle[scope.row.type]" size="medium">
+                                        {{ statusText[scope.row.type] }}
+                                    </el-tag>
+                                </template>
+
+
+
+                            </el-table-column>
+                            <el-table-column prop="data" label="接单时间" align="center"></el-table-column>
+                            <el-table-column fixed="right" label="操作" width="120">
+                                <template slot-scope="scope">
+                                    <el-button
+                                            type="primary"
+                                            size="small"
+                                            @click="dialog1Init(scope.row)">
+                                        处理
+                                    </el-button>
+
+                                </template>
+                            </el-table-column>
+                        </el-table>
+
                     </template>
 
 
 
+                    <el-pagination
+                            background
+                            :page-size="pageSize2"
+                            :current-page="currentPage2"
+                            layout="prev, pager, next"
+                            :total="acceptedOrders.length"
+                            @current-change="currentPage2 = $event">
+                    </el-pagination>
 
 
 
@@ -282,7 +336,7 @@
         </el-container>
     </el-container>
 
-    {{activeIndex1}}
+
 
 
 
@@ -290,31 +344,93 @@
 
 
 </body>
-<script>
+<script type="module">
+
+    import storage from "./js/storage.js";
     new Vue({
             el:"#app",
+            computed: {
+                selectedOrders() {
+                    return [...this.pendingSelected, ...this.acceptedSelected];
+                },
+                statusText() {
+                    return { 0: '待处理', 1: '进行中', 2: '已完成', 3: '已关闭' };
+                },
+                statusStyle() {
+                    return { 0: 'warning', 1: 'primary', 2: 'success', 3: 'info' };
+                },
+                currentPendingOrders() {
+                    const start = (this.currentPage1 - 1) * this.pageSize1;
+                    return this.pendingOrders.slice(start, start + this.pageSize1);
+                },
+                // 已接取分页数据
+                currentAcceptedOrders() {
+                    const start = (this.currentPage2 - 1) * this.pageSize2;
+                    return this.acceptedOrders.slice(start, start + this.pageSize2);
+                },
+                // 待接取订单（工程师ID为空）
+                pendingOrders() {
+                    return this.tableData .sort((a, b) => a.type.localeCompare(b.type))
+                        .filter(item => item.type=='0');
+                    // 按字典序排序
+                },
+                acceptedOrders() {
+
+
+                    return this.tableData.filter(item => item.engineerId==storage.get('user').username);
+                }
+            },
             data() {
                 return {
-                    repairOrderList:[],
+
+                    currentPage1: 1,  // 待接取表格当前页
+                    currentPage2: 1,  // 已接取表格当前页
+                    pageSize1: 3,     // 待接取每页显示数
+                    pageSize2: 4,
+                    engineerName:'',
+                    dialogVisible2:false,
+                    orders:[],
+                    spareOrderList:[],
                     activeIndex1: '2',
                     activeIndex2: '7',
                     dialogVisible:false,
-                    repairOrder:{},
+                    spareOrder:{},
                     dialogImageUrl: '',
-                    stationList:[],
                     disabled: false,
-                    tableData:[]
-                };
+                    tableData:[],
+                    Data:{
+                        data:"2025-04-21",
+                        engineerId:"70000001",
+                        equipmentId:"15454",
+                        equipmentType:"mechanical",
+                        id:'20000000',
+                        newPicture:"无",
+                        olderPicture:"无",
+                        stop:"铁路站",
+                        type:"0"
+                    },
+
+                    IdRepairOrderList:[],
+                    ERepairOrderList:[],
+
+                    dialog1Visible:false,
+
+                    stationList:[],
+                    acceptedSelected:[],
+                    pendingSelected: [],
+                    //   selectedOrders: [],
+                }
+
             },
             mounted() {
 
-                axios.post("http://localhost:7469/MaintenanceManage/stop/selectAll",).then((res) => {
+                axios.post("http://localhost:7469/MaintenanceManage/stop/selectAll").then((res) => {
 
                     this.stationList = res.data;
 
                 })
 
-                axios.post("http://localhost:7469/MaintenanceManage/repairOrder/selectAll",).then((res) => {
+                axios.post("http://localhost:7469/MaintenanceManage/spareOrder/selectAll").then((res) => {
 
                     this.tableData= res.data;
 
@@ -322,6 +438,131 @@
             }
             ,
             methods: {
+                handleAccept(order) {
+
+                    this.$confirm('确认要接受该维修单吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        // 调用API更新工程师ID
+
+
+                        this.$set(order, 'engineerId', '当前工程师ID')
+                        order.engineerId =storage.get('user').username;
+                        axios.post("http://localhost:7469/MaintenanceManage/spareOrder/accept", order).then((res) => {
+
+
+                        })
+
+                        this.$message.success('接单成功');
+
+
+
+                    })
+
+
+                },
+                // 修改后的批量接受方法
+                mutliSelect() {
+
+                    alert("???");
+                    if (this.selectedOrders.length === 0) {
+                        this.$message.warning('请选择要接受的工单');
+                        return;
+                    }
+
+                    this.$confirm('确定要接受选中的工单吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        const requests = this.selectedOrders
+                            .filter(order => !order.engineerId)
+                            .map(order => {
+                                const newOrder = {...order};
+                                newOrder.engineerId = storage.get('user').username;
+                                return axios.post(
+                                    "http://localhost:7469/MaintenanceManage/spareOrder/accept",
+                                    newOrder
+                                );
+                            });
+
+                        Promise.all(requests)
+                            .then(() => {
+                                this.$message.success('接受成功');
+                                // 更新本地数据
+                                this.tableData = this.tableData.map(item => {
+                                    const target = this.selectedOrders.find(o => o.id === item.id);
+                                    return target ? {...item, engineerId: target.engineerId} : item;
+                                });
+                            })
+                            .catch(error => {
+                                this.$message.error('部分操作失败');
+                                console.error(error);
+                            });
+                    }).catch(() => {});
+
+
+                },
+                exportXSL(){
+
+                    // if (!Array.isArray(this.selectedOrders) || this.selectedOrders.length === 0) {
+                    //     alert('repairOrder 数组为空，无法导出');
+                    //     return;
+                    // }
+
+
+
+                    this.orders=this.selectedOrders;
+
+                    // 定义导出字段顺序和列标题
+                    const headerOrder = [
+                        'id', 'engineerId','stop', 'equipmentId', 'equipmentType',
+                        'oldPicture','type','data'
+                    ];
+
+                    // 可选：自定义列标题映射（字段名 -> 表头）
+                    const headerNames = {
+                        id: '工单号',
+                        stop: '车站',
+                        equipmentId: '设备号',
+                        equipmentType: '设备类型',
+                        olderPicture:'维修前图片',
+
+                        engineerId:'工程师工号',
+                        type: '状态',
+                        data: '日期'
+                    };
+
+                    // 组织数据，保证列顺序并使用中文表头
+                    const dataForExport = [headerOrder.map(key => headerNames[key])];
+                    this.orders.forEach(item => {
+                        dataForExport.push(headerOrder.map(key => item[key] ?? ''));
+                    });
+
+                    // 生成 worksheet
+                    const ws = XLSX.utils.aoa_to_sheet(dataForExport);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, '工单列表');
+
+                    // 导出文件
+                    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'tableDataList.xlsx');
+
+
+
+
+                },
+
+                dialog1Init(row) {
+
+                    this.Data=row;
+
+                    this.dialogVisible2=true;
+
+                },
+
                 handleSelect(key, keyPath) {
 
                     window.location.href = "http://localhost:7469/MaintenanceManage/0"+(key-1)+".html";
@@ -359,6 +600,12 @@
                 handleDownload(file) {
                     console.log(file);
                 },
+                handlePendingSelectionChange(rows) {
+                    this.pendingSelected = rows;
+                },
+                handleAcceptedSelectionChange(rows) {
+                    this.acceptedSelected = rows;
+                },
 
                 submitRepairOrder(){
 
@@ -368,7 +615,24 @@
 
                     })
                     this.dialogVisible=false;
+                },
+
+                OrderSubmit(){
+
+                    axios.post("http://localhost:7469/MaintenanceManage/spareOrder/handle",this.Data).then((res) => {
+
+                        if(res.data=="success"){
+                            alert("处理完成");
+                        }
+                    })
+
+                    window.location.reload();
+
+
                 }
+
+
+
             }
         }
     )

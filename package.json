@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "js-table2excel": "^1.1.2"
+  }
+}

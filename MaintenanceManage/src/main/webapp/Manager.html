@@ -13,120 +13,23 @@
 </head>
 
 <style>
-    /* 新增样式 */
-    .auto-assign-dialog {
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-
-        .el-dialog__header {
-            border-bottom: 1px solid #ebeef5;
-            padding: 15px 20px;
-        }
-
-        .el-dialog__body {
-            padding: 20px;
-        }
+    /* 全局样式 */
+    .el-container {
+        height: 100vh;
+        overflow: hidden;
     }
 
-    /* 按钮组布局优化 */
-    .create-button-group {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin: 15px 0;
-
-        .el-button {
-            flex-shrink: 0;
-        }
-    }
-    /********************** 通用样式 **********************/
-    .type-buttons {
-        margin: 20px 0;
+    /* 导航菜单 */
+    .el-aside {
+        background: #545c64 !important;
+        box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
     }
 
-    .order-card {
-        margin-top: 15px;
-        transition: all 0.3s;
+    .el-menu {
+        border-right: none;
     }
 
-    /********************** 对话框增强样式 **********************/
-    .detail-dialog {
-        margin: -20px;
-    }
-
-    .detail-dialog .el-descriptions {
-        margin: 20px;
-    }
-
-    /* 图片预览 */
-    .image-preview-wrapper {
-        margin-top: 10px;
-        border: 1px solid #e4e7ed;
-        border-radius: 4px;
-        padding: 8px;
-        background: #f8fafc;
-    }
-
-    /* 紧急程度标签 */
-    .urgency-tag {
-        margin-left: 8px;
-        font-weight: 500;
-        padding: 4px 8px !important;
-    }
-
-    /* 故障描述预格式 */
-    .fault-description {
-        background: #f8f9fa;
-        padding: 12px;
-        border-radius: 4px;
-        border: 1px dashed #e4e7ed;
-        line-height: 1.6;
-        margin: 8px 0;
-    }
-
-    /********************** 创建按钮组 **********************/
-    .create-button-group {
-        margin: 15px 0;
-    }
-
-    .image-label {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0,0,0,0.5);
-        color: white;
-        text-align: center;
-        padding: 2px 0;
-        font-size: 12px;
-        border-radius: 0 0 4px 4px;
-    }
-    /* 新增个人信息模块样式 */
-    .info-item {
-        margin: 8px 28px;
-        line-height: 15px;
-    }
-    .info-label {
-        color: #909399;
-        margin-right: 10px;
-    }
-    .info-content {
-        color: #606266;
-    }
-    .avatar-img {
-        width: 50%;
-        height: 50%;
-        padding: 30px 70px;
-    }
-    /* 确保图表容器可见 */
-    #mainChart,
-    #radarChart,
-    #roseChart,
-    #pieChart {
-        width: 100% !important;
-        height: 100% !important;
-    }
-    /* 新增样式 */
+    /* 个人信息模块 */
     .personal-container {
         display: flex;
         padding: 20px;
@@ -136,126 +39,397 @@
 
     .personal-card {
         width: 320px;
-        flex-shrink: 0;
         border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    .avatar-container {
-        text-align: center;
-        padding: 20px 0;
-        border-bottom: 1px solid #ebeef5;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .avatar-img {
         width: 120px;
         height: 120px;
         border-radius: 50%;
-        margin-bottom: 15px;
+        margin: 15px 0;
         border: 4px solid #fff;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
-    .basic-info {
-        margin-bottom: 15px;
-    }
-
-    .engineer-name {
-        margin: 0;
-        font-size: 24px;
-        color: #303133;
-    }
-
-    .position-tag {
-        margin-top: 8px;
-        font-size: 14px;
-        transform: scale(0.9);
-    }
-
-    .detail-info {
-        padding: 20px 0;
-    }
-
-    .detail-info .el-descriptions-item__label {
-        color: #909399;
-        width: 80px;
-    }
-
-    .detail-info .el-descriptions-item__content {
-        color: #606266;
-        font-weight: 500;
-    }
-
-    .edit-btn {
-        width: 100%;
-        margin-top: 15px;
-        border-radius: 6px;
-        padding: 12px 0;
-    }
-
-    .data-visualization {
-        flex: 1;
+    /* 工单管理 */
+    .create-button-group {
+        margin: 15px 0;
         display: flex;
-        flex-direction: column;
-        gap: 20px;
+        gap: 10px;
+        align-items: center;
     }
 
+    .order-card {
+        margin-top: 15px;
+        transition: all 0.3s;
+        border-radius: 8px;
+    }
+
+    /* 图表样式 */
     .chart-card {
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         height: 360px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .chart-title {
         margin: 0 0 15px 15px;
-        color: #303133;
         font-size: 16px;
         font-weight: 600;
     }
 
-    .chart-group {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-        height: 300px;
+    /* 对话框样式 */
+    .auto-assign-dialog {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .sub-chart {
+    .detail-dialog .el-descriptions {
+        margin: 20px;
         border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
-    /* 信息分组样式 */
-    .info-group {
+
+    .batch-notice {
+        margin-bottom: 15px;
+        color: #606266;
+        font-size: 14px;
+    }
+
+    .template-info {
+        line-height: 1.8;
+        padding: 10px;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+
+        div {
+            color: #606266;
+            font-size: 14px;
+        }
+    }
+
+    .el-alert--warning.is-light {
+        margin: 10px 0;
+        background-color: #fdf6ec;
+    }
+    /* 添加提示样式 */
+    .template-status {
         margin: 15px 0;
         padding: 15px;
-        background: #f8f9fc;
+        background: #fdf6ec;
+        border-radius: 4px;
+    }
+
+    .template-info {
+        padding: 12px;
+        background: #f8f8f9;
+        border-radius: 4px;
+
+        .template-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+
+            .order-no {
+                font-weight: 500;
+                color: #303133;
+            }
+        }
+
+        .equipment-info {
+            color: #606266;
+            font-size: 14px;
+        }
+    }
+    /* 警告框样式 */
+    .template-alert {
+        .el-message-box__status.el-icon-warning {
+            color: #E6A23C;
+        }
+        .el-message-box__title {
+            color: #E6A23C;
+        }
+        background: #fdf6ec;
+        border-color: #faecd8;
+    }
+
+    .stat-card1 {
+        position: absolute;
+        top:1vw;
+        width: 13vw;
+        left: 13vw;
+        height: 18vw;
+        background: white;
         border-radius: 8px;
-        border: 1px solid #ebeef5;
-        width: 100%;
+        padding: 20px;
+        flex: 1;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+    }
+    .stat-card2 {
+        position: absolute;
+        top:1vw;
+        left: 28.7vw;
+        width: 13vw;
+        height: 18vw;
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        flex: 1;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+    }
+    .stat-card3 {
+        position: absolute;
+        top:1vw;
+        left: 67.2vw;
+        height: 18vw;
+        width: 13vw;
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        flex: 1;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+    }
+    .stat-card4 {
+        position: absolute;
+        top:1vw;
+        left: 83vw;
+        width: 13vw;
+        height: 18vw;
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        flex: 1;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+    }
+    .color-block {
+        width: 70px;
+        height: 70px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
     }
 
-    .group-title {
-        color: #303133;
+    .blue { background-color: #409EFF; }
+    .green { background-color: #67C23A; }
+    .orange { background-color: #E6A23C; }
+    .yellow { background-color: #E6C23C; }
+
+    .stat-number {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .stat-title {
         font-size: 14px;
-        margin: -5px 0 10px -5px;
-        padding-left: 8px;
-        border-left: 4px solid #409EFF;
+        color: #606266;
     }
 
-    .full-width {
-        grid-column: 1 / -1;
+    /* 在现有样式最后添加 */
+    .order-stats-container {
+        position: absolute;
+        top: 8vw;
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        padding: 20px;
+        width: 84%;
+        height: 75vh;
     }
 
-    /* 调整描述项间距 */
-    .detail-info .el-descriptions-item {
-        padding: 8px 0;
+    .stat-card5 {
+        position: absolute;
+        top:14vw;
+        height: auto;
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        flex: 1;
+    }
+    .stat-card6 {
+        position: absolute;
+        top:14vw;
+        left: 61.3vw;
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        flex: 1;
+    }
+    .stat-content{
+        position: absolute;
+        top:1vw;
+        left: 6vw;
+        width: calc(100% - 90px); /* 留出颜色块空间 */
+    }
+    .detail-list {
+        margin-top: 15px;
+        margin-left: -90px;
+        border-top: 1px solid #ebeef5;
+        padding-top: 10px;
     }
 
-    /* 标签样式优化 */
-    .el-tag--info {
-        background-color: #f4f4f5;
-        border-color: #e9e9eb;
+    .detail-item {
+        display: flex;
+        justify-content: flex-start !important;
+        font-size: 12px;
+        color: #909399;
+        margin: 30px 0;
+        gap: 8px;  /* 固定间距代替比例间距 */
+
     }
+    /* 数字与标题间距调整 */
+    .stat-number {
+        margin-bottom: 0.3vw !important;
+        font-size: 1.8rem !important;  /* 适当缩小数字大小 */
+    }
+
+    .status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 9px;
+    }
+
+    .healthy { background: #67C23A; }
+    .warning { background: #E6A23C; }
+    .error { background: #F56C6C; }
+
+    .color-block{
+        position: absolute;
+        top:1vw;
+    }
+    #line-chart-container {
+        width: 67%;
+        height: 70%;
+    }
+
+    #pie-chart-container {
+        width: 25%;
+        height: 70%;
+    }
+
+    @media (max-width: 1200px) {
+        .order-stats-container {
+            flex-direction: column;
+            height: auto;
+        }
+
+        #line-chart-container,
+        #pie-chart-container {
+            width: 100%;
+            height: 400px;
+        }
+    }
+    /* 新增个人信息模块样式 */
+    .personal-info-card {
+        position: absolute;
+        left: 44vw;
+        top:-14px;
+        width: 350px;
+        height: 22.5vw;
+        margin-left: 20px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .info-item {
+        margin: 8px 28px;
+        line-height: 15px;
+    }
+    .info-label { color: #909399; margin-right: 10px; }
+    .info-content { color: #606266; }
+    .avatar-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin: 15px auto;
+        display: block;
+        border: 4px solid #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    /*联系我们*/
+
+    .contact-modules {
+        display: flex;
+        justify-content: space-around;
+        gap: 20px;
+        padding: 20px;
+        height: calc(100vh - 60px);
+    }
+
+    .contact-card {
+        flex: 1;
+        width: 460px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: transform 0.3s;
+    }
+
+    .contact-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .contact-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        margin: 0 auto 15px !important;
+        display: block;
+    }
+
+    .contact-info {
+        text-align: center;
+        padding: 15px;
+    }
+
+    .contact-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #303133;
+        margin-bottom: 8px;
+    }
+
+    .contact-position {
+        color: #409EFF;
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .contact-detail {
+        font-size: 14px;
+        color: #606266;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 992px) {
+        .contact-modules {
+            flex-direction: column;
+            align-items: center;
+        }
+        .contact-card {
+            width: 100%;
+            max-width: 500px;
+        }
+    }
+
 </style>
 
 <body>
@@ -264,13 +438,13 @@
         <!-- 左侧导航菜单 -->
         <el-aside width="200px" style="background-color: #545c64; height: 100vh">
             <el-menu
-                    default-active="2"
+                    default-active="1"
                     @select="handleMenuSelect"
                     background-color="#545c64"
                     text-color="#fff"
                     active-text-color="#ffd04b">
                 <el-menu-item-group title="主菜单">
-                    <el-menu-item index="1"><i class="el-icon-user"></i>个人信息</el-menu-item>
+                    <el-menu-item index="1"><i class="el-icon-moon"></i>首页</el-menu-item>
                     <el-menu-item index="2"><i class="el-icon-menu"></i>工单管理</el-menu-item>
                     <el-menu-item index="3"><i class="el-icon-phone"></i>联系我们</el-menu-item>
                     <el-menu-item index="4"><i class="el-icon-switch-button"></i>退出登录</el-menu-item>
@@ -280,84 +454,156 @@
 
         <!-- 右侧主内容区 -->
         <el-container>
-<!--            个人信息模块-->
+            <!-- 个人信息模块-->
             <div v-show="activeIndex === '1'" class="personal-container">
-                <!-- 左侧个人信息卡片 -->
-                <el-card class="personal-card">
-                    <div class="avatar-container">
-                        <img src="1.png" class="avatar-img">
-                        <div class="basic-info">
-                            <h3 class="engineer-name">{{ engineer.name }}</h3>
-                            <el-tag type="warning" effect="dark" class="position-tag">
-                                {{ engineer.position }}
-                            </el-tag>
+                <!-- 统计卡片 -->
+                <div class="dashboard-container">
+                    <!-- 用户访问量 -->
+                    <div class="stat-card1">
+                        <div class="color-block blue">
+                            <i class="el-icon-user"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">{{ stats.staff.total }}</div>
+                            <div class="stat-title">员工数量</div>
+                            <div class="detail-list">
+                                <div class="detail-item">
+                                    <span><span class="status-dot healthy"></span>维修工程师</span>
+                                    <span>{{ stats.staff.engineers }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span><span class="status-dot healthy"></span>管理人员</span>
+                                    <span>{{ stats.staff.managers }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span><span class="status-dot healthy"></span>其他人员</span>
+                                    <span>{{ stats.staff.others }}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- 详细信息布局 -->
-                    <el-descriptions :column="2" class="detail-info">
-                        <!-- 基本信息列 -->
-                        <div class="info-group">
-                            <h4 class="group-title">基本信息</h4>
-                            <el-descriptions-item label="工号">{{ engineer.id }}</el-descriptions-item>
-                            <el-descriptions-item label="部门">{{ engineer.department }}</el-descriptions-item>
-                            <el-descriptions-item label="工种">{{ engineer.type === '1' ? '维修工程师' : '其他' }}</el-descriptions-item>
+                    <!-- 系统消息 -->
+                    <div class="stat-card2">
+                        <div class="color-block green">
+                            <i class="el-icon-message"></i>
                         </div>
-
-                        <!-- 联系信息列 -->
-                        <div class="info-group">
-                            <h4 class="group-title">联系信息</h4>
-                            <el-descriptions-item label="手机号">手机号：<br>138-1234-5678</el-descriptions-item><hr>
-                            <el-descriptions-item label="邮箱">邮箱:<br>123456789@qq.com</el-descriptions-item><hr>
-                            <el-descriptions-item label="工龄">工龄:<br>5年</el-descriptions-item>
+                        <div class="stat-content">
+                            <div class="stat-number">{{ stats.messages.total }}</div>
+                            <div class="stat-title">系统消息</div>
+                            <div class="detail-list">
+                                <div class="detail-item">
+                                    <span><span class="status-dot warning"></span>未读消息</span>
+                                    <span>{{ stats.messages.unread }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span><span class="status-dot healthy"></span>已读消息</span>
+                                    <span>{{ stats.messages.read }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span><span class="status-dot error"></span>已读消息</span>
+                                    <span>{{ stats.messages.urgent }}</span>
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
-                        <!-- 资格信息块 -->
-                        <div class="info-group full-width">
-                            <h4 class="group-title">资格证书</h4>
-                            <el-descriptions-item>
-                                <el-tag type="info" effect="plain" style="margin:2px">
-                                    {{ engineer.certificate }}
-                                </el-tag>
-                            </el-descriptions-item>
+                    <!-- 工单数量 -->
+                    <div class="stat-card3">
+                        <div class="color-block orange">
+                            <i class="el-icon-document"></i>
                         </div>
-                    </el-descriptions>
+                        <div class="stat-content">
+                            <div class="stat-number">{{ stats.orders.total }}</div>
+                            <div class="stat-title">工单数量</div>
+                            <div class="detail-list">
+                                <div class="detail-item">
+                                    <span><span class="status-dot healthy"></span>已完成</span>
+                                    <span>{{ stats.orders.completed }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span><span class="status-dot warning"></span>进行中</span>
+                                    <span>{{ stats.orders.processing }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span><span class="status-dot error"></span>超时</span>
+                                    <span>{{ stats.orders.overdue }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <el-button
-                            type="primary"
-                            icon="el-icon-edit"
-                            class="edit-btn"
-                            @click="showEditDialog">
-                        修改信息
-                    </el-button>
-                </el-card>
-
-                <!-- 右侧数据可视化区域 -->
-                <div class="data-visualization">
-                    <!-- 月度绩效趋势 -->
-                    <el-card class="chart-card">
-                        <h4 class="chart-title"></h4>
-                        <div id="mainChart" style="height: 280px"></div>
-                    </el-card>
-
-                    <!-- 技能评估雷达图 -->
-                    <el-card class="chart-card">
-                        <h4 class="chart-title"></h4>
-                        <div id="radarChart" style="height: 280px"></div>
-                    </el-card>
-
-                    <!-- 工单分布 -->
-                    <div class="chart-group">
-                        <el-card class="sub-chart">
-                            <h4 class="chart-title"></h4>
-                            <div id="roseChart" style="height: 240px"></div>
-                        </el-card>
-                        <el-card class="sub-chart">
-                            <h4 class="chart-title"></h4>
-                            <div id="pieChart" style="height: 240px"></div>
-                        </el-card>
+                    <!-- 运行设备 -->
+                    <div class="stat-card4">
+                        <div class="color-block yellow">
+                            <i class="el-icon-monitor"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">{{ stats.devices.total }}</div>
+                            <div class="stat-title">运行设备数量</div>
+                            <div class="detail-list">
+                                <div class="detail-item">
+                                    <span><span class="status-dot healthy"></span>正常</span>
+                                    <span>{{ stats.devices.normal }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span><span class="status-dot warning"></span>预警</span>
+                                    <span>{{ stats.devices.warning }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span><span class="status-dot error"></span>故障</span>
+                                    <span>{{ stats.devices.fault }}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- 工单统计容器 -->
+                <div class="order-stats-container">
+                    <!-- 折线图 -->
+                    <div class="stat-card5" id="line-chart-container">
+                        <div id="container01" style="height: 100%"></div>
+                    </div>
+
+                    <!-- 饼图 -->
+                    <div class="stat-card6" id="pie-chart-container">
+                        <div id="container02" style="height: 100%"></div>
+                    </div>
+                </div>
+
+                <!-- 个人信息模块 -->
+                <el-card class="personal-info-card">
+                    <h1 style="text-align: center;">本月最优员工</h1>
+                    <img src="1.png" class="avatar-img">
+                    <div style="padding:14px">
+                        <div class="info-item">
+                            <span class="info-label">姓名：</span>
+                            <span class="info-content">{{ engineer.name }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">工号：</span>
+                            <span class="info-content">{{ engineer.id }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">工种：</span>
+                            <span class="info-content">{{ engineer.type === '1' ? '维修工程师' : '其他' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">手机号:</span>
+                            <span class="info-content">{{ engineer.phone }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">技能：</span>
+                            <span class="info-content">{{ engineer.skills[0] }} </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">邮箱：</span>
+                            <span class="info-content">123456789@qq.com</span>
+                        </div>
+                    </div>
+                </el-card>
+
             </div>
             <!-- 工单管理模块 -->
             <div v-show="activeIndex === '2'" style="width:100%">
@@ -375,20 +621,27 @@
                     <!-- 新建保养工单按钮 -->
                     <div class="create-button-group">
                         <el-button
+                                v-if="['maintain','service','patrol','monitor','spare'].includes(activeType)"
+                                type="primary"
+                                :disabled="selectedOrders.length === 0"
+                                @click="showBatchAssignDialog"
+                                style="margin-left:10px">
+                            <i class="el-icon-s-operation"></i> 批量派单（{{ selectedOrders.length }}）
+                        </el-button>
+                        <el-button
                                 v-if="activeType === 'service'"
                                 type="primary"
                                 @click="showCreateDialog">
                             <i class="el-icon-plus"></i> 新建保养工单
                         </el-button>
-                        <!-- 新增自动派单按钮 -->
+                        <!-- 新增自动自动生成工单按钮 -->
                         <el-button
                                 v-if="activeType === 'service'"
                                 type="warning"
                                 @click="showAutoAssignConfig('service')"
                                 style="margin-left:10px">
-                            <i class="el-icon-alarm-clock"></i> 自动派单
+                            <i class="el-icon-alarm-clock"></i> 自动生成工单
                         </el-button>
-
 
                         <!-- 新增：巡检工单按钮 -->
                         <el-button
@@ -402,7 +655,7 @@
                                 type="warning"
                                 @click="showAutoAssignConfig('patrol')"
                                 style="margin-left:10px">
-                            <i class="el-icon-alarm-clock"></i> 自动派单
+                            <i class="el-icon-alarm-clock"></i> 自动生成工单
                         </el-button>
                         <!-- 新增：监测工单按钮 -->
                         <el-button
@@ -416,7 +669,7 @@
                                 type="warning"
                                 @click="showAutoAssignConfig('monitor')"
                                 style="margin-left:10px">
-                            <i class="el-icon-alarm-clock"></i> 自动派单
+                            <i class="el-icon-alarm-clock"></i> 自动生成工单
                         </el-button>
                         <!-- 新增：备件工单按钮 -->
                         <el-button
@@ -430,34 +683,79 @@
                                 type="warning"
                                 @click="showAutoAssignConfig('spare')"
                                 style="margin-left:10px">
-                            <i class="el-icon-alarm-clock"></i> 自动派单
+                            <i class="el-icon-alarm-clock"></i> 自动生成工单
                         </el-button>
                     </div>
                 </el-header>
                 <!-- 添加周期设置对话框 -->
                 <el-dialog
-                        title="自动派单配置"
+                        title="自动生成工单配置"
                         :visible.sync="autoAssignVisible"
-                        width="400px"
-                        custom-class="auto-assign-dialog">
-                    <el-form>
-                        <el-form-item label="派单周期" label-width="80px">
-                            <el-select
-                                    v-model="selectedCycle"
-                                    placeholder="请选择周期"
-                                    style="width:100%">
-                                <el-option
-                                        v-for="item in cycleOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                        width="500px">
+                    <el-form label-width="120px">
+                        <!-- 启用开关 -->
+                        <el-form-item label="启用自动生成">
+                            <el-switch
+                                    v-model="autoEnable"
+                                    active-text="开启"
+                                    active-color="#1E90FF"
+                                    inactive-text="关闭"
+                                    inactive-color="#ff4949">
+                            </el-switch>
                         </el-form-item>
+
+                        <template v-if="autoEnable">
+                            <!-- 周期设置 -->
+                            <el-form-item label="生成周期" required>
+                                <el-select
+                                        v-model="selectedCycle"
+                                        placeholder="请选择生成周期"
+                                        style="width:100%">
+                                    <el-option
+                                            v-for="item in cycleOptions"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <!-- 模板状态提示 -->
+                            <div class="template-status" v-if="!currentTemplate">
+                                <el-alert
+                                        title="尚未设置模板"
+                                        description="请先创建并标记模板工单"
+                                        type="warning"
+                                        :closable="false"
+                                        show-icon>
+                                    <div slot="title">
+                                        <i class="el-icon-warning" style="color: #E6A23C;"></i>
+                                        <span style="color: #E6A23C;">尚未设置模板</span>
+                                    </div>
+                                    <span style="color: #606266;">请先创建并标记模板工单</span>
+                                </el-alert>
+                            </div>
+                            <!-- 模板信息展示 -->
+                            <el-form-item label="当前模板" v-else>
+                                <div class="template-info">
+                                    <div class="template-meta">
+                                        <span class="order-no">{{ currentTemplate.orderNo }}</span>
+                                        <el-tag type="info" size="mini">创建于 {{ formatTime(currentTemplate.createTime) }}</el-tag>
+                                    </div>
+                                    <div class="equipment-info">
+                                        {{ currentTemplate.equipmentType }} @ {{ currentTemplate.stop }}
+                                    </div>
+                                </div>
+                            </el-form-item>
+                        </template>
                     </el-form>
                     <span slot="footer">
         <el-button @click="autoAssignVisible = false">取消</el-button>
-        <el-button type="primary" @click="saveAutoConfig">保存配置</el-button>
+        <el-button
+                type="primary"
+                :disabled="autoEnable && (!selectedCycle || !currentTemplate)"
+                @click="saveAutoConfig">
+            保存配置
+        </el-button>
     </span>
                 </el-dialog>
                 <!-- 工单表格 -->
@@ -466,8 +764,10 @@
                         <el-table
                                 :data="filteredOrders"
                                 stripe
+                                @selection-change="handleSelectionChange"
                                 style="width: 100%"
                                 v-loading="loading">
+                            <el-table-column type="selection" width="55" fixed></el-table-column>
                             <!-- 固定列：工单编号 -->
                             <el-table-column
                                     label="工单编号"
@@ -487,7 +787,9 @@
                             </template>
 
                             <!-- 状态列 -->
-                            <el-table-column label="状态" width="120">
+                            <el-table-column
+                                    v-if="activeType != 'repair'"
+                                    label="状态" width="120">
                                 <template v-slot="scope">
                                     <el-tag :type="statusStyle[scope.row.status]" size="medium">
                                         {{ statusText[scope.row.status] }}
@@ -504,7 +806,8 @@
                                                 @click="handleDetail(scope.row)">
                                             详情
                                         </el-button>
-                                        <template v-if="['maintain','service','patrol','monitor','spare'].includes(activeType) && scope.row.status === 1">
+                                        <template
+                                                v-if="['maintain','service','patrol','monitor','spare'].includes(activeType) && scope.row.status === 0">
                                             <el-button
                                                     type="text"
                                                     style="color:#67C23A"
@@ -586,6 +889,12 @@
                         <el-form-item label="设备类型">
                             <el-input v-model="equipmentInfo.type" disabled></el-input>
                         </el-form-item>
+                        <el-form-item label="模板设置" v-if="autoEnable">
+                            <el-checkbox v-model="newOrder.isTemplate">设为自动生成模板</el-checkbox>
+                            <el-tooltip content="勾选后此工单将作为自动生成模板使用" placement="top">
+                                <i class="el-icon-info"></i>
+                            </el-tooltip>
+                        </el-form-item>
                     </el-form>
 
                     <span slot="footer" class="dialog-footer">
@@ -596,9 +905,12 @@
 
                 <!-- 派单对话框 -->
                 <el-dialog
-                        title="选择工程师"
+                        :title="isBatchAssign ? '批量派发工单' : '选择工程师'"
                         :visible.sync="assignDialogVisible"
                         width="30%">
+                    <div v-if="isBatchAssign" class="batch-notice">
+                        即将派发 {{ selectedOrders.length }} 个工单
+                    </div>
                     <el-select
                             v-model="selectedEngineer"
                             placeholder="请选择工程师"
@@ -635,7 +947,7 @@
 
                         <!-- 通用字段 -->
                         <el-descriptions-item label="工单类型" style="font-weight: 500; color: #303133;">
-                            {{ orderTypes.find(t => t.value === activeType)?.label }}
+                            工单类型：{{ orderTypes.find(t => t.value === activeType)?.label }}
                         </el-descriptions-item>
                         <el-descriptions-item label="当前状态" style="font-weight: 500; color: #303133;">
                             <el-tag
@@ -649,16 +961,19 @@
                             <span style="font-size: 14px; color: #606266;">{{ currentDetail.stop || '未填写' }}</span>
                         </el-descriptions-item>
                         <el-descriptions-item label="创建时间" :span="2">
-                            <span style="font-size: 14px; color: #606266;">{{ formatTime(currentDetail.createTime) }}</span>
+                            <span style="font-size: 14px; color: #606266;">{{ formatTime(currentDetail.createTime)
+                                }}</span>
                         </el-descriptions-item>
 
                         <!-- 动态字段 -->
                         <template v-if="activeType === 'repair'">
                             <el-descriptions-item label="故障设备ID" :span="2">
-                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.faultyEquipmentId || '未填写' }}</span>
+                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.faultyEquipmentId || '未填写'
+                                    }}</span>
                             </el-descriptions-item>
                             <el-descriptions-item label="故障类型" :span="2">
-                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.faultyType || '未填写' }}</span>
+                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.faultyType || '未填写'
+                                    }}</span>
                             </el-descriptions-item>
                             <el-descriptions-item label="紧急程度" :span="2">
                                 <el-tag
@@ -670,7 +985,8 @@
                                 </el-tag>
                             </el-descriptions-item>
                             <el-descriptions-item label="故障描述" :span="2">
-                                <div class="fault-description" style="margin: 12px 0; padding: 16px; border-radius: 8px;">
+                                <div class="fault-description"
+                                     style="margin: 12px 0; padding: 16px; border-radius: 8px;">
                     <span style="font-size: 14px; color: #606266; line-height: 1.8;">
                         {{ currentDetail.faultyDescription || '无故障描述' }}
                     </span>
@@ -680,32 +996,39 @@
 
                         <template v-if="['maintain', 'service', 'patrol'].includes(activeType)">
                             <el-descriptions-item label="负责工程师" :span="2">
-                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.engineerName || '未分配' }}</span>
+                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.engineerName || '未分配'
+                                    }}</span>
                             </el-descriptions-item>
                             <el-descriptions-item label="计划时间" :span="2">
-                                <span style="font-size: 14px; color: #606266;">{{ formatTime(currentDetail.planTime) }}</span>
+                                <span style="font-size: 14px; color: #606266;">{{ formatTime(currentDetail.planTime)
+                                    }}</span>
                             </el-descriptions-item>
                         </template>
 
                         <template v-if="['check', 'spare', 'service'].includes(activeType)">
                             <el-descriptions-item label="设备类型" :span="2">
-                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.EquipmentType || '未知类型' }}</span>
+                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.EquipmentType || '未知类型'
+                                    }}</span>
                             </el-descriptions-item>
                             <el-descriptions-item label="设备ID" :span="2">
-                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.EquipmentId || '未填写' }}</span>
+                                <span style="font-size: 14px; color: #606266;">{{ currentDetail.EquipmentId || '未填写'
+                                    }}</span>
                             </el-descriptions-item>
                         </template>
 
                         <!-- 图片展示 -->
                         <el-descriptions-item label="相关图片" :span="2" style="padding-top: 20px;">
-                            <div class="image-preview-wrapper" style="display: flex; gap: 12px; padding: 16px; border-radius: 8px;">
+                            <div class="image-preview-wrapper"
+                                 style="display: flex; gap: 12px; padding: 16px; border-radius: 8px;">
                                 <template v-if="activeType === 'repair'">
                                     <el-image
                                             v-if="currentDetail.picture"
                                             :src="currentDetail.picture"
                                             :preview-src-list="[currentDetail.picture]"
                                             style="width: 160px; height: 120px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1)">
-                                        <div slot="tip" class="image-label" style="border-radius: 0 0 6px 6px;">故障图片</div>
+                                        <div slot="tip" class="image-label" style="border-radius: 0 0 6px 6px;">
+                                            故障图片
+                                        </div>
                                     </el-image>
                                 </template>
 
@@ -715,14 +1038,16 @@
                                             :src="currentDetail.oldPicture"
                                             :preview-src-list="[currentDetail.oldPicture, currentDetail.newPicture]"
                                             style="width: 160px; height: 120px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1)">
-                                        <div slot="tip" class="image-label" style="border-radius: 0 0 6px 6px;">维修前</div>
+                                        <div slot="tip" class="image-label" style="border-radius: 0 0 6px 6px;">维修前
+                                        </div>
                                     </el-image>
                                     <el-image
                                             v-if="currentDetail.newPicture"
                                             :src="currentDetail.newPicture"
                                             :preview-src-list="[currentDetail.oldPicture, currentDetail.newPicture]"
                                             style="width: 160px; height: 120px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0.1)">
-                                        <div slot="tip" class="image-label" style="border-radius: 0 0 6px 6px;">维修后</div>
+                                        <div slot="tip" class="image-label" style="border-radius: 0 0 6px 6px;">维修后
+                                        </div>
                                     </el-image>
                                 </template>
                             </div>
@@ -740,21 +1065,256 @@
 
             <!-- 联系我们模块 -->
             <div v-show="activeIndex === '3'">
-                <el-card shadow="never">联系我们页面内容...</el-card>
+                <div class="contact-modules">
+                    <!-- 技术支持模块 -->
+                    <el-card class="contact-card">
+                        <img src="./img/一衡头像.jpg" class="contact-avatar">
+                        <div class="contact-info">
+                            <h2 class="contact-name">张一衡</h2>
+                            <div class="contact-position">技术支持</div>
+                            <div class="contact-detail">
+                                <p>邮箱：support@railmaintain.com</p>
+                                <p>7×24小时在线支持</p>
+                            </div>
+                        </div>
+                    </el-card>
+
+                    <!-- 客户服务模块 -->
+                    <el-card class="contact-card">
+                        <img src="./img/宇恒头像.jpg" class="contact-avatar ">
+                        <div class="contact-info">
+                            <h2 class="contact-name">刘宇恒</h2>
+                            <div class="contact-position">技术支持</div>
+                            <div class="contact-detail">
+                                <p>邮箱：support@railmaintain.com</p>
+                                <p>7×24小时在线支持</p>
+                            </div>
+                        </div>
+                    </el-card>
+
+                    <!-- 紧急联系模块 -->
+                    <el-card class="contact-card">
+                        <img src="./img/阿伟头像.jpg" class="contact-avatar">
+                        <div class="contact-info">
+                            <h2 class="contact-name">孙艺伟</h2>
+                            <div class="contact-position">运维</div>
+                            <div class="contact-detail">
+                                <p>邮箱：support@railmaintain.com</p>
+                                <p>应急预案联系人</p>
+                            </div>
+                        </div>
+                    </el-card>
+                </div>
             </div>
         </el-container>
     </el-container>
 </div>
 
 <script>
+    function initOrderStats() {
+        // 初始化折线图
+        const initLineChart = () => {
+            const echarts = window.echarts;
+            const dom = document.getElementById('container01');
+            if (!dom) return;
+
+            const myChart = echarts.init(dom, null, {
+                renderer: 'canvas',
+                useDirtyRect: false
+            });
+
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                title: {
+                    text: '各项工单周期情况汇总',
+                    left: 'center'
+                },
+                legend: {
+                    data: ['保养单', '备件单','巡检单', '检测单','维修单'],
+                    top: 30
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    boundaryGap: false
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        name: '维修单',
+                        type: 'line',
+                        stack: 'Total',
+                        areaStyle: {},
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        data: [10, 14, 12, 10, 7, 12, 13]
+                    },
+                    {
+                        name: '保养单',
+                        type: 'line',
+                        stack: 'Total',
+                        areaStyle: {},
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        data: [9, 12, 14, 16, 16, 14, 12]
+                    },
+                    {
+                        name: '备件单',
+                        type: 'line',
+                        stack: 'Total',
+                        areaStyle: {},
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        data: [12, 12, 13, 14, 18, 12, 9]
+                    },
+                    {
+                        name: '巡检单',
+                        type: 'line',
+                        stack: 'Total',
+                        areaStyle: {},
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        data: [12, 17, 11, 13, 17, 13, 12]
+                    },
+                    {
+                        name: '检测单',
+                        type: 'line',
+                        stack: 'Total',
+                        areaStyle: {},
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        data: [12, 12, 17, 14, 18, 20, 16]
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+            window.addEventListener('resize', myChart.resize);
+        };
+
+        // 初始化饼图
+        const initPieChart = () => {
+            const echarts = window.echarts;
+            const dom02 = document.getElementById('container02');
+            if (!dom02) return;
+
+            const myChart02 = echarts.init(dom02, null, {
+                renderer: 'canvas',
+                useDirtyRect: false
+            });
+
+            const option02 = {
+                title: {
+                    text: '工程师工单完成情况分析',
+                    subtext: '',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    top: '85%',
+                    left: 'center'
+                },
+                series: [
+                    {
+                        center: ['50%', '45%'],
+                        name: '详细信息',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        padAngle: 5,
+                        itemStyle: {
+                            borderRadius: 10
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 40,
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: [
+                            { value: 30, name: '超时完成' },
+                            { value: 150, name: '按时完成' },
+                            { value: 50, name: '待完成' },
+                            { value: 30, name: '超时未完成' },
+                        ]
+                    }
+                ]
+            };
+
+            myChart02.setOption(option02);
+            window.addEventListener('resize', myChart02.resize);
+        };
+
+        // 初始化数据请求
+        const fetchData = () => {
+            axios.post("http://localhost:7469/MaintenanceManage/repairOrder/allOrder", storage.get('user').username)
+                .then((res) => {
+                    // 这里可以添加数据处理逻辑
+                    console.log('完整工单数据:', res.data);
+                })
+                .catch(error => {
+                    console.error('数据请求失败:', error);
+                });
+        };
+
+        // 执行初始化
+        initLineChart();
+        initPieChart();
+        fetchData();
+    }
     new Vue({
         el: '#app',
         data() {
             return {
                 // 导航状态
-                activeIndex: '2',
+                activeIndex: '1',
                 activeType: 'repair',
 
+                // 新增统计配置项
+                CHART_CONFIG: {
+                    lineChart: { width: 1000, height: 500 },
+                    pieChart: { width: 500, height: 500 }
+                },
+                COLOR_SCHEME: [
+                    '#5470C6', '#91CC75', '#FAC858',
+                    '#EE6666', '#73C0DE'
+                ],
                 // 工单类型配置
                 orderTypes: [
                     {value: 'repair', label: '报修工单'},
@@ -764,7 +1324,32 @@
                     {value: 'monitor', label: '监测工单'},
                     {value: 'spare', label: '备件工单'}
                 ],
-
+                stats: {
+                    staff: {
+                        total: 18,
+                        engineers: 12,
+                        managers: 4,
+                        others: 2
+                    },
+                    messages: {
+                        total: 12,
+                        unread: 3,
+                        read: 7,
+                        urgent: 2
+                    },
+                    orders: {
+                        total: 23,
+                        completed: 15,
+                        processing: 5,
+                        overdue: 3
+                    },
+                    devices: {
+                        total: 23,
+                        normal: 18,
+                        warning: 3,
+                        fault: 2
+                    }
+                },
                 // 数据存储
                 allOrders: [],      // 全部工单数据
                 engineers: [],      // 工程师列表
@@ -787,8 +1372,8 @@
                 engineerMap: {}, // 新增工程师ID-姓名映射
                 // 完善工程师个人信息
                 engineer: {
-                    name: '王大力',
-                    id: 'E2023001',
+                    name: '王大帅',
+                    id: '2222',
                     type: '1', // 1表示维修工程师
                     phone: '138-1234-5678',
                     workYears: 5,
@@ -798,28 +1383,6 @@
                     department: '设备维护一部',
                     position: '高级维修工程师',
                     certificate: '特种设备作业证-XJ12345'
-                }, // 完善图表数据
-                chartData: {
-                    // 月度绩效趋势
-                    line: [4.2, 4.5, 4.7, 4.6, 4.8, 4.9, 4.7],
-
-                    // 技能雷达图数据（维修技能/故障诊断/设备保养/响应速度/客户评价）
-                    radar: [92, 88, 85, 90, 93],
-
-                    // 工单类型玫瑰图
-                    rose: [
-                        { value: 28, name: '维修工单' },
-                        { value: 35, name: '保养工单' },
-                        { value: 40, name: '巡检工单' },
-                        { value: 15, name: '监测工单' }
-                    ],
-
-                    // 工单状态饼图
-                    pie: [
-                        { value: 18, name: '待处理' },
-                        { value: 32, name: '进行中' },
-                        { value: 50, name: '已完成' }
-                    ]
                 },
                 // 保养工单相关数据
                 stationList: [],         // 车站列表
@@ -832,22 +1395,39 @@
                 newOrder: {              // 新工单表单数据
                     stop: '',
                     equipmentId: '',
+                    equipmentType: '',
+                    isTemplate: false, // 是否作为模板
                 },
                 orderRules: {            // 表单验证规则
-                    stop: [{ required: true, message: '请选择车站', trigger: 'change' }],
-                    equipmentId: [{ required: true, message: '请选择设备', trigger: 'change' }]
+                    stop: [{required: true, message: '请选择车站', trigger: 'change'}],
+                    equipmentId: [{required: true, message: '请选择设备', trigger: 'change'}]
                 },
                 autoAssignVisible: false,
                 currentAssignType: '',
                 selectedCycle: null,
                 cycleOptions: [
-                    { value: 7, label: '每周自动派单' },
-                    { value: 14, label: '每两周自动派单' },
-                    { value: 30, label: '每月自动派单' },
-                    { value: 60, label: '每季度自动派单' }
+                    {value: 7, label: '每周自动生成工单'},
+                    {value: 14, label: '每两周自动生成工单'},
+                    {value: 30, label: '每月自动生成工单'},
+                    {value: 60, label: '每季度自动生成工单'}
                 ],
-                autoConfigs: {}
+                autoConfigs: {},
+                selectedOrders: [],
+                isBatchAssign: false,
+                batchOrders: [],
+                currentTemplate: null, // 当前生效模板
+                autoEnable: false,     // 是否启用自动生成
+                stationMap: {}, // 车站ID-名称映射
+                orderTypeMapping: {
+                    service: 1,
+                    patrol: 2,
+                    monitor: 3,
+                    spare: 4
+                }
             }
+        },
+        mounted() {
+            initOrderStats();
         },
         computed: {
             /** 动态列配置 */
@@ -877,7 +1457,7 @@
                         {label: '负责人', prop: 'engineerName', width: 120},
 
                     ],
-                    monitor:[
+                    monitor: [
                         {label: '所属车站', prop: 'stop', width: 120},
                         {label: '设备编号', prop: 'EquipmentId', width: 180},
                         {label: '设备类型', prop: 'EquipmentType', width: 180},
@@ -885,13 +1465,12 @@
                         {label: '负责人', prop: 'engineerName', width: 120},
 
                     ],
-                    spare:[
+                    spare: [
                         {label: '所属车站', prop: 'stop', width: 120},
                         {label: '设备编号', prop: 'EquipmentId', width: 180},
                         {label: '设备类型', prop: 'EquipmentType', width: 180},
                         {label: '上报时间', prop: 'planTime', width: 180},
                         {label: '负责人', prop: 'engineerName', width: 120},
-
                     ]
                 }
                 return config[this.activeType] || []
@@ -910,10 +1489,10 @@
 
             /** 状态显示配置 */
             statusText() {
-                return {1: '待处理', 2: '进行中', 3: '已完成', 4: '已关闭'}
+                return {0: '待处理', 1: '进行中', 2: '已完成', 3: '已关闭'}
             },
             statusStyle() {
-                return {1: 'warning', 2: 'primary', 3: 'success', 4: 'info'}
+                return {0: 'warning', 1: 'primary', 2: 'success', 3: 'info'}
             },
 
             /** 紧急程度文本映射 */
@@ -934,95 +1513,70 @@
             }
         },
         methods: {
-            // 新增方法：加载工程师个人信息
-            async loadEngineerData() {
+            handleResize() {
+                if (this.myChart) {
+                    this.myChart.resize();
+                }
+                if (this.myChart02) {
+                    this.myChart02.resize();
+                }
+            },
+            handleSelectionChange(selection) {
+                this.selectedOrders = selection;
+            },
+            showBatchAssignDialog() {
+                if (this.selectedOrders.length === 0) {
+                    this.$message.warning('请先选择要派发的工单');
+                    return;
+                }
+                this.batchOrders = [...this.selectedOrders];
+                this.isBatchAssign = true;
+                this.assignDialogVisible = true;
+            },
+            // 自动获取最新模板
+            async loadLatestTemplate() {
                 try {
-                    // 模拟接口调用
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                    this.$nextTick(() => {
-                        this.initCharts();
-                    });
+                    // 确保请求路径与后端接口匹配
+                    const typeMapping = {
+                        service: 'upkeepOrder',
+                        patrol: 'patrolOrder',
+                        monitor: 'checkOrder',
+                        spare: 'spareOrder'
+                    };
+
+                    const res = await axios.get(
+                        `http://localhost:7469/MaintenanceManage/${typeMapping[this.currentAssignType]}/getLatestTemplate`
+                    );
+
+                    // 添加响应数据校验
+                    if (res.data && res.data.code === 200) {
+                        this.currentTemplate = this.formatOrderData(res.data.data);
+                    } else {
+                        this.currentTemplate = null;
+                    }
                 } catch (error) {
-                    console.error('加载工程师信息失败:', error);
+                    console.error('模板加载失败:', error);
+                    this.currentTemplate = null;
+                }
+            },
+            // 新增配置加载方法
+            async loadAutoConfigs() {
+                try {
+                    const res = await axios.get('http://localhost:7469/MaintenanceManage/timeSel/selectAll');
+                    this.autoConfigs = res.data.reduce((configs, item) => {
+                        const typeMap = {1: 'service', 2: 'patrol', 3: 'monitor', 4: 'spare'};
+                        configs[typeMap[item.orderType]] = {
+                            enable: item.day > 0,
+                            cycle: item.day,
+                            templateId: item.templateOrderId // 直接使用配置中的模板ID
+                        };
+                        return configs;
+                    }, {});
+                } catch (error) {
+                    console.error('配置加载失败:', error);
                 }
             },
 
-            // 新增方法：初始化图表
-            initCharts() {
-                // 需要先初始化每个图表实例
-                const lineChart = echarts.init(document.getElementById('mainChart'));
-                const radarChart = echarts.init(document.getElementById('radarChart'));
-                const roseChart = echarts.init(document.getElementById('roseChart'));
-                const pieChart = echarts.init(document.getElementById('pieChart'));
-
-                // 折线图配置
-                lineChart.setOption({
-                    title: { text: '月度绩效趋势', left: 'center' },
-                    xAxis: {
-                        type: 'category',
-                        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月']
-                    },
-                    yAxis: { max: 5 },
-                    series: [{
-                        data: this.chartData.line,
-                        type: 'line',
-                        smooth: true,
-                        areaStyle: {},
-                        itemStyle: { color: '#409EFF' }
-                    }]
-                });
-
-                // 雷达图配置
-                radarChart.setOption({
-                    title: { text: '技能评估', left: 'center' },
-                    radar: {
-                        indicator: [
-                            { name: '维修技能', max: 100 },
-                            { name: '故障诊断', max: 100 },
-                            { name: '设备保养', max: 100 },
-                            { name: '响应速度', max: 100 },
-                            { name: '客户评价', max: 100 }
-                        ]
-                    },
-                    series: [{
-                        type: 'radar',
-                        data: [{
-                            value: this.chartData.radar,
-                            areaStyle: { color: 'rgba(64, 158, 255, 0.6)' }
-                        }]
-                    }]
-                });
-
-                // 玫瑰图配置
-                roseChart.setOption({
-                    title: { text: '工单类型分布', left: 'center' },
-                    series: [{
-                        type: 'pie',
-                        radius: [20, 120],
-                        roseType: 'area',
-                        data: this.chartData.rose,
-                        itemStyle: {
-                            borderRadius: 8,
-                            color: function(params) {
-                                const colors = ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C'];
-                                return colors[params.dataIndex % colors.length];
-                            }
-                        }
-                    }]
-                });
-
-                // 饼图配置
-                pieChart.setOption({
-                    title: { text: '工单状态分布', left: 'center' },
-                    series: [{
-                        type: 'pie',
-                        radius: '65%',
-                        data: this.chartData.pie,
-                        label: { formatter: '{b}: {d}%' },
-                        color: ['#E6A23C', '#409EFF', '#67C23A']
-                    }]
-                });
-            },
             //工程师列表加载方法
             async loadEngineers() {
                 try {
@@ -1047,8 +1601,8 @@
                 if (!timestamp) return '无时间信息';
                 try {
                     const date = new Date(timestamp);
-                    return `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')}
-              ${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`;
+                    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}
+              ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
                 } catch (e) {
                     return '时间格式错误';
                 }
@@ -1069,6 +1623,7 @@
                     const res = await axios.get(
                         `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}`
                     )
+
                     this.allOrders = (res.data.data || res.data).map(this.formatOrderData)
                 } catch (error) {
                     this.$message.error('数据加载失败')
@@ -1079,18 +1634,18 @@
             },
 
             /** 格式化工单数据 */
-             formatOrderData(item) {
+            formatOrderData(item) {
                 const base = {
                     id: item.id,
                     orderNo: this.generateOrderNo(item.id),
-                    status: parseInt(item.status) || 1,
+                    status: parseInt(item.type),
                     // 修复时间字段映射
-                    createTime: item.createTime || new Date().getTime(),
-                    planTime: item.planTime || item.data,
+                    createTime:new Date().getTime(),
+                    planTime: item.data,
                     // 修复设备字段映射
                     EquipmentType: item.equipmentType || item.EquipmentType || '未知类型',
                     EquipmentId: item.equipmentId || item.EquipmentId || '未知ID',
-                    stop:item.stop||'空',
+                    stop: this.stationMap[item.stop] || item.stop, // 优先显示名称
                     engineerId: item.engineerId || null,
                     engineerName: item.engineerId
                         ? this.engineerMap[item.engineerId] || '未知工程师'
@@ -1108,7 +1663,7 @@
                             faultyDescription: item.faultyDescription,
                             faultyGrade: item.faultyGrade,
                             picture: item.picture,
-                            faultyEquipmentType:item.faultyType
+                            faultyEquipmentType: item.faultyType
                         }
                     case 'maintain':
                         return {
@@ -1160,7 +1715,7 @@
                     // 1. 调用后端接口获取单个工程师数据
                     const res = await axios.get(`http://localhost:7469/MaintenanceManage/engineer/selectById`,
                         {
-                            params: { id: id }
+                            params: {id: id}
                         }
                     );
                     // 2. 直接返回姓名
@@ -1175,35 +1730,150 @@
                 }
             },
             // 显示配置对话框
-            showAutoAssignConfig(type) {
-                this.currentAssignType = type
-                this.selectedCycle = this.autoConfigs[type] || null
-                this.autoAssignVisible = true
+            async showAutoAssignConfig(type) {
+                this.currentAssignType = type;
+                const config = this.autoConfigs[type] || {};
+                this.autoEnable = config.enable || false;
+                this.selectedCycle = config.cycle || null;
+
+                // 加载关联的模板信息
+                if (config.templateId) {
+                    try {
+                        const apiMap = {
+                            service: 'upkeepOrder/selectById',
+                            patrol: 'patrolOrder/selectById',
+                            monitor: 'checkOrder/selectById',
+                            spare: 'spareOrder/selectById'
+                        };
+                        const res = await axios.get(
+                            `http://localhost:7469/MaintenanceManage/${apiMap[type]}`,
+                            { params: { id: config.templateId } }
+                        );
+                        this.currentTemplate = this.formatOrderData(res.data);
+                    } catch (error) {
+                        console.error('模板加载失败:', error);
+                        this.currentTemplate = null;
+                    }
+                } else {
+                    this.currentTemplate = null;
+                }
+                this.autoAssignVisible = true;
             },
 
             // 保存配置
             async saveAutoConfig() {
-                if (!this.selectedCycle) {
-                    this.$message.warning('请选择派单周期')
-                    return
+                if (!this.currentTemplate) {
+                    this.$message.error('请先创建模板工单');
+                    return;
                 }
+
+                const params = {
+                    orderType: this.orderTypeMapping[this.currentAssignType],
+                    day: this.autoEnable ? this.selectedCycle : 0, // 关闭时设为0
+                    templateOrderId: this.autoEnable ? (this.currentTemplate?.id || null) : null, // 关闭时清空
+                    lastGenerateTime: new Date().toISOString()
+                };
 
                 try {
-                    // 调用保存接口
-                    await axios.post('/api/auto-assign', {
-                        type: this.currentAssignType,
-                        cycle: this.selectedCycle
-                    })
-
-                    // 更新本地配置
-                    this.$set(this.autoConfigs, this.currentAssignType, this.selectedCycle)
-                    this.autoAssignVisible = false
-                    this.$message.success('自动派单配置已保存')
+                    const res = await axios.post('http://localhost:7469/MaintenanceManage/timeSel/update', params);
+                    if (res.data.code === 200) {
+                        this.$message.success('配置保存成功');
+                        await this.loadAutoConfigs(); // 刷新配置
+                        this.autoAssignVisible = false;
+                    }
                 } catch (error) {
-                    this.$message.error('配置保存失败: ' + error.message)
+                    this.$message.error('保存失败');
                 }
             },
+            // 创建工单逻辑调整
+            async createOrder() {
+                this.$refs.orderForm.validate(async valid => {
+                    if (valid) {
+                        try {
+                            const apiMap = {
+                                service: '/upkeepOrder/add',
+                                patrol: '/patrolOrder/add',
+                                monitor: '/checkOrder/add',
+                                spare: '/spareOrder/add'
+                            };
+                            const url = `http://localhost:7469/MaintenanceManage${apiMap[this.activeType]}`;
+                            const postData = {
+                                stop: this.newOrder.stop,
+                                equipmentId: this.newOrder.equipmentId,
+                                equipmentType: this.newOrder.equipmentType,
+                                isTemplate: this.newOrder.isTemplate ? 1 : 0  // 转换为数字
+                            }
 
+                            const res = await axios.post(url, postData);
+
+
+                            // 修改判断逻辑
+                            if (res.data.code === 200 || res.data.includes("成功")) {
+                                this.$message.success('工单创建成功');
+                                this.createDialogVisible = false;
+                                await Promise.all([
+                                    this.loadOrders(),
+                                    // 当创建的是模板工单时刷新相关数据
+                                    this.newOrder.isTemplate && this.refreshTemplateData()
+                                ]);
+                                this.resetForm1();  // 新增表单重置
+                            } else {
+                                this.$message.error(res.data.msg || '创建失败');
+                            }
+                        } catch (error) {
+                            this.$message.error('创建工单错误: ' + error.message);
+                        }
+                    }
+                });
+            },
+            // 新增模板数据刷新方法
+            async refreshTemplateData() {
+                try {
+                    // 双重刷新保障
+                    await Promise.all([
+                        this.loadAutoConfigs(),  // 刷新配置信息
+                        this.loadLatestTemplate() // 直接获取最新模板
+                    ]);
+
+                    // 智能提示
+                    if (this.currentTemplate) {
+                        this.$message.success('模板数据已更新');
+                    }
+                } catch (error) {
+                    console.error('模板刷新失败:', error);
+                    this.$message.warning('模板状态更新失败，请手动刷新');
+                }
+            },
+            resetForm1() {
+                this.newOrder = {
+                    stop: '',
+                    equipmentId: '',
+                    isTemplate: false
+                };
+                this.selectedEquipment = null;
+                this.equipmentInfo = {name: '', type: ''};
+                if (this.$refs.orderForm) {
+                    this.$refs.orderForm.resetFields();
+                }
+            },
+            // 加载当前模板
+            async loadCurrentTemplate() {
+                try {
+                    const res = await axios.get('/template/getLatest', {
+                        params: {orderType: this.currentAssignType}
+                    });
+                    this.currentTemplate = res.data;
+                } catch (error) {
+                    this.currentTemplate = null;
+                }
+            },
+            // 查看模板详情
+            viewTemplateDetail() {
+                if (this.currentTemplate) {
+                    this.currentDetail = this.currentTemplate;
+                    this.detailDialogVisible = true;
+                }
+            },
             /** 显示派单对话框 */
             async showAssignDialog(order) {
                 try {
@@ -1218,7 +1888,6 @@
                     this.$message.error('加载工程师列表失败')
                 }
             },
-
             /** 执行派单操作 */
             async assignOrder() {
                 try {
@@ -1228,33 +1897,54 @@
                         patrol: 'patrolOrder/assign',
                         monitor: 'checkOrder/assign',
                         spare: 'spareOrder/assign'
-                    }
-                    const response  = await axios.post(
-                        `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}`,
-                        {
-                            orderId: this.currentOrder.id, // 工单ID放请求体
-                            engineerId: this.selectedEngineer
+                    };
+
+                    // 获取要处理的工单列表
+                    const orders = this.isBatchAssign ? this.batchOrders : [this.currentOrder];
+
+                    let successCount = 0;
+                    const errorMessages = [];
+
+                    for (const order of orders) {
+                        try {
+                            const response = await axios.post(
+                                `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}`,
+                                {
+                                    orderId: order.id,
+                                    engineerId: this.selectedEngineer
+                                }
+                            );
+
+                            if (response.data.trim() === '派单成功') {
+                                successCount++;
+                            } else {
+                                errorMessages.push(`工单 ${order.orderNo} 失败: ${response.data}`);
+                            }
+                        } catch (error) {
+                            errorMessages.push(`工单 ${order.orderNo} 错误: ${error.message}`);
                         }
-                    )
-                    // 检查响应状态
-                    const result = response.data.trim();
-                    if (result === '派单成功') {
-                        this.$message.success(result);
-                        await this.loadEngineers(); // 刷新工程师数据
-                        await this.loadOrders(); // 确保等待加载完成
-                        this.assignDialogVisible = false;
-                        this.selectedEngineer = null; // 清空选择
-                    } else {
-                        this.$message.error(`派单失败: ${response.data}`)
                     }
+
+                    // 处理结果显示
+                    if (successCount > 0) {
+                        this.$message.success(`成功派发 ${successCount} 个工单`);
+                        await this.loadOrders();
+                    }
+                    if (errorMessages.length > 0) {
+                        this.$message.error(errorMessages.join('\n'));
+                    }
+
+                    // 重置状态
+                    this.assignDialogVisible = false;
+                    this.selectedEngineer = null;
+                    this.isBatchAssign = false;
+                    this.batchOrders = [];
+                    this.selectedOrders = [];
 
                 } catch (error) {
-                    // 显示更具体的错误信息
-                    const msg = error.response?.data || error.message
-                    this.$message.error(`请求错误: ${msg}`)
+                    this.$message.error(`派单请求失败: ${error.message}`);
                 }
             },
-
             /** 查看工单详情 */
             async handleDetail(order) {
                 try {
@@ -1269,7 +1959,7 @@
                     }
                     const res = await axios.get(
                         `http://localhost:7469/MaintenanceManage/${apiMap[this.activeType]}`,
-                        { params: { id: order.id } }
+                        {params: {id: order.id}}
                     )
                     this.currentDetail = this.formatOrderData(res.data)
                     this.detailDialogVisible = true
@@ -1293,6 +1983,12 @@
                         id: item.id,
                         name: item.name
                     }))
+                    // 生成映射关系
+                    this.stationMap = res.data.reduce((map, station) => {
+                        map[station.id] = station.name
+                        return map
+                    }, {})
+
                 } catch (error) {
                     this.$message.error('车站列表加载失败')
                 }
@@ -1319,13 +2015,14 @@
                     type: equipment.type
                 }
                 this.newOrder.equipmentId = equipment.id
+                this.newOrder.equipmentType = equipment.type
             },
 
             /** 重置表单 */
             resetForm() {
                 this.selectedEquipment = null
-                this.equipmentInfo = { name: '', type: '' }
-                this.newOrder = { stop: '', equipmentId: '' }
+                this.equipmentInfo = {name: '', type: ''}
+                this.newOrder = {stop: '', equipmentId: ''}
                 this.$nextTick(() => {
                     if (this.$refs.orderForm) this.$refs.orderForm.clearValidate()
                 })
@@ -1351,11 +2048,12 @@
                 this.activeIndex = index
             }
         },
-        async created() {
-            await this.loadEngineerData();
-            await this.loadEngineers();  // 先加载工程师
-            await this.loadOrders();
-        }
+        created() {
+            this.loadEngineers();
+            this.loadOrders();
+            //配置项加载
+            this.loadAutoConfigs();
+        },
     })
 </script>
 </body>

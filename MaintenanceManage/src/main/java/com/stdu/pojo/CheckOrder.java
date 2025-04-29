@@ -24,6 +24,10 @@ public class CheckOrder {
         this.data = data;
     }
 
+    public CheckOrder() {
+
+    }
+
     public Long getId() {
         return id;
     }
@@ -94,5 +98,20 @@ public class CheckOrder {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "CheckOrder{" +
+                "id=" + id +
+                ", stop='" + stop + '\'' +
+                ", equipmentId='" + equipmentId + '\'' +
+                ", equipmentType='" + equipmentType + '\'' +
+                ", engineerId='" + engineerId + '\'' +
+                ", oldPicture='" + oldPicture + '\'' +
+                ", newPicture='" + newPicture + '\'' +
+                ", type='" + type + '\'' +
+                ", data='" + data + '\'' +
+                '}';
     }
 }

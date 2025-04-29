@@ -1,5 +1,6 @@
 package com.stdu.mapper;
 import com.stdu.pojo.PatrolOrder;
+import com.stdu.pojo.UpkeepOrder;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -46,4 +47,5 @@ public interface PatrolOrderMapper {
     @Select("SELECT * FROM tb_patrol_order WHERE id = #{id}")
     @ResultMap("patrolMap")
     PatrolOrder selectById(Long id);
+
 }

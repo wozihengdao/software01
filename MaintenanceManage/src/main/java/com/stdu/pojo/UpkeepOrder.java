@@ -24,6 +24,10 @@ public class UpkeepOrder {
         this.data = data;
     }
 
+    public UpkeepOrder() {
+
+    }
+
     public Long getId() {
         return id;
     }
@@ -94,5 +98,20 @@ public class UpkeepOrder {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "UpkeepOrder{" +
+                "id=" + id +
+                ", stop='" + stop + '\'' +
+                ", equipmentId='" + equipmentId + '\'' +
+                ", equipmentType='" + equipmentType + '\'' +
+                ", engineerId='" + engineerId + '\'' +
+                ", oldPicture='" + oldPicture + '\'' +
+                ", newPicture='" + newPicture + '\'' +
+                ", type='" + type + '\'' +
+                ", data='" + data + '\'' +
+                '}';
     }
 }

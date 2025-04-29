@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+</head>
+<body><style>
+    .type-buttons {
+        margin: 20px 0;
+    }
+
+    .order-card {
+        margin-top: 15px;
+        transition: all 0.3s;
+    }
+</style>
+
+<style scoped>
+    .info-item {
+        margin: 8px 28px;
+        line-height: 15px;
+    }
+
+    .info-label {
+        color: #909399;
+        margin-right: 10px;
+    }
+
+    .info-content {
+        color: #606266;
+    }
+
+    .image {
+        width: 100%;
+        height: 270px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .button {
+        width: 100%;
+        margin-top: 5px;
+    }
+</style>
+
+
+<div id="app">
+
+    <el-container>
+        <el-aside width="200px" style="background-color: #545c64; height: 100vh">
+            <el-menu
+                    :default-active="activeIndex1"
+                    @select="handleMenuItemClick"
+                    background-color="#545c64"
+                    text-color="#fff"
+                    active-text-color="#ffd04b">
+                <el-menu-item-group title="主菜单">
+                    <el-menu-item index="1">
+                        <i class="el-icon-user"></i>
+                        <span>个人信息</span>
+                    </el-menu-item>
+                    <el-menu-item index="2">
+                        <i class="el-icon-menu"></i>
+                        <span>功能面板</span>
+                    </el-menu-item>
+                    <el-menu-item index="3">
+                        <i class="el-icon-phone"></i>
+                        <span>联系我们</span>
+                    </el-menu-item>
+                    <el-menu-item index="4">
+                        <i class="el-icon-switch-button"></i>
+                        <span>退出登录</span>
+                    </el-menu-item>
+                </el-menu-item-group>
+            </el-menu>
+        </el-aside>
+
+        <el-container>
+            <div v-if="activeIndex1==2" style="width:1500px">
+                <el-header>
+
+                    <el-menu
+                            :default-active="activeIndex2"
+                            class="el-menu-demo"
+                            mode="horizontal"
+                            @select="handleSelect"
+                            background-color="#545c64"
+                            text-color="#fff"
+                            active-text-color="#ffd04b"
+
+                    >
+
+                        <el-menu-item index="1">首页</el-menu-item>
+                        <el-menu-item index="2">报修</el-menu-item>
+                        <el-menu-item index="3">维修</el-menu-item>
+                        <el-menu-item index="4">保养</el-menu-item>
+                        <el-menu-item index="5">巡检</el-menu-item>
+                        <el-menu-item index="6">检测</el-menu-item>
+                        <el-menu-item index="7">备件</el-menu-item>
+                    </el-menu>
+
+                </el-header>
+                <el-main>
+
+
+
+                    <!--按钮-->
+
+                    <el-row>
+
+                        <!--         <el-button type="danger" @click="multiDelete()" plain>批量删除</el-button>-->
+                        <el-button type="primary" plain @click="dialogVisible = true">批量接受</el-button>
+                        <el-button type="success" plain @click="dialogVisible = true">批量导出</el-button>
+                    </el-row>
+
+                    <el-dialog
+                            title="维修工单详情"
+                            :visible.sync="dialogVisible2"
+                            width="40%"
+                            @close="dialogVisible2 = false">
+                        <el-form ref="viewForm" :model="Data" label-width="120px">
+                            <!-- 基础信息 -->
+
+                            <el-form-item label="工单ID">
+                                <el-input :value="Data.id" :readonly="true" class="readonly-item"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="创建日期">
+                                <el-input :value="Data.data"
+                                          :readonly="true"
+                                          placeholder="无日期信息"></el-input>
+                            </el-form-item>
+
+                            <!-- 设备信息 -->
+                            <el-form-item label="所属车站">
+                                <el-input :value="getStationName(Data.stop)"
+                                          :readonly="true"></el-input>
+                            </el-form-item>
+
+                            <!-- 故障信息 -->
+                            <el-form-item label="故障类型">
+                                <el-input :value="getFaultTypeText(Data.faultyType)"
+                                          :readonly="true"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="紧急程度">
+                                <el-input :value="getGradeText(Data.faultyGrade)"
+                                          :readonly="true"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="故障描述">
+                                <el-input type="textarea"
+                                          :rows="2"
+                                          :value="Data.faultyDescription || '无描述信息'"
+                                          :readonly="true"></el-input>
+                            </el-form-item>
+
+
+                            <!-- 图片信息 -->
+                            <el-form-item label="历史照片">
+                                <el-tag type="info">{{ Data.olderPicture || '无历史照片' }}</el-tag>
+                            </el-form-item>
+
+                            <el-form-item label="维修照片">
+                                <el-tag type="info">{{ Data.newPicture || '无最新照片' }}</el-tag>
+                            </el-form-item>
+
+
+                            <!-- 处理信息 -->
+                            <el-form-item label="负责工程师Id">
+                                <el-input :value="Data.engineerId"
+                                          :readonly="true"></el-input>
+                            </el-form-item>
+
+                            <div class="dialog-footer">
+                                <el-button @click="dialogVisible2 = false">关 闭</el-button>
+                            </div>
+
+                        </el-form>
+                    </el-dialog>
+
+
+
+
+<!--                    &lt;!&ndash;处理数据对话框表单&ndash;&gt;-->
+<!--                    <el-dialog-->
+<!--                            title="维修工单"-->
+<!--                            :visible.sync="dialogVisible2"-->
+<!--                            width="40%">-->
+<!--                        <el-form ref="form" :model="repairOrder" label-width="120px">-->
+<!--                            &lt;!&ndash; 隐藏ID字段 &ndash;&gt;-->
+<!--                            <el-input type="hidden" v-model="repairOrder.id"></el-input>-->
+
+<!--                            <el-form-item label="所属车站" prop="stop" required>-->
+<!--                                <el-select-->
+<!--                                        v-model="repairOrder.stop"-->
+<!--                                        placeholder="请选择车站"-->
+<!--                                        filterable>-->
+<!--                                    <el-option-->
+<!--                                            v-for="station in stationList"-->
+<!--                                            :key="station.id"-->
+<!--                                            :label="station.name"-->
+<!--                                            :value="station.id">-->
+<!--                                    </el-option>-->
+<!--                                </el-select>-->
+<!--                            </el-form-item>-->
+
+<!--                            <el-form-item label="设备编号" prop="faultyEquipmentId" required>-->
+<!--                                <el-input-->
+<!--                                        v-model="repairOrder.faultyEquipmentId"-->
+<!--                                        placeholder="请输入设备编号或扫码">-->
+
+<!--                                </el-input>-->
+<!--                            </el-form-item>-->
+
+<!--                            <el-form-item label="故障类别" prop="faultyType">-->
+<!--                                <el-select v-model="repairOrder.faultyType" placeholder="请选择类型">-->
+<!--                                    <el-option label="机械故障" value="mechanical"></el-option>-->
+<!--                                    <el-option label="电气故障" value="electrical"></el-option>-->
+<!--                                    <el-option label="软件故障" value="software"></el-option>-->
+<!--                                </el-select>-->
+<!--                            </el-form-item>-->
+
+<!--                            <el-form-item label="故障等级" prop="faultyGrade">-->
+<!--                                <el-radio-group v-model="repairOrder.faultyGrade">-->
+<!--                                    <el-radio label="urgent">紧急</el-radio>-->
+<!--                                    <el-radio label="high">高</el-radio>-->
+<!--                                    <el-radio label="medium">中</el-radio>-->
+<!--                                    <el-radio label="low">低</el-radio>-->
+<!--                                </el-radio-group>-->
+<!--                            </el-form-item>-->
+
+<!--                            <el-form-item label="故障描述" prop="faultyDescription">-->
+<!--                                <el-input-->
+<!--                                        type="textarea"-->
+<!--                                        :rows="3"-->
+<!--                                        v-model="repairOrder.faultyDescription"-->
+<!--                                        placeholder="请详细描述故障现象">-->
+<!--                                </el-input>-->
+<!--                            </el-form-item>-->
+<!--                            <span>上传图片</span>-->
+<!--                            <el-upload-->
+
+<!--                                    ref="upload"-->
+<!--                                    action="#"-->
+<!--                                    file-list="fileList"-->
+<!--                                    list-type="picture-card"-->
+<!--                                    :auto-upload="false">-->
+<!--                                <i slot="default" class="el-icon-plus"></i>-->
+<!--                                <div slot="file" slot-scope="{file}">-->
+<!--                                    <img-->
+<!--                                            class="el-upload-list__item-thumbnail"-->
+<!--                                            :src="file.url" alt=""-->
+<!--                                    >-->
+<!--                                    <span class="el-upload-list__item-actions">-->
+<!--                    <span-->
+<!--                            class="el-upload-list__item-preview"-->
+<!--                            @click="handlePictureCardPreview(file)"-->
+<!--                    >-->
+<!--                      <i class="el-icon-zoom-in"></i>-->
+<!--                    </span>-->
+<!--                    <span-->
+<!--                            v-if="!disabled"-->
+<!--                            class="el-upload-list__item-delete"-->
+<!--                            @click="handleDownload(file)"-->
+<!--                    >-->
+<!--                      <i class="el-icon-download"></i>-->
+<!--                    </span>-->
+<!--                    <span-->
+<!--                            v-if="!disabled"-->
+<!--                            class="el-upload-list__item-delete"-->
+<!--                            @click="handleRemove(file)"-->
+<!--                    >-->
+<!--                      <i class="el-icon-delete"></i>-->
+<!--                    </span>-->
+<!--                  </span>-->
+<!--                                </div>-->
+<!--                            </el-upload>-->
+
+<!--                            <el-form-item>-->
+<!--                                <el-button type="primary" @click="submitMaintenanceOrder">提交工单</el-button>-->
+<!--                                <el-button @click="dialogVisible = false">取消</el-button>-->
+<!--                            </el-form-item>-->
+<!--                        </el-form>-->
+<!--                    </el-dialog>-->
+
+
+                    <template>
+                        <!-- 待接取表格 -->
+                        <h3>待接取</h3>
+                        <el-table
+                                :data="pendingOrders"
+                                style="width: 100%; margin-bottom: 20px"
+                                :row-class-name="tableRowClassName">
+                            <el-table-column prop="id" label="维修单号" align="center"></el-table-column>
+                            <el-table-column label="工程师ID" align="center">
+                                <template slot-scope="scope">
+                                    {{ scope.row.engineerId || '未分配' }}
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="type" label="状态" align="center"></el-table-column>
+                            <el-table-column prop="data" label="创建时间" align="center"></el-table-column>
+                            <el-table-column fixed="right" label="操作" width="150">
+                                <template slot-scope="scope">
+                                    <el-button
+                                            type="primary"
+                                            size="small"
+                                            @click="handleAccept(scope.row)">
+                                        接受
+                                    </el-button>
+
+                                </template>
+                            </el-table-column>
+                        </el-table>
+
+                        <!-- 已接取表格 -->
+                        <h3>已接取</h3>
+                        <el-table
+                                :data="acceptedOrders"
+                                style="width: 100%"
+                                :row-class-name="tableRowClassName">
+                            <el-table-column prop="id" label="维修单号" align="center"></el-table-column>
+                            <el-table-column label="工程师ID" align="center">
+                            <template slot-scope="scope">
+                                {{ scope.row.engineerId || '系统分配' }}
+                            </template>
+                            </el-table-column>
+                            <el-table-column prop="type" label="状态" align="center"></el-table-column>
+                            <el-table-column prop="data" label="接单时间" align="center"></el-table-column>
+                            <el-table-column fixed="right" label="操作" width="120">
+                                <template slot-scope="scope">
+                                    <el-button
+                                            type="primary"
+                                            size="small"
+                                            @click="dialog1Init(scope.row)">
+                                        处理
+                                    </el-button>
+
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </template>
+
+
+
+
+
+                </el-main>
+
+            </div>
+        </el-container>
+    </el-container>
+
+
+
+
+
+</div>
+
+
+</body>
+<script type="module">
+
+    import storage from "./js/storage.js";
+
+    new Vue({
+            el:"#app",
+        computed: {
+            // 待接取订单（工程师ID为空）
+            pendingOrders() {
+                return this.tableData.filter(item => !item.engineerId);
+            },
+            // 已接取订单（工程师ID已存在）
+            acceptedOrders() {
+                return this.tableData.filter(item => !!item.engineerId);
+            }
+        },
+            data() {
+                return {
+                    engineerName:'',
+                    dialogVisible2:false,
+                Data:{
+                        data:"2025-04-21",engineerId:"70000001",
+                      faultyDescription:"无",faultyEquipmentId:"15454",
+                    faultyGrade:"urgent",faultyType:"mechanical",id:20000000,
+                    newPicture:"无",olderPicture:"无",stop:"11000001",type:"0"},
+                    repairOrderList:[],
+                    activeIndex1: '2',
+                    activeIndex2: '3',
+                    dialog1Visible:false,
+                    repairOrder:{},
+                    dialogImageUrl: '',
+                    stationList:[],
+                    disabled: false,
+                    tableData:[]
+                };
+            },
+            mounted() {
+
+                axios.post("http://localhost:7469/MaintenanceManage/stop/selectAll",).then((res) => {
+
+                    this.stationList = res.data;
+
+                })
+
+                axios.post("http://localhost:7469/MaintenanceManage/maintenanceOrder/selectAll",).then((res) => {
+
+                    this.tableData= res.data;
+
+                })
+            }
+            ,
+            methods: {
+
+                dialog1Init(row) {
+                    this.dialogVisible2=true;
+
+
+                },
+
+                handleAccept(order) {
+
+                    this.$confirm('确认要接受该维修单吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        // 调用API更新工程师ID
+
+
+
+                        this.$set(order, 'engineerId', '当前工程师ID')
+                        order.engineerId =storage.get('user').username;
+
+                        axios.post("http://localhost:7469/MaintenanceManage/maintenanceOrder/update", order).then((res) => {
+
+
+                        })
+                        this.$message.success('接单成功');
+
+
+
+                    })
+
+
+                },
+                // 拒绝工单
+                handleReject(order) {
+                    this.$confirm('确认要拒绝该维修单吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        // 执行拒绝逻辑
+                        this.tableData = this.tableData.filter(item => item.id !== order.id)
+                        this.$message.success('已拒绝工单');
+                    })
+                }
+            ,
+                handleSelect(key, keyPath) {
+
+                    window.location.href = "http://localhost:7469/MaintenanceManage/0"+(key-1)+".html";
+
+                },
+                handleMenuItemClick(index) {
+                    console.log('点击菜单:', index)
+                    this.activeIndex1=index;
+                    if(index==1){
+                        window.location.href = "http://localhost:7469/MaintenanceManage/000.html";
+                    }
+                    else if(index==2){
+
+                        window.location.href = "http://localhost:7469/MaintenanceManage/01.html";
+                    }
+                    else if(index==3){
+
+                        window.location.href = "http://localhost:7469/MaintenanceManage/002.html";
+                    }
+                    else if(index==4){
+                        window.location.href = "http://localhost:7469/MaintenanceManage/logIn.html";
+
+
+                    }},
+                fileList: [],
+                handleRemove(file) {
+                    // 从上传文件列表中移除
+                    const fileList = this.$refs.upload.uploadFiles;
+                    this.$refs.upload.uploadFiles = fileList.filter(item => item.uid !== file.uid);
+                },
+                handlePictureCardPreview(file) {
+                    this.dialogImageUrl = file.url;
+                    this.dialogVisible = true;
+                },
+                handleDownload(file) {
+                    console.log(file);
+                },
+
+                submitRepairOrder(){
+
+                    axios.post("http://localhost:7469/MaintenanceManage/repairOrder/insert",this.repairOrder).then((res) => {
+
+                        alert("hello");
+
+                    })
+                    this.dialogVisible=false;
+                }
+                ,
+
+                async loadEngineerInfo(id) {
+                    try {
+                        const response = await axios.get(`/MaintenanceManage/engineer/${id}`)
+                        this.engineerName = response.data.name
+                    } catch (error) {
+                        console.error('工程师信息加载失败:', error)
+                        this.engineerName = '信息获取失败'
+                    }
+                }
+
+
+        ,
+                 getStationName(ide){
+
+                   name;
+                    axios.post("http://localhost:7469/MaintenanceManage/stop/selectById",ide).then((res) => {
+
+
+                        name = res.data.name;
+                    })
+
+                    return name;
+                },
+                getGradeText(grade) {
+                    const gradeMap = {
+                        urgent: '紧急',
+                        high: '高级',
+                        medium: '中级',
+                        low: '低级'
+                    }
+                    return gradeMap[grade] || '未分级'
+                },
+                getFaultTypeText(type) {
+                    const typeMap = {
+                        mechanical: '机械故障',
+                        electrical: '电气故障',
+                        software: '软件故障'
+                    }
+                    return typeMap[type] || '未知类型'
+                },
+
+              async getEngineerName(Ids){
+
+                  try{
+                      const res=await   axios.post("http://localhost:7469/MaintenanceManage/engineer/selectById",Ids);
+
+                      this.engineerName=  res.data.name;
+
+                  }catch(error){
+
+                       return error;
+                  }
+
+
+
+
+    }
+
+            }
+        }
+    )
+</script>
+<style scoped>
+    .readonly-item >>> .el-input__inner {
+        background-color: #f5f7fa;
+        border-color: #e4e7ed;
+        color: #909399;
+        cursor: not-allowed;
+    }
+    .dialog-footer {
+        text-align: right;
+        margin-right: 20px;
+    }
+    .el-tag {
+        margin-right: 10px;
+    }
+</style>
+</html>

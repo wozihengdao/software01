@@ -19,6 +19,16 @@ public class SpareOrderService {
         }
     }
 
+    public SpareOrder addSpareOrder2(SpareOrder order) {
+        try (SqlSession session = factory.openSession()) {
+            SpareOrderMapper mapper = session.getMapper(SpareOrderMapper.class);
+            mapper.insert2(order); // MyBatis会自动填充ID到order对象
+            session.commit();
+            return order; // 返回包含生成ID的对象
+        }
+    }
+
+
     // 删除备件单
     public void deleteById(Long id) {
         try (SqlSession session = factory.openSession()) {
@@ -52,4 +62,6 @@ public class SpareOrderService {
             return mapper.selectById(id);
         }
     }
+
+
 }

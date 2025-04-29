@@ -1,10 +1,15 @@
 package com.stdu.service;
 
 import com.stdu.mapper.UpkeepOrderMapper;
+import com.stdu.pojo.TimeSel;
 import com.stdu.pojo.UpkeepOrder;
 import com.stdu.util.SqlSessionFactoryUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.List;
 
 public class UpkeepOrderService {
@@ -16,6 +21,16 @@ public class UpkeepOrderService {
             UpkeepOrderMapper mapper = session.getMapper(UpkeepOrderMapper.class);
             mapper.insert(order);
             session.commit();
+        }
+    }
+
+    // UpkeepOrderService.java
+    public UpkeepOrder addUpkeepOrder2(UpkeepOrder order) {
+        try (SqlSession session = factory.openSession()) {
+            UpkeepOrderMapper mapper = session.getMapper(UpkeepOrderMapper.class);
+            mapper.insert2(order); // MyBatis会自动填充ID到order对象
+            session.commit();
+            return order; // 返回包含生成ID的对象
         }
     }
 
@@ -52,4 +67,7 @@ public class UpkeepOrderService {
             return mapper.selectById(id);
         }
     }
+
+
+
 }

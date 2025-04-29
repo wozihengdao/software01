@@ -1,0 +1,40 @@
+/* order-stats.css */
+.order-stats-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#line-chart-container {
+    width: 1000px;
+    height: 500px;
+}
+
+#pie-chart-container {
+    width: 500px;
+    height: 500px;
+}
+
+/* 响应式适配 */
+@media (max-width: 1200px) {
+    .order-stats-container {
+        flex-direction: column;
+    }
+
+    #line-chart-container,
+    #pie-chart-container {
+        width: 100%;
+        height: auto;
+        min-height: 400px;
+    }
+}

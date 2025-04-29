@@ -24,6 +24,10 @@ public class SpareOrder {
         this.data = data;
     }
 
+    public SpareOrder() {
+
+    }
+
     public Long getId() {
         return id;
     }
@@ -94,5 +98,20 @@ public class SpareOrder {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "SpareOrder{" +
+                "id=" + id +
+                ", stop='" + stop + '\'' +
+                ", equipmentId='" + equipmentId + '\'' +
+                ", equipmentType='" + equipmentType + '\'' +
+                ", engineerId='" + engineerId + '\'' +
+                ", oldPicture='" + oldPicture + '\'' +
+                ", newPicture='" + newPicture + '\'' +
+                ", type='" + type + '\'' +
+                ", data='" + data + '\'' +
+                '}';
     }
 }

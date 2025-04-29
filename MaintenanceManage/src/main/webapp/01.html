@@ -259,12 +259,6 @@
 
                             </el-table>
                         </template>
-
-
-
-
-
-
                 </el-main>
 
             </div>
@@ -349,10 +343,10 @@
 
                     axios.post("http://localhost:7469/MaintenanceManage/repairOrder/insert",this.repairOrder).then((res) => {
 
-                        alert("hello");
+                        this.dialogVisible=false;
 
                     })
-                    this.dialogVisible=false;
+
                 }
             }
         }

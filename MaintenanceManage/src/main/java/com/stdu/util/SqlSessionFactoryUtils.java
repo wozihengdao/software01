@@ -1,6 +1,7 @@
 package com.stdu.util;
 
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
@@ -17,6 +18,7 @@ public class SqlSessionFactoryUtils {
             String resource = "mybatis-config.xml";
             InputStream inputStream = Resources.getResourceAsStream(resource);
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+            sqlSessionFactory.getConfiguration().setDefaultExecutorType(ExecutorType.BATCH);
         } catch (IOException e) {
             e.printStackTrace();
         }
